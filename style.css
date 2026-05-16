@@ -1,31 +1,43 @@
-/* ========================================
-   STYLE.CSS - Em Hieu Bio Link
-   ======================================== */
-
-/* Reset CSS */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* ========================================
-   BODY & BACKGROUND
-   ======================================== */
+/* Theme variables */
+:root {
+    --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --text-color: #333;
+    --muted-color: #666;
+    --card-bg: rgba(255, 255, 255, 0.95);
+    --card-border: rgba(255, 255, 255, 0.3);
+    --accent: #667eea;
+}
+
+.dark {
+    --bg-gradient: linear-gradient(135deg, #0f172a 0%, #020617 100%);
+    --text-color: #e6eef8;
+    --muted-color: #b8c2d6;
+    --card-bg: rgba(10, 12, 20, 0.75);
+    --card-border: rgba(255, 255, 255, 0.06);
+    --accent: #4f46e5;
+}
+
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--bg-gradient);
+    color: var(--text-color);
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     overflow-x: hidden;
     position: relative;
+    transition: background 300ms ease, color 300ms ease;
 }
 
-/* ========================================
-   FLOATING BUBBLE ANIMATION (Background)
-   ======================================== */
+
 .bubble {
     position: fixed;
     width: 100px;
@@ -40,7 +52,7 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-/* Xác định vị trí cho từng bubble */
+
 .bubble:nth-child(1) { --left: 10; animation-duration: 8s; animation-delay: 0s; width: 80px; height: 80px; }
 .bubble:nth-child(2) { --left: 20; animation-duration: 10s; animation-delay: 2s; width: 60px; height: 60px; }
 .bubble:nth-child(3) { --left: 30; animation-duration: 12s; animation-delay: 4s; width: 100px; height: 100px; }
@@ -70,11 +82,9 @@ body {
     }
 }
 
-/* ========================================
-   BIO CONTAINER (Main Card)
-   ======================================== */
+
 .bio-container {
-    background: rgba(255, 255, 255, 0.95);
+    background: var(--card-bg);
     width: 90%;
     max-width: 450px;
     padding: 40px 30px;
@@ -83,27 +93,25 @@ body {
     text-align: center;
     animation: slideUp 0.6s ease-out;
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid var(--card-border);
     position: relative;
     z-index: 10;
 }
 
 @keyframes slideUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
+    .name {
+        font-size: 28px;
+        font-weight: 700;
+        color: var(--text-color);
+        letter-spacing: 0.5px;
+        animation: fadeInDown 0.8s ease-out 0.2s both;
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
+    .description {
+        font-size: 16px;
+        color: var(--muted-color);
+        margin-bottom: 0 !important;
+        animation: fadeInDown 0.8s ease-out 0.3s both;
     }
-}
-
-/* ========================================
-   PROFILE SECTION
-   ======================================== */
-.profile-section {
-    animation: zoomIn 0.8s ease-out;
 }
 
 @keyframes zoomIn {
@@ -144,9 +152,7 @@ body {
     object-fit: cover;
 }
 
-/* ========================================
-   NAME & DESCRIPTION
-   ======================================== */
+
 .name {
     font-size: 28px;
     font-weight: 700;
@@ -173,9 +179,7 @@ body {
     }
 }
 
-/* ========================================
-   SOCIAL LINKS
-   ======================================== */
+
 .social-links {
     display: flex;
     flex-direction: column;
@@ -276,9 +280,7 @@ body {
     }
 }
 
-/* ========================================
-   ZALO QR SECTION
-   ======================================== */
+
 .zalo-section {
     animation: fadeInUp 0.6s ease-out 0.7s both;
 }
@@ -311,9 +313,34 @@ body {
     border-color: #667eea;
 }
 
-/* ========================================
-   FOOTER
-   ======================================== */
+/* Theme toggle button */
+.theme-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    border: none;
+    background: rgba(255,255,255,0.9);
+    color: #222;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    cursor: pointer;
+    transition: background 200ms ease, color 200ms ease, transform 120ms ease;
+    z-index: 1000;
+}
+
+.theme-toggle:active { transform: scale(0.98); }
+
+.dark .theme-toggle {
+    background: rgba(255,255,255,0.06);
+    color: var(--text-color);
+}
+
+
 .footer {
     font-size: 13px;
     animation: fadeInUp 0.6s ease-out 0.8s both;
@@ -324,9 +351,7 @@ body {
     letter-spacing: 0.3px;
 }
 
-/* ========================================
-   RESPONSIVE DESIGN
-   ======================================== */
+
 @media (max-width: 480px) {
     .bio-container {
         padding: 30px 20px;
@@ -357,9 +382,7 @@ body {
     }
 }
 
-/* ========================================
-   GLOW EFFECT
-   ======================================== */
+
 .bio-container {
     box-shadow: 
         0 0 20px rgba(102, 126, 234, 0.2),
