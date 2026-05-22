@@ -348,3 +348,20 @@
         gap: 8px;
     }
 }
+
+/* ---------- Accessibility: Reduce Motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+    .life-card {
+        animation: none !important;
+    }
+
+    .life-card,
+    .gallery-overlay,
+    .gallery-panel {
+        transition: none !important;
+    }
+
+    .gallery-panel {
+        transform: none !important;
+    }
+}

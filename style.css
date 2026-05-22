@@ -951,6 +951,17 @@ button:focus-visible,
     }
 }
 
+/* ---------- Gallery Loading/Empty State ---------- */
+.gallery-loading,
+.gallery-empty {
+    grid-column: 1/-1;
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
 /* ---------- Responsive ---------- */
 @media (max-width: 480px) {
     :root {
@@ -1233,4 +1244,55 @@ button.link-btn {
     font-family: inherit;
     cursor: pointer;
     background: var(--accent-soft);
+}
+
+/* ---------- Accessibility: Reduce Motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .blob {
+        animation: none !important;
+    }
+
+    .avatar-ring {
+        animation: none !important;
+    }
+
+    .profile-name,
+    .profile-tagline,
+    .bio-intro,
+    .status-box,
+    .link-group,
+    .qr-section,
+    .site-footer {
+        animation: none !important;
+    }
+
+    .link-btn,
+    .life-card,
+    .photo-card {
+        transition: none !important;
+    }
+
+    .lightbox,
+    .profile-modal,
+    .gallery-overlay,
+    .photo-lightbox {
+        transition: none !important;
+    }
+
+    .lightbox__content,
+    .profile-modal__card,
+    .gallery-panel,
+    .photo-lightbox__content {
+        transform: none !important;
+        transition: none !important;
+    }
 }

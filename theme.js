@@ -57,8 +57,15 @@
     }
 
     /* ---- Pointer-tracking ripple on .link-btn ---- */
+    var lastRippleTime = 0;
+    var rippleThrottle = 16; // ~60fps
+
     document.querySelectorAll('.link-btn').forEach(function (btn) {
         btn.addEventListener('mousemove', function (e) {
+            var now = Date.now();
+            if (now - lastRippleTime < rippleThrottle) return;
+            lastRippleTime = now;
+
             var rect = btn.getBoundingClientRect();
             var x = ((e.clientX - rect.left) / rect.width) * 100;
             var y = ((e.clientY - rect.top) / rect.height) * 100;
@@ -180,6 +187,7 @@
         img.src = src;
         img.alt = name || 'Anh nau an';
         img.loading = 'lazy';
+        img.decoding = 'async';
 
         card.appendChild(img);
         card.addEventListener('click', function () {
@@ -242,6 +250,7 @@
             : photos.slice((currentPage - 1) * perPage, currentPage * perPage);
 
         gallery.innerHTML = '';
+        gallery._currentPage = currentPage;
         visiblePhotos.forEach(function (photo) {
             createPhotoCard(gallery, photo.src, photo.name);
         });
@@ -330,6 +339,13 @@
         var dir = gallery.getAttribute('data-gallery-dir');
         if (!dir) return;
 
+        // Show loading state
+        var loadingDiv = document.createElement('div');
+        loadingDiv.className = 'gallery-loading';
+        loadingDiv.textContent = 'Đang tải ảnh...';
+        gallery.innerHTML = '';
+        gallery.appendChild(loadingDiv);
+
         fetch(dir)
             .then(function (response) {
                 if (!response.ok) throw new Error('No local directory listing');
@@ -342,7 +358,14 @@
             })
             .catch(function () {
                 var githubUrl = getGithubGalleryUrl(gallery, dir);
-                if (!githubUrl) return;
+                if (!githubUrl) {
+                    var emptyDiv = document.createElement('div');
+                    emptyDiv.className = 'gallery-empty';
+                    emptyDiv.textContent = 'Chưa update. Hãy quay lại sau nhé!🌷';
+                    gallery.innerHTML = '';
+                    gallery.appendChild(emptyDiv);
+                    return;
+                }
                 fetch(githubUrl)
                     .then(function (response) {
                         if (!response.ok) throw new Error('No GitHub photos');
@@ -352,9 +375,16 @@
                         return addGithubPhotoTimes(gallery, getGithubPhotos(items));
                     })
                     .then(function (photos) {
+                        if (!photos.length) throw new Error('No photos');
                         renderPhotoGallery(gallery, photos);
                     })
-                    .catch(function () { /* keep gallery empty */ });
+                    .catch(function () {
+                        var emptyDiv = document.createElement('div');
+                        emptyDiv.className = 'gallery-empty';
+                        emptyDiv.textContent = 'Chưa update. Hãy quay lại sau nhé!🌷';
+                        gallery.innerHTML = '';
+                        gallery.appendChild(emptyDiv);
+                    });
             });
     }
 
@@ -362,11 +392,19 @@
         loadPhotoGallery(gallery);
     });
 
+    // Debounce resize event
+    var resizeTimer = null;
     if (window.addEventListener) {
         window.addEventListener('resize', function () {
-            document.querySelectorAll('.photo-gallery[data-gallery-dir]').forEach(function (gallery) {
-                if (gallery._photos) renderPhotoGalleryPage(gallery, gallery._photos, 1);
-            });
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function () {
+                document.querySelectorAll('.photo-gallery[data-gallery-dir]').forEach(function (gallery) {
+                    if (gallery._photos) {
+                        var currentPage = gallery._currentPage || 1;
+                        renderPhotoGalleryPage(gallery, gallery._photos, currentPage);
+                    }
+                });
+            }, 250);
         });
     }
 
