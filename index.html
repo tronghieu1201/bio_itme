@@ -1,73 +1,113 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Em Hieu Bio</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <title>Trọng Hiếu – Bio</title>
+    <meta name="description"
+        content="Trang bio cá nhân của Trọng Hiếu – Learning Technology, Cloud & AI Journey. Liên hệ qua Facebook, Instagram, LinkedIn, GitHub, Email và Zalo.">
+    <link rel="canonical" href="https://tronghieu1201.github.io/bio_itme/">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
+    <!-- Theme toggle -->
     <button id="theme-toggle" class="theme-toggle" aria-label="Chuyển giao diện">🌙</button>
-    <!-- Background animation -->
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
 
-    <div class="bio-container">
-        <!-- Profile Photo -->
-        <div class="profile-section">
-            <div class="profile-photo">
-                <img src="images/personal_photo.jpg" alt="Ảnh cá nhân của Hiếu" class="img-fluid">
+    <!-- Background blobs -->
+    <div class="blob blob--1" aria-hidden="true"></div>
+    <div class="blob blob--2" aria-hidden="true"></div>
+    <div class="blob blob--3" aria-hidden="true"></div>
+
+    <main class="bio-card">
+        <!-- Profile header -->
+        <header class="profile-header">
+            <div class="avatar-ring">
+                <img src="images/personal_photo.jpg" alt="Ảnh đại diện Trọng Hiếu" width="140" height="140">
+            </div>
+            <button type="button" class="profile-name profile-name-btn" id="profile-info-open">
+                Trọng Hiếu
+            </button>
+            <p class="profile-tagline">Learning Technology | Cloud &amp; AI Journey</p>
+        </header>
+
+        <!-- Current status -->
+        <section class="status-box" aria-label="Trạng thái hiện tại">
+            <span class="status-label">Work</span>
+            <span class="status-text">Bootcamp – First Cloud AI Journey at AWS Study Group</span>
+        </section>
+        <!-- Links -->
+        <section class="link-group" aria-label="Liên kết">
+            <div class="link-group__list">
+                <button type="button" class="link-btn link-btn--email" id="link-email"
+                    data-email="tronghieu.dev16@gmail.com">
+                    <i class="fas fa-at" aria-hidden="true"></i>
+                    <span>Email</span>
+                </button>
+                <button type="button" class="link-btn link-btn--zalo" id="link-zalo">
+                    <i class="fas fa-qrcode" aria-hidden="true"></i>
+                    <span>Zalo QR</span>
+                </button>
+                <a href="https://www.facebook.com/profile.php?id=61561660415335&locale=vi_VN" target="_blank"
+                    rel="noopener noreferrer" class="link-btn link-btn--facebook" id="link-facebook">
+                    <i class="fab fa-facebook-f" aria-hidden="true"></i>
+                    <span>Facebook</span>
+                </a>
+                <a href="https://www.instagram.com/gt_hius/" target="_blank" rel="noopener noreferrer"
+                    class="link-btn link-btn--instagram" id="link-instagram">
+                    <i class="fab fa-instagram" aria-hidden="true"></i>
+                    <span>Instagram</span>
+                </a>
+                <a href="https://www.linkedin.com/in/tronghieu-dev/" target="_blank" rel="noopener noreferrer"
+                    class="link-btn link-btn--linkedin" id="link-linkedin">
+                    <i class="fab fa-linkedin-in" aria-hidden="true"></i>
+                    <span>LinkedIn</span>
+                </a>
+                <a href="https://github.com/tronghieu1201" target="_blank" rel="noopener noreferrer"
+                    class="link-btn link-btn--github" id="link-github">
+                    <i class="fab fa-github" aria-hidden="true"></i>
+                    <span>GitHub</span>
+                </a>
+                <a href="./life.html" class="link-btn link-btn--life" id="link-life">
+                    <i class="fas fa-heart" aria-hidden="true"></i>
+                    <span>Góc cá nhân</span>
+                </a>
+            </div>
+        </section>
+
+
+        <!-- QR Lightbox -->
+        <div class="lightbox" id="qr-lightbox" role="dialog" aria-label="QR Zalo phóng to" aria-hidden="true">
+            <div class="lightbox__backdrop"></div>
+            <div class="lightbox__content">
+                <img src="images/qr_zalo.jpg" alt="Mã QR Zalo phóng to" class="lightbox__img">
+                <button class="lightbox__close" id="qr-close" aria-label="Đóng">&times;</button>
             </div>
         </div>
 
-        <!-- Name & Description -->
-        <h1 class="name mt-4">Trọng Hiếu</h1>
-        <p class="description text-muted">Web Developer | Cloud Enthusiast</p>
-
-        <!-- Social Links -->
-        <div class="social-links mt-5">
-            <!-- Facebook -->
-            <a href="https://www.facebook.com/profile.php?id=61561660415335&locale=vi_VN" 
-               target="_blank" 
-               class="social-link btn btn-primary d-flex align-items-center justify-content-center shadow-lg bubble-effect">
-                <i class="fab fa-facebook-f me-2"></i> Facebook
-            </a>
-
-            <!-- Instagram -->
-            <a href="https://www.instagram.com/gt_hius/" 
-               target="_blank" 
-               class="social-link btn btn-danger d-flex align-items-center justify-content-center shadow-lg bubble-effect">
-                <i class="fab fa-instagram me-2"></i> Instagram
-            </a>
-
-            <!-- LinkedIn -->
-            <a href="https://www.linkedin.com/in/tronghieu-dev/" 
-               target="_blank" 
-               class="social-link btn btn-info d-flex align-items-center justify-content-center shadow-lg bubble-effect">
-                <i class="fab fa-linkedin-in me-2"></i> LinkedIn
-            </a>
+        <!-- Profile info card -->
+        <div class="profile-modal" id="profile-info-modal" role="dialog" aria-label="Thông tin cá nhân"
+            aria-hidden="true">
+            <div class="profile-modal__backdrop"></div>
+            <article class="profile-modal__card">
+                <button class="profile-modal__close" id="profile-info-close" aria-label="Đóng">&times;</button>
+                <h2 class="profile-modal__title">Thông tin cá nhân</h2>
+                <div class="profile-modal__content">
+                    <p class="profile-modal__empty">Chưa cập nhật</p>
+                </div>
+            </article>
         </div>
+    </main>
 
-        <!-- Zalo QR Code -->
-        <div class="zalo-section mt-5">
-            <p class="text-muted fw-bold">📱 Scan Zalo QR:</p>
-            <div class="qr-container">
-                <img src="images/qr_zalo.jpg" alt="Zalo QR Code" class="img-fluid qr-image shadow">
-            </div>
-        </div>
+    <!-- Toast notification -->
+    <div class="toast" id="toast" aria-live="polite"></div>
 
-        <!-- Footer -->
-        <div class="footer mt-5 text-muted">
-            <p>✨ Created by Em Hieu ✨.</p>
-        </div>
-    </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script src="theme.js"></script>
 </body>
+
 </html>

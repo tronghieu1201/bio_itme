@@ -1,0 +1,283 @@
+/* ========================================================
+   LIFE.CSS – Góc cá nhân styles
+   Extends the base style.css design system.
+   ======================================================== */
+
+/* ---------- Life Page Layout ---------- */
+.life-page {
+    max-width: 560px;
+    padding: 32px 28px 24px;
+}
+
+/* ---------- Life Header ---------- */
+.life-header {
+    text-align: center;
+    margin-bottom: 24px;
+    position: relative;
+}
+
+.life-back {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: fit-content;
+    margin: 0 auto 14px 0;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s ease, transform 0.2s ease;
+    padding: 8px 10px;
+    border-radius: 999px;
+}
+
+.life-back:hover {
+    color: var(--accent);
+    transform: translateX(-3px);
+}
+
+.life-back i {
+    font-size: 12px;
+}
+
+.life-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+    animation: fadeSlideUp 0.6s 0.1s both;
+}
+
+.life-subtitle {
+    font-size: 13px;
+    color: var(--text-muted);
+    animation: fadeSlideUp 0.6s 0.2s both;
+}
+
+/* ---------- Category Cards ---------- */
+.life-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.life-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 18px;
+    border-radius: 16px;
+    background: var(--accent-soft);
+    border: 1px solid transparent;
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: transform 0.22s ease,
+                box-shadow 0.22s ease,
+                background 0.22s ease,
+                border-color 0.22s ease;
+    animation: fadeSlideUp 0.5s both;
+}
+
+.life-card:nth-child(1) { animation-delay: 0.25s; }
+.life-card:nth-child(2) { animation-delay: 0.35s; }
+.life-card:nth-child(3) { animation-delay: 0.45s; }
+.life-card:nth-child(4) { animation-delay: 0.55s; }
+
+.life-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(108, 92, 231, 0.18);
+    border-color: var(--card-border);
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+
+.dark .life-card:hover {
+    background: color-mix(in srgb, var(--accent) 14%, transparent);
+}
+
+.life-card:active {
+    transform: translateY(0) scale(0.98);
+}
+
+.life-card__icon {
+    font-size: 18px;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    flex-shrink: 0;
+}
+
+.life-card__body {
+    flex: 1;
+    min-width: 0;
+}
+
+.life-card__title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 3px;
+}
+
+.life-card__desc {
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--text-secondary);
+}
+
+.life-card__arrow {
+    font-size: 12px;
+    color: var(--text-muted);
+    flex-shrink: 0;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.life-card:hover .life-card__arrow {
+    transform: translateX(3px);
+    color: var(--accent);
+}
+
+/* ---------- Gallery Overlay ---------- */
+.gallery-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    padding: 20px;
+}
+
+.gallery-overlay.is-open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.gallery-panel {
+    width: 100%;
+    max-width: 600px;
+    max-height: 85vh;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 22px;
+    padding: 24px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    overflow-y: auto;
+    transform: scale(0.9) translateY(20px);
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.gallery-overlay.is-open .gallery-panel {
+    transform: scale(1) translateY(0);
+}
+
+.gallery-panel__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.gallery-panel__title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.gallery-panel__close {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: var(--accent-soft);
+    color: var(--text-primary);
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.gallery-panel__close:hover {
+    background: var(--accent);
+    color: #fff;
+    transform: scale(1.1);
+}
+
+.gallery-panel__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+}
+
+.gallery-panel__grid img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 1px solid var(--card-border);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+}
+
+.gallery-panel__grid img:hover {
+    transform: scale(1.04);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.gallery-panel__empty {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 14px;
+    padding: 40px 0;
+    display: none;
+}
+
+.gallery-panel__empty.is-visible {
+    display: block;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 480px) {
+    .life-page {
+        padding: 24px 16px 20px;
+    }
+
+    .life-card {
+        padding: 14px 14px;
+        gap: 12px;
+    }
+
+    .life-card__icon {
+        font-size: 17px;
+        width: 38px;
+        height: 38px;
+    }
+
+    .life-card__title {
+        font-size: 14px;
+    }
+
+    .gallery-panel {
+        padding: 18px;
+        border-radius: 18px;
+    }
+
+    .gallery-panel__grid {
+        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+        gap: 8px;
+    }
+}

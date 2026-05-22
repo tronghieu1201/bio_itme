@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Góc cá nhân – Trọng Hiếu</title>
+    <meta name="description" content="Góc cá nhân của Trọng Hiếu – Nấu ăn, tâm sự, bạn bè và những khoảnh khắc đời thường.">
+    <link rel="canonical" href="https://tronghieu1201.github.io/bio_itme/life.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="life.css">
+</head>
+
+<body>
+    <!-- Theme toggle -->
+    <button id="theme-toggle" class="theme-toggle" aria-label="Chuyển giao diện">🌙</button>
+
+    <!-- Background blobs -->
+    <div class="blob blob--1" aria-hidden="true"></div>
+    <div class="blob blob--2" aria-hidden="true"></div>
+    <div class="blob blob--3" aria-hidden="true"></div>
+
+    <main class="bio-card life-page">
+        <!-- Page header -->
+        <header class="life-header">
+            <a href="./" class="life-back" id="life-back" aria-label="Quay lại trang bio">
+                <i class="fas fa-arrow-left" aria-hidden="true"></i>
+            </a>
+            <h1 class="life-title">Ní thích điều gì...😎</h1>
+            <p class="life-subtitle">Một ngày một ít</p>
+        </header>
+
+        <!-- Category Cards -->
+        <section class="life-grid" aria-label="Danh mục">
+            <!-- Nấu ăn -->
+            <a href="#" class="life-card" id="card-cooking" data-category="cooking">
+                <div class="life-card__icon">
+                    <i class="fas fa-utensils" aria-hidden="true"></i>
+                </div>
+                <div class="life-card__body">
+                    <h2 class="life-card__title">Nấu ăn</h2>
+                    <p class="life-card__desc">Những món mình tự nấu.</p>
+                </div>
+                <i class="fas fa-chevron-right life-card__arrow" aria-hidden="true"></i>
+            </a>
+
+            <!-- Tâm sự -->
+            <a href="#" class="life-card" id="card-thoughts" data-category="thoughts">
+                <div class="life-card__icon">
+                    <i class="fas fa-pen" aria-hidden="true"></i>
+                </div>
+                <div class="life-card__body">
+                    <h2 class="life-card__title">Tâm sự</h2>
+                    <p class="life-card__desc">Một vài suy nghĩ,hay một stt gì đó.</p>
+                </div>
+                <i class="fas fa-chevron-right life-card__arrow" aria-hidden="true"></i>
+            </a>
+
+            <!-- Bạn bè -->
+            <a href="#" class="life-card" id="card-friends" data-category="friends">
+                <div class="life-card__icon">
+                    <i class="fas fa-user-group" aria-hidden="true"></i>
+                </div>
+                <div class="life-card__body">
+                    <h2 class="life-card__title">Bạn bè</h2>
+                    <p class="life-card__desc">Danh sách bạn bè: C1-C2-C3-ĐH-Đi Làm.</p>
+                </div>
+                <i class="fas fa-chevron-right life-card__arrow" aria-hidden="true"></i>
+            </a>
+
+            <!-- Khoảnh khắc -->
+            <a href="#" class="life-card" id="card-daily" data-category="daily">
+                <div class="life-card__icon">
+                    <i class="fas fa-camera" aria-hidden="true"></i>
+                </div>
+                <div class="life-card__body">
+                    <h2 class="life-card__title">Khoảnh khắc</h2>
+                    <p class="life-card__desc">Một tí sự vô tri.</p>
+                </div>
+                <i class="fas fa-chevron-right life-card__arrow" aria-hidden="true"></i>
+            </a>
+        </section>
+
+        <!-- Gallery modal (populated by JS) -->
+        <div class="gallery-overlay" id="gallery-overlay" aria-hidden="true">
+            <div class="gallery-panel">
+                <div class="gallery-panel__header">
+                    <h2 class="gallery-panel__title" id="gallery-title"></h2>
+                    <button class="gallery-panel__close" id="gallery-close" aria-label="Đóng">&times;</button>
+                </div>
+                <div class="gallery-panel__grid" id="gallery-grid">
+                    <!-- Images injected by JS -->
+                </div>
+                <p class="gallery-panel__empty" id="gallery-empty">Chưa update. Hãy quay lại sau nhé! 🌷</p>
+            </div>
+        </div>
+    </main>
+
+    <script src="theme.js"></script>
+    <script src="life.js"></script>
+</body>
+
+</html>
