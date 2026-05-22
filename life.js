@@ -64,8 +64,9 @@
     // Attach click to each category card
     document.querySelectorAll('.life-card').forEach(function (card) {
         card.addEventListener('click', function (e) {
-            e.preventDefault();
             var category = card.getAttribute('data-category');
+            if (!category) return;
+            e.preventDefault();
             if (category) openGallery(category);
         });
     });
