@@ -6,6 +6,8 @@
     var emptyEl = document.getElementById('gallery-empty');
     var closeBtn = document.getElementById('gallery-close');
     var backBtn = document.getElementById('life-back');
+    var toast = document.getElementById('life-toast');
+    var toastTimer = null;
 
     // Category config: map category key → display name and image folder
     var categories = {
@@ -37,9 +39,11 @@
 
         titleEl.textContent = cat.title;
         gridEl.innerHTML = '';
+        clearTimeout(toastTimer);
 
         if (cat.images.length === 0) {
-            emptyEl.classList.add('is-visible');
+            showLifeToast();
+            return;
         } else {
             emptyEl.classList.remove('is-visible');
             cat.images.forEach(function (filename) {
@@ -55,8 +59,17 @@
         overlay.setAttribute('aria-hidden', 'false');
     }
 
+    function showLifeToast() {
+        if (!toast) return;
+        toast.classList.add('is-visible');
+        toastTimer = setTimeout(function () {
+            toast.classList.remove('is-visible');
+        }, 2600);
+    }
+
     function closeGallery() {
         if (!overlay) return;
+        clearTimeout(toastTimer);
         overlay.classList.remove('is-open');
         overlay.setAttribute('aria-hidden', 'true');
     }
