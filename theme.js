@@ -142,6 +142,53 @@
         });
     }
 
+    /* ---- Site Note ---- */
+    var NOTE_SNOOZE_KEY = 'site-note-snooze-until';
+    var noteModal = document.getElementById('site-note');
+    var noteCloseBtn = document.getElementById('site-note-close');
+    var noteSnoozeBtn = document.getElementById('site-note-snooze');
+
+    function getNoteSnoozeUntil() {
+        try {
+            return Number(localStorage.getItem(NOTE_SNOOZE_KEY)) || 0;
+        } catch (e) {
+            return 0;
+        }
+    }
+
+    function setNoteSnoozeUntil(value) {
+        try {
+            localStorage.setItem(NOTE_SNOOZE_KEY, String(value));
+        } catch (e) { /* ignore storage errors */ }
+    }
+
+    function openSiteNote() {
+        if (!noteModal) return;
+        noteModal.classList.add('is-open');
+        noteModal.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeSiteNote() {
+        if (!noteModal) return;
+        noteModal.classList.remove('is-open');
+        noteModal.setAttribute('aria-hidden', 'true');
+    }
+
+    if (noteModal && Date.now() >= getNoteSnoozeUntil()) {
+        window.setTimeout(openSiteNote, 350);
+    }
+
+    if (noteCloseBtn) {
+        noteCloseBtn.addEventListener('click', closeSiteNote);
+    }
+
+    if (noteSnoozeBtn) {
+        noteSnoozeBtn.addEventListener('click', function () {
+            setNoteSnoozeUntil(Date.now() + 60 * 60 * 1000);
+            closeSiteNote();
+        });
+    }
+
     /* ---- Photo Gallery Lightbox ---- */
     var photoLightbox = document.getElementById('photo-lightbox');
     var photoLightboxImg = document.getElementById('photo-lightbox-img');

@@ -34,25 +34,13 @@
                 Trọng Hiếu
             </button>
             <p class="profile-tagline">Learning Technology | Cloud &amp; AI Journey</p>
+            <p class="profile-tagline">Bootcamp - First Cloud AI Journey at AWS Study Group</p>
+            <p class="profile-subtagline">Kiến thức - Key skill - Sản phẩm</p>
         </header>
 
-        <!-- Current status -->
-        <section class="status-box" aria-label="Trạng thái hiện tại">
-            <span class="status-label">Work</span>
-            <span class="status-text">Bootcamp – First Cloud AI Journey at AWS Study Group</span>
-        </section>
         <!-- Links -->
         <section class="link-group" aria-label="Liên kết">
             <div class="link-group__list">
-                <button type="button" class="link-btn link-btn--email" id="link-email"
-                    data-email="tronghieu.dev16@gmail.com">
-                    <i class="fas fa-at" aria-hidden="true"></i>
-                    <span>Email</span>
-                </button>
-                <button type="button" class="link-btn link-btn--zalo" id="link-zalo">
-                    <i class="fas fa-qrcode" aria-hidden="true"></i>
-                    <span>Zalo QR</span>
-                </button>
                 <a href="https://www.facebook.com/profile.php?id=61561660415335&locale=vi_VN" target="_blank"
                     rel="noopener noreferrer" class="link-btn link-btn--facebook" id="link-facebook">
                     <i class="fab fa-facebook-f" aria-hidden="true"></i>
@@ -63,16 +51,30 @@
                     <i class="fab fa-instagram" aria-hidden="true"></i>
                     <span>Instagram</span>
                 </a>
-                <a href="https://www.linkedin.com/in/tronghieu-dev/" target="_blank" rel="noopener noreferrer"
-                    class="link-btn link-btn--linkedin" id="link-linkedin">
-                    <i class="fab fa-linkedin-in" aria-hidden="true"></i>
-                    <span>LinkedIn</span>
+                <a href="https://locket.camera/links/Z5eRuLziCZaLzkZq8" target="_blank" rel="noopener noreferrer"
+                    class="link-btn link-btn--locket" id="link-locket">
+                    <i class="fas fa-heart" aria-hidden="true"></i>
+                    <span>Locket</span>
                 </a>
                 <a href="https://github.com/tronghieu1201" target="_blank" rel="noopener noreferrer"
                     class="link-btn link-btn--github" id="link-github">
                     <i class="fab fa-github" aria-hidden="true"></i>
                     <span>GitHub</span>
                 </a>
+                <a href="https://www.linkedin.com/in/tronghieu-dev/" target="_blank" rel="noopener noreferrer"
+                    class="link-btn link-btn--linkedin" id="link-linkedin">
+                    <i class="fab fa-linkedin-in" aria-hidden="true"></i>
+                    <span>LinkedIn</span>
+                </a>
+                <button type="button" class="link-btn link-btn--zalo" id="link-zalo">
+                    <i class="fas fa-qrcode" aria-hidden="true"></i>
+                    <span>Zalo QR</span>
+                </button>
+                <button type="button" class="link-btn link-btn--email" id="link-email"
+                    data-email="tronghieu.dev16@gmail.com">
+                    <i class="fas fa-at" aria-hidden="true"></i>
+                    <span>Email</span>
+                </button>
                 <a href="./life.html" class="link-btn link-btn--life" id="link-life">
                     <i class="fas fa-heart" aria-hidden="true"></i>
                     <span>Góc cá nhân</span>
@@ -98,11 +100,28 @@
                 <button class="profile-modal__close" id="profile-info-close" aria-label="Đóng">&times;</button>
                 <h2 class="profile-modal__title">Thông tin cá nhân</h2>
                 <div class="profile-modal__content">
-                    <p class="profile-modal__empty">Chưa cập nhật</p>
+                    <p class="profile-modal__empty">Cát Minh - Phù Cát - Bình Định</p>
                 </div>
             </article>
         </div>
     </main>
+
+    <!-- Site note -->
+    <div class="site-note" id="site-note" role="dialog" aria-label="Bạn có thể biết" aria-hidden="true">
+        <div class="site-note__backdrop"></div>
+        <article class="site-note__card">
+            <h2 class="site-note__title">Bạn có thể biết</h2>
+            <p class="site-note__text">Nếu chuyển sang dark sẽ ok hơn</p>
+            <div class="site-note__actions">
+                <button type="button" class="site-note__btn site-note__btn--ghost" id="site-note-close">
+                    Đóng
+                </button>
+                <button type="button" class="site-note__btn site-note__btn--primary" id="site-note-snooze">
+                    Tắt 1 tiếng
+                </button>
+            </div>
+        </article>
+    </div>
 
     <!-- Toast notification -->
     <div class="toast" id="toast" aria-live="polite"></div>
