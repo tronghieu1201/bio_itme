@@ -11,6 +11,7 @@
     var joinModal = document.getElementById('join-modal');
     var joinClose = document.getElementById('join-close');
     var joinForm = document.getElementById('join-form');
+    var joinCreatedAt = document.getElementById('join-created-at');
     var toastTimer = null;
     var JOIN_STORAGE_KEY = 'life-join-submissions';
     var DEFAULT_TOAST_MESSAGE = toast ? toast.textContent : 'Chưa update. Hãy quay lại sau nhé!';
@@ -112,34 +113,8 @@
         return true;
     }
 
-    function sendJoinSubmission(data) {
-        if (!joinForm || !joinForm.action) {
-            return Promise.reject(new Error('Missing form endpoint'));
-        }
-
-        return fetch(joinForm.action, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json'
-            },
-            body: JSON.stringify({
-                name: data.name,
-                email: data.email,
-                createdAt: data.createdAt,
-                message: 'Tham gia cùng tôi',
-                _subject: 'Có người muốn tham gia cùng tôi',
-                _template: 'table',
-                _captcha: 'false'
-            })
-        }).then(function (response) {
-            return response.json().then(function (result) {
-                if (!response.ok || result.success === false) {
-                    throw new Error(result.message || 'Form submit failed');
-                }
-                return result;
-            });
-        });
+    function isValidGmail(email) {
+        return /^[a-zA-Z0-9._%+-]+@gmail\.com$/i.test(email);
     }
 
     // Attach click to each category card
@@ -173,7 +148,6 @@
 
     if (joinForm) {
         joinForm.addEventListener('submit', function (e) {
-            e.preventDefault();
             var formData = new FormData(joinForm);
             var data = {
                 name: String(formData.get('name') || '').trim(),
@@ -181,24 +155,24 @@
                 createdAt: new Date().toISOString()
             };
 
-            if (!data.name || !data.email) return;
+            if (!data.name || !data.email) {
+                e.preventDefault();
+                return;
+            }
 
+            if (!isValidGmail(data.email)) {
+                e.preventDefault();
+                showLifeToast('Nhập đúng địa chỉ Gmail nhé!');
+                return;
+            }
+
+            if (joinCreatedAt) joinCreatedAt.value = data.createdAt;
             saveJoinSubmission(data);
-
-            sendJoinSubmission(data)
-                .then(function () {
-                    joinForm.reset();
-                    closeJoinModal();
-                    showLifeToast('Đã gửi thông tin. Cảm ơn bạn nhé!');
-                })
-                .catch(function (error) {
-                    var message = error && error.message ? error.message : '';
-                    if (message.toLowerCase().indexOf('activate') >= 0 || message.toLowerCase().indexOf('confirm') >= 0) {
-                        showLifeToast('Bạn cần xác nhận FormSubmit trong email trước nhé!');
-                    } else {
-                        showLifeToast('Chưa gửi được, thử lại sau nhé!');
-                    }
-                });
+            window.setTimeout(function () {
+                joinForm.reset();
+                closeJoinModal();
+                showLifeToast('Đã gửi. Nếu lần đầu dùng, hãy xác nhận email FormSubmit nhé!');
+            }, 350);
         });
     }
 
