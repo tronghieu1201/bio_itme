@@ -116,11 +116,8 @@
                 <button type="button" class="join-modal__close" id="join-close" aria-label="Đóng">&times;</button>
                 <h2 class="join-modal__title">Tham gia cùng tôi</h2>
                 <p class="join-modal__note">Tên của bạn note nhẹ: chỉ cần ghi chữ cái đầu tiên của tên bạn là được.</p>
-                <form class="join-form" id="join-form" action="https://formsubmit.co/tronghieu.dev16@gmail.com"
-                    method="POST" target="formsubmit-frame">
-                    <input type="hidden" name="_subject" value="Có người muốn tham gia cùng tôi">
-                    <input type="hidden" name="_template" value="table">
-                    <input type="hidden" name="_captcha" value="false">
+                <form class="join-form" id="join-form" action="https://script.google.com/macros/s/AKfycbzGVKOJ3meMpsssRLv-ZTdEa4Jtj3UyN1YupOwfdaezYV9LporQk_e2frmrAVWBihvLBA/exec"
+                    method="POST">
                     <input type="hidden" name="createdAt" id="join-created-at">
                     <label class="join-form__field">
                         <span>Họ tên</span>
@@ -129,8 +126,7 @@
                     <label class="join-form__field">
                         <span>Email</span>
                         <input type="email" id="join-email" name="email" placeholder="tenban@gmail.com"
-                            pattern="^[a-zA-Z0-9._%+-]+@gmail\.com$" title="Vui lòng nhập đúng địa chỉ Gmail"
-                            required>
+                            title="Vui lòng nhập đúng địa chỉ Gmail" required>
                     </label>
                     <button type="submit" class="join-form__submit">Gửi</button>
                 </form>
@@ -141,7 +137,6 @@
     <div class="life-toast" id="life-toast" role="status" aria-live="polite">
         Thằng Hiếu chưa cập nhật. Hãy quay lại sau nhé!🌷
     </div>
-    <iframe class="formsubmit-frame" name="formsubmit-frame" title="Form submit" hidden></iframe>
 
     <script src="theme.js"></script>
     <script src="life.js"></script>

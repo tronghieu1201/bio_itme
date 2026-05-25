@@ -168,11 +168,17 @@
 
             if (joinCreatedAt) joinCreatedAt.value = data.createdAt;
             saveJoinSubmission(data);
-            window.setTimeout(function () {
-                joinForm.reset();
-                closeJoinModal();
-                showLifeToast('Đã gửi. Nếu lần đầu dùng, hãy xác nhận email FormSubmit nhé!');
-            }, 350);
+
+            e.preventDefault();
+            fetch(joinForm.action, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: new FormData(joinForm)
+            });
+
+            joinForm.reset();
+            closeJoinModal();
+            showLifeToast('Đã gửi thông tin vào Google Sheet!');
         });
     }
 
