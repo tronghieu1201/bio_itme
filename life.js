@@ -112,7 +112,7 @@
         return true;
     }
 
-    function sendJoinSubmission(formData) {
+    function sendJoinSubmission(data) {
         if (!joinForm || !joinForm.action) {
             return Promise.reject(new Error('Missing form endpoint'));
         }
@@ -120,12 +120,25 @@
         return fetch(joinForm.action, {
             method: 'POST',
             headers: {
+                'Content-Type': 'application/json',
                 Accept: 'application/json'
             },
-            body: formData
+            body: JSON.stringify({
+                name: data.name,
+                email: data.email,
+                createdAt: data.createdAt,
+                message: 'Tham gia cùng tôi',
+                _subject: 'Có người muốn tham gia cùng tôi',
+                _template: 'table',
+                _captcha: 'false'
+            })
         }).then(function (response) {
-            if (!response.ok) throw new Error('Form submit failed');
-            return response.json();
+            return response.json().then(function (result) {
+                if (!response.ok || result.success === false) {
+                    throw new Error(result.message || 'Form submit failed');
+                }
+                return result;
+            });
         });
     }
 
@@ -170,17 +183,21 @@
 
             if (!data.name || !data.email) return;
 
-            formData.append('createdAt', data.createdAt);
             saveJoinSubmission(data);
 
-            sendJoinSubmission(formData)
+            sendJoinSubmission(data)
                 .then(function () {
                     joinForm.reset();
                     closeJoinModal();
                     showLifeToast('Đã gửi thông tin. Cảm ơn bạn nhé!');
                 })
-                .catch(function () {
-                    showLifeToast('Chưa gửi được, thử lại sau nhé!');
+                .catch(function (error) {
+                    var message = error && error.message ? error.message : '';
+                    if (message.toLowerCase().indexOf('activate') >= 0 || message.toLowerCase().indexOf('confirm') >= 0) {
+                        showLifeToast('Bạn cần xác nhận FormSubmit trong email trước nhé!');
+                    } else {
+                        showLifeToast('Chưa gửi được, thử lại sau nhé!');
+                    }
                 });
         });
     }
