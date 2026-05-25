@@ -178,7 +178,7 @@
 
             joinForm.reset();
             closeJoinModal();
-            showLifeToast('Đã gửi thông tin vào Google Sheet!');
+            showLifeToast('Nhớ check mail nhé 😉');
         });
     }
 
