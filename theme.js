@@ -74,6 +74,40 @@
         });
     });
 
+    /* ---- Link group panels ---- */
+    var linkHub = document.getElementById('link-hub');
+    var linkPanels = Array.prototype.slice.call(document.querySelectorAll('.link-panel'));
+
+    function closeLinkPanels() {
+        if (linkHub) linkHub.classList.remove('is-hidden');
+        linkPanels.forEach(function (panel) {
+            panel.classList.remove('is-open');
+            panel.setAttribute('aria-hidden', 'true');
+        });
+    }
+
+    function openLinkPanel(panelId) {
+        var target = document.getElementById(panelId);
+        if (!target || !linkHub) return;
+
+        linkHub.classList.add('is-hidden');
+        linkPanels.forEach(function (panel) {
+            var isTarget = panel === target;
+            panel.classList.toggle('is-open', isTarget);
+            panel.setAttribute('aria-hidden', isTarget ? 'false' : 'true');
+        });
+    }
+
+    document.querySelectorAll('[data-panel-target]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            openLinkPanel(btn.getAttribute('data-panel-target'));
+        });
+    });
+
+    document.querySelectorAll('[data-panel-back]').forEach(function (btn) {
+        btn.addEventListener('click', closeLinkPanels);
+    });
+
     /* ---- QR Lightbox ---- */
     var zaloBtn = document.getElementById('link-zalo');
     var qrClose = document.getElementById('qr-close');

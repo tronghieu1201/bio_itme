@@ -413,6 +413,136 @@ button:focus-visible,
     gap: 10px;
 }
 
+.link-hub {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 16px;
+    animation: fadeSlideUp 0.6s 0.45s both;
+    transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.link-hub.is-hidden {
+    display: none;
+}
+
+.group-card {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 14px;
+    padding: 16px 18px;
+    border-radius: 18px;
+    border: 1px solid var(--card-border);
+    background: var(--accent-soft);
+    color: var(--text-primary);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.14);
+    font: inherit;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+.group-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--btn-hover-lift);
+    border-color: var(--card-border);
+}
+
+.group-card:active {
+    transform: translateY(0) scale(0.98);
+}
+
+.group-card__icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: var(--accent);
+    font-size: 18px;
+}
+
+.group-card__body {
+    display: grid;
+    min-width: 0;
+    flex: 1;
+}
+
+.group-card__title {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+.group-card__arrow {
+    font-size: 12px;
+    color: var(--text-muted);
+    flex-shrink: 0;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.group-card:hover .group-card__arrow {
+    transform: translateX(3px);
+    color: var(--accent);
+}
+
+.link-panel {
+    display: none;
+    margin-bottom: 16px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.link-panel.is-open {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+    animation: panelEnter 0.24s ease both;
+}
+
+@keyframes panelEnter {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.panel-back {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 10px;
+    width: 38px;
+    height: 38px;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--text-primary);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+    text-shadow: inherit;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.panel-back:hover {
+    color: var(--accent);
+    transform: translateX(-3px);
+}
+
 /* ---------- Link Buttons ---------- */
 .link-btn {
     display: flex;
@@ -1119,6 +1249,8 @@ button:focus-visible,
     a,
     button,
     .link-btn,
+    .group-card,
+    .panel-back,
     .life-card,
     .photo-card,
     .theme-toggle {
@@ -1134,6 +1266,12 @@ button:focus-visible,
     .link-btn:focus,
     .link-btn:focus-visible,
     .link-btn:active,
+    .group-card:focus,
+    .group-card:focus-visible,
+    .group-card:active,
+    .panel-back:focus,
+    .panel-back:focus-visible,
+    .panel-back:active,
     .life-card:focus,
     .life-card:focus-visible,
     .life-card:active,
@@ -1146,6 +1284,7 @@ button:focus-visible,
     }
 
     .link-btn:focus-visible,
+    .group-card:focus-visible,
     .life-card:focus-visible,
     .photo-card:focus-visible,
     .theme-toggle:focus-visible {
@@ -1159,6 +1298,8 @@ button:focus-visible,
     .profile-tagline,
     .status-box,
     .link-btn,
+    .group-card,
+    .panel-back,
     .life-title,
     .life-subtitle,
     .life-card,
@@ -1173,6 +1314,8 @@ button:focus-visible,
     .dark .profile-tagline,
     .dark .status-box,
     .dark .link-btn,
+    .dark .group-card,
+    .dark .panel-back,
     .dark .life-title,
     .dark .life-subtitle,
     .dark .life-card,
@@ -1196,6 +1339,7 @@ button:focus-visible,
     }
 
     .link-btn,
+    .group-card,
     .life-card,
     .status-box,
     .profile-modal__card,
@@ -1209,6 +1353,7 @@ button:focus-visible,
     }
 
     .link-btn,
+    .group-card,
     .life-card,
     .status-box {
         font-weight: 700;
@@ -1225,6 +1370,7 @@ button:focus-visible,
     }
 
     .dark .link-btn,
+    .dark .group-card,
     .dark .life-card,
     .dark .status-box,
     .dark .profile-modal__card,
@@ -1259,6 +1405,7 @@ button:focus-visible,
     }
 
     .link-btn:hover,
+    .group-card:hover,
     .life-card:hover,
     .photo-card:hover {
         background: rgba(255, 255, 255, 0.08);
@@ -1267,6 +1414,7 @@ button:focus-visible,
     }
 
     .dark .link-btn:hover,
+    .dark .group-card:hover,
     .dark .life-card:hover,
     .dark .photo-card:hover {
         background: rgba(255, 255, 255, 0.08);
@@ -1298,6 +1446,32 @@ button:focus-visible,
         margin-top: 5px;
         font-size: 12.5px;
         line-height: 1.45;
+    }
+
+    .link-hub {
+        gap: 8px;
+        margin-bottom: 8px;
+    }
+
+    .group-card {
+        padding: 13px 14px;
+        gap: 12px;
+        border-radius: 14px;
+    }
+
+    .group-card__icon {
+        width: 38px;
+        height: 38px;
+        font-size: 17px;
+    }
+
+    .group-card__title {
+        font-size: 14px;
+    }
+
+    .panel-back {
+        margin-bottom: 8px;
+        padding: 7px 8px;
     }
 
     .link-btn {
@@ -1442,12 +1616,16 @@ button.link-btn {
     .bio-intro,
     .status-box,
     .link-group,
+    .link-hub,
+    .link-panel,
     .qr-section,
     .site-footer {
         animation: none !important;
     }
 
     .link-btn,
+    .group-card,
+    .link-panel,
     .life-card,
     .photo-card {
         transition: none !important;
