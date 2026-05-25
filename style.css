@@ -1234,6 +1234,30 @@ button:focus-visible,
         box-shadow: 0 8px 22px rgba(0, 0, 0, 0.26);
     }
 
+    .profile-modal__card {
+        background: rgba(255, 255, 255, 0.94);
+        border-color: rgba(255, 255, 255, 0.70);
+        color: #111827;
+        box-shadow: 0 20px 58px rgba(0, 0, 0, 0.28);
+        text-shadow: none;
+    }
+
+    .dark .profile-modal__card {
+        background: rgba(18, 18, 28, 0.94);
+        border-color: rgba(255, 255, 255, 0.18);
+        color: #f8fafc;
+        box-shadow: 0 22px 64px rgba(0, 0, 0, 0.46);
+        text-shadow: none;
+    }
+
+    .profile-modal__title,
+    .profile-modal__content,
+    .profile-modal__content p,
+    .profile-modal__empty {
+        color: inherit;
+        text-shadow: none;
+    }
+
     .link-btn:hover,
     .life-card:hover,
     .photo-card:hover {

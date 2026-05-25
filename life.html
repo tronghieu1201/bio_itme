@@ -82,6 +82,18 @@
                 </div>
                 <i class="fas fa-chevron-right life-card__arrow" aria-hidden="true"></i>
             </a>
+
+            <!-- Tham gia cùng tôi -->
+            <button type="button" class="life-card life-card--button" id="card-join">
+                <div class="life-card__icon">
+                    <i class="fas fa-handshake" aria-hidden="true"></i>
+                </div>
+                <div class="life-card__body">
+                    <h2 class="life-card__title">Tham gia cùng tôi</h2>
+                    <p class="life-card__desc">Gửi một chút thông tin để mấy anh em kết nối.</p>
+                </div>
+                <i class="fas fa-chevron-right life-card__arrow" aria-hidden="true"></i>
+            </button>
         </section>
 
         <!-- Gallery modal (populated by JS) -->
@@ -97,10 +109,33 @@
                 <p class="gallery-panel__empty" id="gallery-empty">Chưa update. Hãy quay lại sau nhé!🌷</p>
             </div>
         </div>
+        <!-- Join modal -->
+        <div class="join-modal" id="join-modal" role="dialog" aria-label="Tham gia cùng tôi" aria-hidden="true">
+            <div class="join-modal__backdrop"></div>
+            <article class="join-modal__card">
+                <button type="button" class="join-modal__close" id="join-close" aria-label="Đóng">&times;</button>
+                <h2 class="join-modal__title">Tham gia cùng tôi</h2>
+                <p class="join-modal__note">Tên của bạn note nhẹ: chỉ cần ghi chữ cái đầu tiên của tên bạn là được.</p>
+                <form class="join-form" id="join-form" action="https://formsubmit.co/ajax/tronghieu.dev16@gmail.com"
+                    method="POST">
+                    <input type="hidden" name="_subject" value="Có người muốn tham gia cùng tôi">
+                    <input type="hidden" name="_template" value="table">
+                    <label class="join-form__field">
+                        <span>Họ tên</span>
+                        <input type="text" id="join-name" name="name" placeholder="Ví dụ: H" required>
+                    </label>
+                    <label class="join-form__field">
+                        <span>Email</span>
+                        <input type="email" id="join-email" name="email" placeholder="ban@example.com" required>
+                    </label>
+                    <button type="submit" class="join-form__submit">Gửi</button>
+                </form>
+            </article>
+        </div>
     </main>
 
     <div class="life-toast" id="life-toast" role="status" aria-live="polite">
-        Chưa update. Hãy quay lại sau nhé!🌷
+        Thằng Hiếu chưa cập nhật. Hãy quay lại sau nhé!🌷
     </div>
 
     <script src="theme.js"></script>

@@ -75,12 +75,16 @@
     display: flex;
     align-items: center;
     gap: 14px;
+    width: 100%;
     padding: 16px 18px;
     border-radius: 16px;
     background: var(--accent-soft);
     border: 1px solid var(--card-border);
+    font-family: inherit;
     text-decoration: none;
+    text-align: left;
     color: var(--text-primary);
+    cursor: pointer;
     transition: transform 0.22s ease,
                 box-shadow 0.22s ease,
                 background 0.22s ease,
@@ -96,6 +100,7 @@
 .life-card:nth-child(2) { animation-delay: 0.35s; }
 .life-card:nth-child(3) { animation-delay: 0.45s; }
 .life-card:nth-child(4) { animation-delay: 0.55s; }
+.life-card:nth-child(5) { animation-delay: 0.65s; }
 
 .life-card:hover {
     transform: translateY(-3px);
@@ -317,6 +322,145 @@
     transform: translate(-50%, -50%) scale(1);
 }
 
+/* ---------- Join Form ---------- */
+.join-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 2300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.join-modal.is-open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.join-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.34);
+}
+
+.join-modal__card {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 420px);
+    border-radius: 24px;
+    padding: 24px 22px 22px;
+    background: rgba(255, 255, 255, 0.94);
+    border: 1px solid rgba(255, 255, 255, 0.70);
+    color: #111827;
+    box-shadow: 0 22px 58px rgba(0, 0, 0, 0.30);
+    text-shadow: none;
+    transform: translateY(16px) scale(0.94);
+    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.join-modal.is-open .join-modal__card {
+    transform: translateY(0) scale(1);
+}
+
+.dark .join-modal__card {
+    background: rgba(18, 18, 28, 0.94);
+    border-color: rgba(255, 255, 255, 0.18);
+    color: #f8fafc;
+}
+
+.join-modal__close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 34px;
+    height: 34px;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(17, 24, 39, 0.08);
+    color: inherit;
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.join-modal__title {
+    padding-right: 38px;
+    margin-bottom: 8px;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.join-modal__note {
+    margin-bottom: 18px;
+    color: inherit;
+    opacity: 0.72;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.55;
+}
+
+.join-form {
+    display: grid;
+    gap: 14px;
+}
+
+.join-form__field {
+    display: grid;
+    gap: 7px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.join-form__field input {
+    width: 100%;
+    min-height: 46px;
+    border-radius: 14px;
+    border: 1px solid rgba(17, 24, 39, 0.14);
+    padding: 0 14px;
+    background: rgba(255, 255, 255, 0.88);
+    color: #111827;
+    font: inherit;
+    outline: none;
+}
+
+.dark .join-form__field input {
+    border-color: rgba(255, 255, 255, 0.16);
+    background: rgba(255, 255, 255, 0.10);
+    color: #f8fafc;
+}
+
+.join-form__field input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.16);
+}
+
+.join-form__submit {
+    min-height: 46px;
+    margin-top: 4px;
+    border: 0;
+    border-radius: 14px;
+    background: #111827;
+    color: #ffffff;
+    font: inherit;
+    font-weight: 800;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.join-form__submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 26px rgba(0, 0, 0, 0.18);
+}
+
+.dark .join-form__submit {
+    background: #f8fafc;
+    color: #111827;
+}
+
 /* ---------- Responsive ---------- */
 @media (max-width: 480px) {
     .life-page {
@@ -326,12 +470,32 @@
     .life-card {
         padding: 14px 14px;
         gap: 12px;
+        background: transparent;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.14);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
+
+    .dark .life-card {
+        background: transparent;
+        box-shadow: 0 8px 22px rgba(0, 0, 0, 0.26);
+    }
+
+    .life-card:hover {
+        background: transparent;
+        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.18);
+    }
+
+    .dark .life-card:hover {
+        background: transparent;
+        box-shadow: 0 14px 30px rgba(0, 0, 0, 0.32);
     }
 
     .life-card__icon {
         font-size: 17px;
         width: 38px;
         height: 38px;
+        background: transparent;
     }
 
     .life-card__title {
