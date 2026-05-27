@@ -18,9 +18,6 @@
 </head>
 
 <body>
-    <!-- Theme toggle -->
-    <button id="theme-toggle" class="theme-toggle" aria-label="Chuyển giao diện">🌙</button>
-
     <!-- Background blobs -->
     <div class="blob blob--1" aria-hidden="true"></div>
     <div class="blob blob--2" aria-hidden="true"></div>
@@ -82,7 +79,8 @@
                     <i class="fab fa-linkedin-in" aria-hidden="true"></i>
                     <span>LinkedIn</span>
                 </a>
-                <button type="button" class="link-btn link-btn--zalo" id="link-zalo">
+                <button type="button" class="link-btn link-btn--zalo" id="link-zalo"
+                    data-qr-src="images/qr_zalo.jpg" data-qr-alt="Mã QR Zalo phóng to">
                     <i class="fas fa-qrcode" aria-hidden="true"></i>
                     <span>Zalo QR</span>
                 </button>
@@ -114,16 +112,20 @@
                     <i class="fas fa-heart" aria-hidden="true"></i>
                     <span>Locket</span>
                 </a>
+                <button type="button" class="link-btn link-btn--telegram" id="link-telegram"
+                    data-qr-src="images/qr_lete.jpg" data-qr-alt="Mã QR Telegram phóng to">
+                    <i class="fab fa-telegram-plane" aria-hidden="true"></i>
+                    <span>Telegram QR</span>
+                </button>
             </div>
         </section>
 
 
         <!-- QR Lightbox -->
-        <div class="lightbox" id="qr-lightbox" role="dialog" aria-label="QR Zalo phóng to" aria-hidden="true">
+        <div class="lightbox" id="qr-lightbox" role="dialog" aria-label="QR phóng to" aria-hidden="true">
             <div class="lightbox__backdrop"></div>
             <div class="lightbox__content">
-                <img src="images/qr_zalo.jpg" alt="Mã QR Zalo phóng to" class="lightbox__img" loading="lazy" decoding="async">
-                <button class="lightbox__close" id="qr-close" aria-label="Đóng">&times;</button>
+                <img src="images/qr_zalo.jpg" alt="Mã QR Zalo phóng to" class="lightbox__img" id="qr-lightbox-img" loading="lazy" decoding="async">
             </div>
         </div>
 
@@ -140,23 +142,6 @@
             </article>
         </div>
     </main>
-
-    <!-- Site note -->
-    <div class="site-note" id="site-note" role="dialog" aria-label="Bạn có thể biết" aria-hidden="true">
-        <div class="site-note__backdrop"></div>
-        <article class="site-note__card">
-            <h2 class="site-note__title">Bạn có thể biết</h2>
-            <p class="site-note__text">Nếu chuyển sang dark sẽ ok hơn</p>
-            <div class="site-note__actions">
-                <button type="button" class="site-note__btn site-note__btn--ghost" id="site-note-close">
-                    Đóng
-                </button>
-                <button type="button" class="site-note__btn site-note__btn--primary" id="site-note-snooze">
-                    Tắt 1 tiếng
-                </button>
-            </div>
-        </article>
-    </div>
 
     <!-- Toast notification -->
     <div class="toast" id="toast" aria-live="polite"></div>

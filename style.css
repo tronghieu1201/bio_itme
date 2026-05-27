@@ -1,7 +1,6 @@
 /* ========================================================
    STYLE.CSS – Trọng Hiếu Bio
-   Pure CSS, no framework. Uses CSS custom properties for
-   light/dark theming toggled via .dark on <html>.
+   Pure CSS, no framework. Cloud AI blue/cyan dark palette.
    ======================================================== */
 
 /* ---------- Reset & Base ---------- */
@@ -15,58 +14,33 @@
 
 /* ---------- Design Tokens ---------- */
 :root {
-    /* Light palette */
-    --bg-start: #e0e7ff;
-    --bg-end: #f8e8ff;
-    --card-bg: transparent;
-    --card-border: rgba(255, 255, 255, 0.35);
-    --card-shadow: 0 18px 45px rgba(0, 0, 0, 0.18);
-    --text-primary: #1e1b3a;
-    --text-secondary: #5a5478;
-    --text-muted: #8882a0;
-    --accent: #6c5ce7;
-    --tagline-color: #8b7fc7;
-    --accent-soft: transparent;
-    --btn-hover-lift: 0 14px 30px rgba(0, 0, 0, 0.20);
-    --status-bg: transparent;
-    --status-border: rgba(255, 255, 255, 0.28);
-    --divider: rgba(0, 0, 0, 0.06);
-    --qr-bg: #ffffff;
-    --qr-border: #e2dff0;
-    --toggle-bg: transparent;
-    --toggle-color: #333;
-    --page-bg-image: url("images/lightbackgroud.png");
-    --page-bg-overlay: rgba(255, 255, 255, 0.03);
-    --blob-1: rgba(108, 92, 231, 0.18);
-    --blob-2: rgba(162, 130, 255, 0.14);
-    --blob-3: rgba(255, 170, 210, 0.13);
-}
-
-.dark {
-    --bg-start: #0c0a1d;
-    --bg-end: #18122b;
-    --card-bg: transparent;
-    --card-border: rgba(255, 255, 255, 0.22);
-    --card-shadow: 0 22px 52px rgba(0, 0, 0, 0.36);
-    --text-primary: #eae6ff;
-    --text-secondary: #b3aed0;
-    --text-muted: #7d78a0;
-    --accent: #a78bfa;
-    --tagline-color: #c4b5fd;
-    --accent-soft: transparent;
-    --btn-hover-lift: 0 14px 34px rgba(0, 0, 0, 0.30);
-    --status-bg: transparent;
-    --status-border: rgba(255, 255, 255, 0.12);
-    --divider: rgba(255, 255, 255, 0.06);
-    --qr-bg: #1e1a35;
-    --qr-border: #2e2852;
-    --toggle-bg: transparent;
-    --toggle-color: #eae6ff;
-    --page-bg-image: url("images/darkbackgroud.png");
-    --page-bg-overlay: rgba(0, 0, 0, 0.06);
-    --blob-1: rgba(108, 92, 231, 0.10);
-    --blob-2: rgba(162, 130, 255, 0.08);
-    --blob-3: rgba(255, 130, 190, 0.06);
+    --bg-start: #04091a;
+    --bg-end: #0a1628;
+    --card-bg: rgba(14, 26, 52, 0.85);
+    --card-border: rgba(59, 130, 246, 0.25);
+    --card-shadow: 0 24px 64px rgba(0, 0, 0, 0.52);
+    --text-primary: #f0f4ff;
+    --text-secondary: #94a3b8;
+    --text-muted: #4a6080;
+    --accent: #3b82f6;
+    --accent-strong: #60a5fa;
+    --cyan-glow: #06b6d4;
+    --cyan-soft: #67e8f9;
+    --tagline-color: #94a3b8;
+    --accent-soft: rgba(59, 130, 246, 0.06);
+    --btn-hover-lift: 0 14px 34px rgba(59, 130, 246, 0.20);
+    --status-bg: rgba(59, 130, 246, 0.04);
+    --status-border: rgba(59, 130, 246, 0.25);
+    --divider: rgba(59, 130, 246, 0.18);
+    --qr-bg: #FFFFFF;
+    --qr-border: rgba(59, 130, 246, 0.35);
+    --toggle-bg: rgba(14, 26, 52, 0.85);
+    --toggle-color: #f0f4ff;
+    --page-bg-image: url("images/backgrod.jpg");
+    --page-bg-overlay: rgba(4, 9, 26, 0.82);
+    --blob-1: rgba(59, 130, 246, 0.10);
+    --blob-2: rgba(6, 182, 212, 0.08);
+    --blob-3: rgba(96, 165, 250, 0.06);
 }
 
 /* ---------- Body & Background ---------- */
@@ -74,7 +48,8 @@ body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     background:
         linear-gradient(var(--page-bg-overlay), var(--page-bg-overlay)),
-        var(--page-bg-image) center / cover fixed no-repeat;
+        var(--page-bg-image) center / cover fixed no-repeat,
+        linear-gradient(135deg, var(--bg-start), var(--bg-end));
     color: var(--text-primary);
     min-height: 100vh;
     display: flex;
@@ -82,7 +57,33 @@ body {
     align-items: flex-start;
     padding: 48px 16px;
     overflow-x: hidden;
+    position: relative;
     transition: background 0.4s ease, color 0.4s ease;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image:
+        linear-gradient(rgba(59, 130, 246, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(59, 130, 246, 0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 0;
+    width: 600px;
+    height: 600px;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, rgba(6, 182, 212, 0.04) 40%, transparent 70%);
 }
 
 /* Floating blobs */
@@ -127,42 +128,9 @@ body {
     100% { transform: translate(30px, -30px) scale(1.12); }
 }
 
-/* ---------- Theme Toggle ---------- */
-.theme-toggle {
-    position: fixed;
-    top: 18px;
-    right: 18px;
-    width: 46px;
-    height: 46px;
-    border-radius: 14px;
-    border: 1px solid var(--card-border);
-    background: var(--toggle-bg);
-    color: var(--toggle-color);
-    font-size: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 1000;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.14);
-    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease;
-}
-
-.theme-toggle:hover {
-    transform: scale(1.08);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
-}
-
-.theme-toggle:active {
-    transform: scale(0.95);
-}
-
 a,
 button,
-.link-btn,
-.theme-toggle {
+.link-btn {
     -webkit-tap-highlight-color: transparent;
 }
 
@@ -171,26 +139,22 @@ a:active,
 button:focus,
 button:active,
 .link-btn:focus,
-.link-btn:active,
-.theme-toggle:focus,
-.theme-toggle:active {
+.link-btn:active {
     outline: none;
 }
 
 a:focus-visible,
 button:focus-visible,
-.link-btn:focus-visible,
-.theme-toggle:focus-visible {
-    outline: 2px solid rgba(255, 255, 255, 0.58);
+.link-btn:focus-visible {
+    outline: 2px solid rgba(59, 130, 246, 0.82);
     outline-offset: 3px;
-    box-shadow: 0 12px 28px rgba(40, 28, 90, 0.16),
-                inset 0 0 0 1px rgba(255, 255, 255, 0.28);
+    box-shadow: 0 12px 28px rgba(59, 130, 246, 0.24),
+                inset 0 0 0 1px rgba(6, 182, 212, 0.32);
 }
 
 .dark a:focus-visible,
 .dark button:focus-visible,
-.dark .link-btn:focus-visible,
-.dark .theme-toggle:focus-visible {
+.dark .link-btn:focus-visible {
     outline-color: rgba(255, 255, 255, 0.42);
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28),
                 inset 0 0 0 1px rgba(255, 255, 255, 0.16);
@@ -204,12 +168,51 @@ button:focus-visible,
     max-width: 520px;
     background: var(--card-bg);
     border: 1px solid var(--card-border);
-    border-radius: 32px;
+    border-radius: 24px;
     padding: 36px 32px 28px;
     box-shadow: var(--card-shadow);
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    overflow: hidden;
     animation: cardEnter 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.bio-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 20px;
+    right: 20px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), var(--cyan-glow), transparent);
+    opacity: 0.65;
+    pointer-events: none;
+}
+
+.bio-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    padding: 1.5px;
+    border-radius: inherit;
+    background:
+        conic-gradient(from var(--border-angle),
+            transparent 0deg,
+            transparent 42deg,
+            rgba(59, 130, 246, 0.16) 70deg,
+            rgba(6, 182, 212, 0.95) 92deg,
+            rgba(103, 232, 249, 0.95) 106deg,
+            rgba(96, 165, 250, 0.18) 130deg,
+            transparent 158deg,
+            transparent 360deg);
+    -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    pointer-events: none;
+    animation: borderCrawler 4.8s linear infinite;
 }
 
 .bio-card,
@@ -224,8 +227,8 @@ button:focus-visible,
 .album-subtitle,
 .album-back {
     text-shadow:
-        0 1px 2px rgba(255, 255, 255, 0.75),
-        0 2px 8px rgba(255, 255, 255, 0.35);
+        0 1px 2px rgba(0, 0, 0, 0.78),
+        0 2px 9px rgba(0, 0, 0, 0.48);
 }
 
 .dark .bio-card,
@@ -267,9 +270,21 @@ button:focus-visible,
     margin: 0 auto 16px;
     border-radius: 50%;
     padding: 4px;
-    background: linear-gradient(135deg, var(--accent), #f093fb);
-    box-shadow: 0 6px 24px rgba(108, 92, 231, 0.30);
-    animation: avatarFloat 4s ease-in-out infinite;
+    background: linear-gradient(135deg, var(--accent), var(--cyan-glow));
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.30), 0 0 20px rgba(6, 182, 212, 0.15);
+    animation: avatarFloat 4s ease-in-out infinite, avatarGlow 6s linear infinite;
+}
+
+@property --border-angle {
+    syntax: '<angle>';
+    inherits: false;
+    initial-value: 0deg;
+}
+
+@keyframes borderCrawler {
+    to {
+        --border-angle: 360deg;
+    }
 }
 
 .avatar-ring img {
@@ -284,6 +299,15 @@ button:focus-visible,
 @keyframes avatarFloat {
     0%, 100% { transform: translateY(0); }
     50%      { transform: translateY(-8px); }
+}
+
+@keyframes avatarGlow {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.30), 0 0 20px rgba(6, 182, 212, 0.15);
+    }
+    50% {
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.10), 0 0 30px rgba(6, 182, 212, 0.25);
+    }
 }
 
 .profile-name {
@@ -306,7 +330,7 @@ button:focus-visible,
 }
 
 .profile-name-btn:hover {
-    color: var(--accent);
+    color: var(--accent-strong);
     background: transparent;
     transform: translateY(-1px);
 }
@@ -432,24 +456,27 @@ button:focus-visible,
     width: 100%;
     gap: 14px;
     padding: 16px 18px;
-    border-radius: 18px;
+    border-radius: 12px;
     border: 1px solid var(--card-border);
-    background: var(--accent-soft);
+    background: transparent;
     color: var(--text-primary);
-    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.14);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.18);
     font: inherit;
     text-align: left;
     text-decoration: none;
     cursor: pointer;
+    position: relative;
+    overflow: hidden;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
-    transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+    transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease, background 0.22s ease;
 }
 
 .group-card:hover {
-    transform: translateY(-3px);
+    transform: translateX(2px);
     box-shadow: var(--btn-hover-lift);
-    border-color: var(--card-border);
+    border-color: rgba(6, 182, 212, 0.50);
+    background: transparent;
 }
 
 .group-card:active {
@@ -459,13 +486,30 @@ button:focus-visible,
 .group-card__icon {
     width: 44px;
     height: 44px;
-    border-radius: 14px;
+    border-radius: 8px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    color: var(--accent);
+    color: var(--accent-strong);
     font-size: 18px;
+    background: transparent;
+    border: 1px solid rgba(59, 130, 246, 0.20);
+}
+
+.group-card[data-panel-target="work-panel"] .group-card__icon {
+    color: #60A5FA;
+    text-shadow: 0 0 14px rgba(96, 165, 250, 0.35);
+}
+
+.group-card[data-panel-target="social-panel"] .group-card__icon {
+    color: #1877F2;
+    text-shadow: 0 0 14px rgba(24, 119, 242, 0.35);
+}
+
+.group-card--link .group-card__icon {
+    color: #FF4D8D;
+    text-shadow: 0 0 14px rgba(255, 77, 141, 0.35);
 }
 
 .group-card__body {
@@ -489,7 +533,7 @@ button:focus-visible,
 
 .group-card:hover .group-card__arrow {
     transform: translateX(3px);
-    color: var(--accent);
+    color: var(--cyan-glow);
 }
 
 .link-panel {
@@ -539,22 +583,23 @@ button:focus-visible,
 }
 
 .panel-back:hover {
-    color: var(--accent);
+    color: var(--accent-strong);
     transform: translateX(-3px);
 }
 
 /* ---------- Link Buttons ---------- */
 .link-btn {
+    --tint: var(--accent);
     display: flex;
     align-items: center;
     gap: 12px;
     padding: 14px 20px;
-    border-radius: 14px;
+    border-radius: 10px;
     text-decoration: none;
     font-size: 15px;
     font-weight: 600;
     color: var(--text-primary);
-    background: var(--accent-soft);
+    background: transparent;
     border: 1px solid var(--card-border);
     box-shadow: 0 8px 22px rgba(0, 0, 0, 0.14);
     backdrop-filter: none;
@@ -572,12 +617,14 @@ button:focus-visible,
     width: 22px;
     text-align: center;
     flex-shrink: 0;
+    filter: drop-shadow(0 0 6px color-mix(in srgb, currentColor 42%, transparent));
 }
 
 .link-btn:hover {
-    transform: translateY(-3px);
+    transform: translateX(2px);
     box-shadow: var(--btn-hover-lift);
-    border-color: var(--card-border);
+    border-color: color-mix(in srgb, var(--tint) 48%, transparent);
+    background: transparent;
 }
 
 .link-btn:active {
@@ -590,34 +637,60 @@ button:focus-visible,
     position: absolute;
     inset: 0;
     background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%),
-                rgba(255,255,255,0.18) 0%, transparent 60%);
+                rgba(96, 165, 250, 0.24) 0%, transparent 60%);
     opacity: 0;
     transition: opacity 0.3s ease;
     pointer-events: none;
+}
+
+.link-btn::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--tint);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+}
+
+.link-btn:hover::before {
+    opacity: 1;
 }
 
 .link-btn:hover::after {
     opacity: 1;
 }
 
-/* Per-platform accent tints */
-.link-btn--email       { --tint: #e74c3c; }
-.link-btn--zalo        { --tint: #0068ff; }
-.link-btn--facebook    { --tint: #1877f2; }
-.link-btn--instagram   { --tint: #e1306c; }
-.link-btn--locket      { --tint: #f9c74f; }
-.link-btn--linkedin    { --tint: #0a66c2; }
-.link-btn--github      { --tint: #6e40c9; }
-.link-btn--life        { --tint: #e84393; }
+/* Per-platform brand tints */
+.link-btn--email       { --tint: #EA4335; }
+.link-btn--zalo        { --tint: #0068FF; }
+.link-btn--facebook    { --tint: #1877F2; }
+.link-btn--instagram   { --tint: #E4405F; }
+.link-btn--locket      { --tint: #FFD400; }
+.link-btn--linkedin    { --tint: #0A66C2; }
+.link-btn--github      { --tint: #FFFFFF; }
+.link-btn--life        { --tint: #FF4D8D; }
+.link-btn--telegram    { --tint: #26A5E4; }
 
-.link-btn--email i       { color: #e74c3c; }
-.link-btn--zalo i        { color: #0068ff; }
-.link-btn--facebook i    { color: #1877f2; }
-.link-btn--instagram i   { color: #e1306c; }
-.link-btn--locket i      { color: #f59e0b; }
-.link-btn--linkedin i    { color: #0a66c2; }
-.link-btn--github i      { color: #6e40c9; }
-.link-btn--life i        { color: #e84393; }
+.link-btn--email i       { color: #EA4335; }
+.link-btn--zalo i        { color: #0068FF; }
+.link-btn--facebook i    { color: #1877F2; }
+.link-btn--instagram i   { color: #E4405F; }
+.link-btn--locket i      { color: #FFD400; }
+.link-btn--linkedin i    { color: #0A66C2; }
+.link-btn--github i      { color: #FFFFFF; }
+.link-btn--life i        { color: #FF4D8D; }
+.link-btn--telegram i    { color: #26A5E4; }
+
+.link-btn--instagram i {
+    color: #E4405F;
+    filter:
+        drop-shadow(0 0 4px rgba(228, 64, 95, 0.45))
+        drop-shadow(0 0 8px rgba(253, 175, 69, 0.20));
+}
 
 .link-btn:hover {
     background: transparent;
@@ -709,8 +782,35 @@ button:focus-visible,
 .lightbox__content {
     position: relative;
     z-index: 1;
+    border-radius: 22px;
     transform: scale(0.85);
     transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.lightbox__content::after {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    z-index: -1;
+    padding: 2px;
+    border-radius: 24px;
+    background:
+        conic-gradient(from var(--border-angle),
+            transparent 0deg,
+            transparent 42deg,
+            rgba(59, 130, 246, 0.16) 70deg,
+            rgba(6, 182, 212, 0.95) 92deg,
+            rgba(103, 232, 249, 0.95) 106deg,
+            rgba(96, 165, 250, 0.18) 130deg,
+            transparent 158deg,
+            transparent 360deg);
+    -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    pointer-events: none;
+    animation: borderCrawler 4.8s linear infinite;
 }
 
 .lightbox.is-open .lightbox__content {
@@ -718,6 +818,8 @@ button:focus-visible,
 }
 
 .lightbox__img {
+    position: relative;
+    z-index: 1;
     width: 280px;
     height: 280px;
     border-radius: 20px;
@@ -726,31 +828,6 @@ button:focus-visible,
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
     object-fit: contain;
     display: block;
-}
-
-.lightbox__close {
-    position: absolute;
-    top: -14px;
-    right: -14px;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    border: none;
-    background: var(--accent);
-    color: #fff;
-    font-size: 22px;
-    line-height: 1;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    transition: transform 0.2s ease, background 0.2s ease;
-}
-
-.lightbox__close:hover {
-    transform: scale(1.12);
-    background: #5a3fd4;
 }
 
 /* ---------- Profile Info Modal ---------- */
@@ -775,7 +852,7 @@ button:focus-visible,
 .profile-modal__backdrop {
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.38);
+    background: rgba(2, 6, 23, 0.68);
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
 }
@@ -785,12 +862,12 @@ button:focus-visible,
     z-index: 1;
     width: min(100%, 420px);
     min-height: 220px;
-    background: rgba(255, 255, 255, 0.94);
-    border: 1px solid rgba(255, 255, 255, 0.70);
+    background: rgba(39, 64, 62, 0.96);
+    border: 1px solid rgba(6, 182, 212, 0.50);
     border-radius: 24px;
     padding: 26px 24px 22px;
-    color: #111827;
-    box-shadow: 0 20px 58px rgba(0, 0, 0, 0.28);
+    color: #FFFFFF;
+    box-shadow: 0 22px 64px rgba(2, 6, 23, 0.52);
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     text-shadow: none;
@@ -818,7 +895,7 @@ button:focus-visible,
     height: 34px;
     border: 0;
     border-radius: 50%;
-    background: rgba(17, 24, 39, 0.08);
+    background: rgba(59, 130, 246, 0.12);
     color: inherit;
     font-size: 22px;
     line-height: 1;
@@ -830,7 +907,7 @@ button:focus-visible,
 }
 
 .profile-modal__close:hover {
-    background: var(--accent);
+    background: #3B82F6;
     color: #fff;
     transform: scale(1.08);
 }
@@ -868,115 +945,6 @@ button:focus-visible,
     color: inherit;
 }
 
-/* ---------- Site Note ---------- */
-.site-note {
-    position: fixed;
-    inset: 0;
-    z-index: 2400;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.24s ease, visibility 0.24s ease;
-}
-
-.site-note.is-open {
-    opacity: 1;
-    visibility: visible;
-}
-
-.site-note__backdrop {
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.34);
-}
-
-.site-note__card {
-    position: relative;
-    z-index: 1;
-    width: min(100%, 380px);
-    padding: 24px 22px 20px;
-    border-radius: 22px;
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.72);
-    color: #111827;
-    box-shadow: 0 22px 58px rgba(0, 0, 0, 0.30);
-    text-align: center;
-    text-shadow: none;
-    transform: translateY(16px) scale(0.94);
-    transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.site-note.is-open .site-note__card {
-    transform: translateY(0) scale(1);
-}
-
-.dark .site-note__card {
-    background: rgba(18, 18, 28, 0.95);
-    border-color: rgba(255, 255, 255, 0.18);
-    color: #f8fafc;
-}
-
-.site-note__title {
-    font-size: 20px;
-    font-weight: 800;
-    margin-bottom: 10px;
-}
-
-.site-note__text {
-    font-size: 15px;
-    font-weight: 600;
-    line-height: 1.6;
-    margin-bottom: 20px;
-}
-
-.site-note__actions {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
-}
-
-.site-note__btn {
-    min-height: 44px;
-    border-radius: 14px;
-    border: 1px solid rgba(17, 24, 39, 0.12);
-    font-family: inherit;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-}
-
-.site-note__btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
-}
-
-.site-note__btn--ghost {
-    background: rgba(17, 24, 39, 0.06);
-    color: inherit;
-}
-
-.site-note__btn--primary {
-    background: #111827;
-    color: #ffffff;
-}
-
-.dark .site-note__btn {
-    border-color: rgba(255, 255, 255, 0.16);
-}
-
-.dark .site-note__btn--ghost {
-    background: rgba(255, 255, 255, 0.10);
-}
-
-.dark .site-note__btn--primary {
-    background: #f8fafc;
-    color: #111827;
-}
-
 /* ---------- Album Pages ---------- */
 .album-page {
     max-width: 1120px;
@@ -1003,7 +971,7 @@ button:focus-visible,
 }
 
 .album-back:hover {
-    color: var(--accent);
+    color: #60A5FA;
     background: transparent;
     transform: translateX(-3px);
 }
@@ -1168,7 +1136,8 @@ button:focus-visible,
 
 .photo-lightbox__close:hover {
     transform: scale(1.1);
-    background: #5a3fd4;
+    background: #60A5FA;
+    color: #000000;
 }
 
 .photo-pager {
@@ -1194,7 +1163,7 @@ button:focus-visible,
 
 .photo-pager__btn:hover,
 .photo-pager__btn.is-active {
-    background: var(--accent);
+    background: #3B82F6;
     color: #fff;
     transform: translateY(-1px);
 }
@@ -1225,21 +1194,21 @@ button:focus-visible,
 /* ---------- Responsive ---------- */
 @media (max-width: 480px) {
     :root {
-        --card-bg: transparent;
-        --card-border: rgba(255, 255, 255, 0.34);
-        --accent-soft: transparent;
-        --status-bg: transparent;
+        --card-bg: rgba(15, 23, 42, 0.88);
+        --card-border: rgba(59, 130, 246, 0.28);
+        --accent-soft: rgba(30, 58, 138, 0.68);
+        --status-bg: rgba(30, 58, 138, 0.62);
         --toggle-bg: transparent;
-        --page-bg-image: url("images/lightbackgroudmobile.png");
+        --page-bg-image: url("images/backgrod.jpg");
     }
 
     .dark {
-        --card-bg: transparent;
-        --card-border: rgba(255, 255, 255, 0.22);
-        --accent-soft: transparent;
-        --status-bg: transparent;
+        --card-bg: rgba(15, 23, 42, 0.88);
+        --card-border: rgba(59, 130, 246, 0.28);
+        --accent-soft: rgba(30, 58, 138, 0.68);
+        --status-bg: rgba(30, 58, 138, 0.62);
         --toggle-bg: transparent;
-        --page-bg-image: url("images/darkbackgroudmobile.png");
+        --page-bg-image: url("images/backgrod.jpg");
     }
 
     body {
@@ -1252,8 +1221,7 @@ button:focus-visible,
     .group-card,
     .panel-back,
     .life-card,
-    .photo-card,
-    .theme-toggle {
+    .photo-card {
         -webkit-tap-highlight-color: transparent;
     }
 
@@ -1280,16 +1248,15 @@ button:focus-visible,
     .photo-card:active {
         outline: none;
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.16),
-                    inset 0 0 0 1px rgba(255, 255, 255, 0.28);
+                    inset 0 0 0 1px rgba(6, 182, 212, 0.28);
     }
 
     .link-btn:focus-visible,
     .group-card:focus-visible,
     .life-card:focus-visible,
-    .photo-card:focus-visible,
-    .theme-toggle:focus-visible {
+    .photo-card:focus-visible {
         transform: translateY(-2px);
-        outline: 2px solid rgba(255, 255, 255, 0.55);
+        outline: 2px solid rgba(103, 232, 249, 0.72);
         outline-offset: 3px;
     }
 
@@ -1305,8 +1272,8 @@ button:focus-visible,
     .life-card,
     .album-back {
         text-shadow:
-            0 1px 2px rgba(255, 255, 255, 0.85),
-            0 2px 8px rgba(255, 255, 255, 0.45);
+            0 1px 2px rgba(0, 0, 0, 0.85),
+            0 2px 9px rgba(0, 0, 0, 0.55);
     }
 
     .dark .bio-card,
@@ -1328,7 +1295,7 @@ button:focus-visible,
     .bio-card {
         padding: 32px 20px 28px;
         border-radius: 22px;
-        background: transparent;
+        background: var(--card-bg);
         box-shadow: 0 14px 34px rgba(0, 0, 0, 0.16);
         backdrop-filter: none;
         -webkit-backdrop-filter: none;
@@ -1341,11 +1308,8 @@ button:focus-visible,
     .link-btn,
     .group-card,
     .life-card,
-    .status-box,
-    .profile-modal__card,
-    .photo-card,
-    .theme-toggle {
-        background: rgba(255, 255, 255, 0.07);
+    .photo-card {
+        background: transparent;
         border-color: var(--card-border);
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.14);
         backdrop-filter: none;
@@ -1365,26 +1329,23 @@ button:focus-visible,
     }
 
     .profile-tagline {
-        color: #6d5dfc;
+        color: #60A5FA;
         font-weight: 700;
     }
 
     .dark .link-btn,
     .dark .group-card,
     .dark .life-card,
-    .dark .status-box,
-    .dark .profile-modal__card,
-    .dark .photo-card,
-    .dark .theme-toggle {
-        background: rgba(255, 255, 255, 0.06);
+    .dark .photo-card {
+        background: transparent;
         box-shadow: 0 8px 22px rgba(0, 0, 0, 0.26);
     }
 
     .profile-modal__card {
-        background: rgba(255, 255, 255, 0.94);
-        border-color: rgba(255, 255, 255, 0.70);
-        color: #111827;
-        box-shadow: 0 20px 58px rgba(0, 0, 0, 0.28);
+        background: rgba(30, 58, 138, 0.96);
+        border-color: rgba(59, 130, 246, 0.48);
+        color: #FFFFFF;
+        box-shadow: 0 22px 64px rgba(0, 0, 0, 0.62);
         text-shadow: none;
     }
 
@@ -1408,16 +1369,16 @@ button:focus-visible,
     .group-card:hover,
     .life-card:hover,
     .photo-card:hover {
-        background: rgba(255, 255, 255, 0.08);
+        background: transparent;
         transform: translateY(-3px);
-        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.18);
+        box-shadow: 0 14px 28px rgba(59, 130, 246, 0.24);
     }
 
     .dark .link-btn:hover,
     .dark .group-card:hover,
     .dark .life-card:hover,
     .dark .photo-card:hover {
-        background: rgba(255, 255, 255, 0.08);
+        background: transparent;
         box-shadow: 0 14px 30px rgba(0, 0, 0, 0.32);
     }
 
@@ -1589,7 +1550,7 @@ button.link-btn {
     width: 100%;
     font-family: inherit;
     cursor: pointer;
-    background: var(--accent-soft);
+    background: transparent;
 }
 
 /* ---------- Accessibility: Reduce Motion ---------- */
@@ -1608,6 +1569,10 @@ button.link-btn {
     }
 
     .avatar-ring {
+        animation: none !important;
+    }
+
+    .bio-card::after {
         animation: none !important;
     }
 

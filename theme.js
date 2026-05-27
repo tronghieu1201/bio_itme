@@ -1,61 +1,5 @@
-// theme.js – light/dark theme toggle with localStorage persistence
-// and pointer-tracking ripple effect on link buttons.
+// theme.js – interactions for link panels, modals, galleries, and toasts.
 (function () {
-    const STORAGE_KEY = 'site-theme';
-    const toggle = document.getElementById('theme-toggle');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
-
-    /* ---- Theme application ---- */
-    function applyTheme(theme) {
-        const root = document.documentElement;
-        if (theme === 'dark') {
-            root.classList.add('dark');
-            toggle.textContent = '☀️';
-            toggle.setAttribute('aria-label', 'Chuyển sang giao diện sáng');
-        } else {
-            root.classList.remove('dark');
-            toggle.textContent = '🌙';
-            toggle.setAttribute('aria-label', 'Chuyển sang giao diện tối');
-        }
-    }
-
-    function getStoredTheme() {
-        try {
-            return localStorage.getItem(STORAGE_KEY);
-        } catch (e) {
-            return null;
-        }
-    }
-
-    /* ---- Initialise ---- */
-    const stored = getStoredTheme();
-    if (stored === 'dark' || stored === 'light') {
-        applyTheme(stored);
-    } else {
-        applyTheme(prefersDark.matches ? 'dark' : 'light');
-    }
-
-    /* ---- System preference change ---- */
-    if (prefersDark.addEventListener) {
-        prefersDark.addEventListener('change', function (e) {
-            if (!getStoredTheme()) {
-                applyTheme(e.matches ? 'dark' : 'light');
-            }
-        });
-    }
-
-    /* ---- Toggle click ---- */
-    if (toggle) {
-        toggle.addEventListener('click', function () {
-            var isDark = document.documentElement.classList.contains('dark');
-            var next = isDark ? 'light' : 'dark';
-            try {
-                localStorage.setItem(STORAGE_KEY, next);
-            } catch (e) { /* quota exceeded – ignore */ }
-            applyTheme(next);
-        });
-    }
-
     /* ---- Pointer-tracking ripple on .link-btn ---- */
     var lastRippleTime = 0;
     var rippleThrottle = 16; // ~60fps
@@ -77,6 +21,24 @@
     /* ---- Link group panels ---- */
     var linkHub = document.getElementById('link-hub');
     var linkPanels = Array.prototype.slice.call(document.querySelectorAll('.link-panel'));
+    var panelHistoryActive = false;
+    var qrHistoryActive = false;
+
+    function pushUiState(state) {
+        if (!window.history || !window.history.pushState) return false;
+        try {
+            window.history.pushState(state, '');
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    function hasOpenLinkPanel() {
+        return linkPanels.some(function (panel) {
+            return panel.classList.contains('is-open');
+        });
+    }
 
     function closeLinkPanels() {
         if (linkHub) linkHub.classList.remove('is-hidden');
@@ -84,11 +46,16 @@
             panel.classList.remove('is-open');
             panel.setAttribute('aria-hidden', 'true');
         });
+        panelHistoryActive = false;
     }
 
-    function openLinkPanel(panelId) {
+    function openLinkPanel(panelId, skipHistory) {
         var target = document.getElementById(panelId);
         if (!target || !linkHub) return;
+
+        if (!skipHistory) {
+            panelHistoryActive = pushUiState({ bioPanel: panelId });
+        }
 
         linkHub.classList.add('is-hidden');
         linkPanels.forEach(function (panel) {
@@ -105,42 +72,102 @@
     });
 
     document.querySelectorAll('[data-panel-back]').forEach(function (btn) {
-        btn.addEventListener('click', closeLinkPanels);
+        btn.addEventListener('click', function () {
+            if (panelHistoryActive) {
+                window.history.back();
+            } else {
+                closeLinkPanels();
+            }
+        });
     });
 
     /* ---- QR Lightbox ---- */
-    var zaloBtn = document.getElementById('link-zalo');
-    var qrClose = document.getElementById('qr-close');
     var lightbox = document.getElementById('qr-lightbox');
+    var qrLightboxImg = document.getElementById('qr-lightbox-img');
 
-    function openLightbox() {
+    function openLightbox(trigger, skipHistory) {
         if (lightbox) {
+            var qrSrc = trigger ? trigger.getAttribute('data-qr-src') : '';
+            var qrAlt = trigger ? trigger.getAttribute('data-qr-alt') : '';
+            if (trigger && qrLightboxImg) {
+                qrLightboxImg.src = qrSrc || 'images/qr_zalo.jpg';
+                qrLightboxImg.alt = qrAlt || 'Ma QR phong to';
+            }
+            if (!skipHistory) {
+                qrHistoryActive = pushUiState({
+                    qrLightbox: true,
+                    qrSrc: qrSrc || 'images/qr_zalo.jpg',
+                    qrAlt: qrAlt || 'Ma QR phong to'
+                });
+            }
             lightbox.classList.add('is-open');
             lightbox.setAttribute('aria-hidden', 'false');
         }
     }
 
-    function closeLightbox() {
+    function closeLightbox(skipHistory) {
         if (lightbox) {
+            if (!skipHistory && qrHistoryActive) {
+                window.history.back();
+                return;
+            }
             lightbox.classList.remove('is-open');
             lightbox.setAttribute('aria-hidden', 'true');
+            qrHistoryActive = false;
         }
     }
 
-    if (zaloBtn) {
-        zaloBtn.addEventListener('click', openLightbox);
-    }
-
-    if (qrClose) {
-        qrClose.addEventListener('click', closeLightbox);
-    }
+    document.querySelectorAll('[data-qr-src]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            openLightbox(btn);
+        });
+    });
 
     if (lightbox) {
-        lightbox.querySelector('.lightbox__backdrop').addEventListener('click', closeLightbox);
+        lightbox.querySelector('.lightbox__backdrop').addEventListener('click', function () {
+            closeLightbox();
+        });
         document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape') closeLightbox();
         });
     }
+
+    window.addEventListener('popstate', function (e) {
+        if (e.state && e.state.qrLightbox) {
+            if (qrLightboxImg) {
+                qrLightboxImg.src = e.state.qrSrc || 'images/qr_zalo.jpg';
+                qrLightboxImg.alt = e.state.qrAlt || 'Ma QR phong to';
+            }
+            qrHistoryActive = true;
+            openLightbox(null, true);
+            return;
+        }
+
+        if (qrHistoryActive) {
+            closeLightbox(true);
+            return;
+        }
+
+        if (e.state && e.state.bioPanel) {
+            openLinkPanel(e.state.bioPanel, true);
+            panelHistoryActive = true;
+            return;
+        }
+
+        if (panelHistoryActive || hasOpenLinkPanel()) {
+            closeLinkPanels();
+        }
+    });
+
+    document.addEventListener('keydown', function (e) {
+        if (lightbox && lightbox.classList.contains('is-open')) return;
+        if (e.key !== 'Escape' || !hasOpenLinkPanel()) return;
+        if (panelHistoryActive) {
+            window.history.back();
+        } else {
+            closeLinkPanels();
+        }
+    });
 
     /* ---- Profile Info Card ---- */
     var profileOpenBtn = document.getElementById('profile-info-open');
@@ -173,53 +200,6 @@
         profileModal.querySelector('.profile-modal__backdrop').addEventListener('click', closeProfileModal);
         document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape') closeProfileModal();
-        });
-    }
-
-    /* ---- Site Note ---- */
-    var NOTE_SNOOZE_KEY = 'site-note-snooze-until';
-    var noteModal = document.getElementById('site-note');
-    var noteCloseBtn = document.getElementById('site-note-close');
-    var noteSnoozeBtn = document.getElementById('site-note-snooze');
-
-    function getNoteSnoozeUntil() {
-        try {
-            return Number(localStorage.getItem(NOTE_SNOOZE_KEY)) || 0;
-        } catch (e) {
-            return 0;
-        }
-    }
-
-    function setNoteSnoozeUntil(value) {
-        try {
-            localStorage.setItem(NOTE_SNOOZE_KEY, String(value));
-        } catch (e) { /* ignore storage errors */ }
-    }
-
-    function openSiteNote() {
-        if (!noteModal) return;
-        noteModal.classList.add('is-open');
-        noteModal.setAttribute('aria-hidden', 'false');
-    }
-
-    function closeSiteNote() {
-        if (!noteModal) return;
-        noteModal.classList.remove('is-open');
-        noteModal.setAttribute('aria-hidden', 'true');
-    }
-
-    if (noteModal && Date.now() >= getNoteSnoozeUntil()) {
-        window.setTimeout(openSiteNote, 350);
-    }
-
-    if (noteCloseBtn) {
-        noteCloseBtn.addEventListener('click', closeSiteNote);
-    }
-
-    if (noteSnoozeBtn) {
-        noteSnoozeBtn.addEventListener('click', function () {
-            setNoteSnoozeUntil(Date.now() + 60 * 60 * 1000);
-            closeSiteNote();
         });
     }
 
