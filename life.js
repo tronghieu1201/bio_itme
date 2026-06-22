@@ -14,6 +14,8 @@
     var joinForm = document.getElementById('join-form');
     var joinCreatedAt = document.getElementById('join-created-at');
     var toastTimer = null;
+    var thoughtsConfirmModal = null;
+    var thoughtsConfirmCloseTimer = null;
     var JOIN_STORAGE_KEY = 'life-join-submissions';
     var DEFAULT_TOAST_MESSAGE = toast ? toast.textContent : 'Mục này đang được cập nhật, hãy quay lại sau nhé!';
     var THOUGHTS_STORAGE_KEY = 'life-thoughts-selected';
@@ -41,7 +43,7 @@
             images: [] // Add image filenames here, e.g. ['mon1.jpg', 'mon2.jpg']
         },
         thoughts: {
-            title: 'Tâm sự',
+            title: 'Sai số thứ...',
             folder: 'images/life/daily/', // reuse daily folder or create a separate one
             images: []
         },
@@ -156,6 +158,75 @@
         }, 900);
     }
 
+    function stopConfirmEvent(ev) {
+        ev.preventDefault();
+        ev.stopPropagation();
+    }
+
+    function ensureThoughtsConfirmModal() {
+        if (thoughtsConfirmModal) return thoughtsConfirmModal;
+
+        thoughtsConfirmModal = document.createElement('div');
+        thoughtsConfirmModal.className = 'thoughts-confirm';
+        thoughtsConfirmModal.setAttribute('aria-hidden', 'true');
+        thoughtsConfirmModal.innerHTML =
+            '<div class="thoughts-confirm__backdrop"></div>' +
+            '<article class="thoughts-confirm__card" role="dialog" aria-modal="true" aria-label="X&aacute;c nh&#7853;n L&#259;ng k&iacute;nh">' +
+                '<p class="thoughts-confirm__message">C&oacute; th&#7875; kh&ocirc;ng &#273;&uacute;ng v&#7899;i b&#7841;n, nh&#432;ng n&oacute; l&agrave; g&oacute;c nh&igrave;n t&#7915;ng tr&#7843;i c&#7911;a Hi&#7871;u.</p>' +
+                '<div class="thoughts-confirm__actions">' +
+                    '<button type="button" class="thoughts-confirm__accept">Ch&#7845;p nh&#7853;n</button>' +
+                    '<button type="button" class="thoughts-confirm__decline">Kh&ocirc;ng</button>' +
+                '</div>' +
+            '</article>';
+
+        var backdrop = thoughtsConfirmModal.querySelector('.thoughts-confirm__backdrop');
+        var card = thoughtsConfirmModal.querySelector('.thoughts-confirm__card');
+
+        ['pointerdown', 'touchend', 'click'].forEach(function (eventName) {
+            backdrop.addEventListener(eventName, stopConfirmEvent);
+            card.addEventListener(eventName, function (ev) {
+                ev.stopPropagation();
+            });
+        });
+
+        thoughtsConfirmModal.querySelector('.thoughts-confirm__accept').addEventListener('click', function (ev) {
+            stopConfirmEvent(ev);
+            closeThoughtsConfirm(true);
+        });
+
+        thoughtsConfirmModal.querySelector('.thoughts-confirm__decline').addEventListener('click', function (ev) {
+            stopConfirmEvent(ev);
+            closeThoughtsConfirm(false);
+        });
+
+        document.body.appendChild(thoughtsConfirmModal);
+        return thoughtsConfirmModal;
+    }
+
+    function openThoughtsConfirm() {
+        var modal = ensureThoughtsConfirmModal();
+        clearTimeout(thoughtsConfirmCloseTimer);
+        document.body.classList.add('is-modal-open');
+        modal.classList.remove('is-closing');
+        modal.classList.add('is-open');
+        modal.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeThoughtsConfirm(accepted) {
+        if (!thoughtsConfirmModal) return;
+        thoughtsConfirmModal.classList.remove('is-open');
+        thoughtsConfirmModal.classList.add('is-closing');
+        thoughtsConfirmModal.setAttribute('aria-hidden', 'true');
+
+        thoughtsConfirmCloseTimer = setTimeout(function () {
+            if (!thoughtsConfirmModal) return;
+            thoughtsConfirmModal.classList.remove('is-closing');
+            if (!accepted) document.body.classList.remove('is-modal-open');
+        }, 320);
+
+        if (accepted) openGallery('thoughts');
+    }
+
     function closeGallery() {
         if (!overlay) return;
         clearTimeout(toastTimer);
@@ -213,6 +284,12 @@
             var category = card.getAttribute('data-category');
             if (!category) return;
             e.preventDefault();
+
+            if (category === 'thoughts') {
+                openThoughtsConfirm();
+                return;
+            }
+
             if (category) openGallery(category);
         });
     });

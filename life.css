@@ -14,18 +14,26 @@
     text-align: center;
     margin-bottom: 24px;
     position: relative;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .life-back {
+    position: absolute;
+    left: 0;
+    top: 50%;
     display: flex;
     align-items: center;
     gap: 6px;
     width: fit-content;
-    margin: 0 auto 14px 0;
+    margin: 0;
     font-size: 13px;
     font-weight: 700;
     color: var(--text-primary);
     text-decoration: none;
+    transform: translateY(-50%);
     transition: color 0.2s ease, transform 0.2s ease;
     padding: 8px 10px;
     border-radius: 999px;
@@ -43,7 +51,7 @@
 
 .life-back:hover {
     color: var(--accent);
-    transform: translateX(-3px);
+    transform: translate(-3px, -50%);
 }
 
 .life-back i {
@@ -51,10 +59,12 @@
 }
 
 .life-title {
+    position: relative;
+    left: -13px;
     font-size: 22px;
     font-weight: 700;
     color: var(--text-primary);
-    margin-bottom: 6px;
+    margin: 0;
     animation: fadeSlideUp 0.6s 0.1s both;
 }
 
@@ -382,7 +392,7 @@
 .life-toast {
     position: fixed;
     left: 50%;
-    top: 50%;
+    top: 38%;
     z-index: 9999;
     transform: translate(-50%, -50%) scale(0.96);
     width: min(86vw, 340px);
@@ -409,6 +419,100 @@
     opacity: 1;
     visibility: visible;
     transform: translate(-50%, -50%) scale(1);
+    pointer-events: auto;
+}
+
+.thoughts-confirm {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: clamp(132px, 18vh, 170px) 20px 20px;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.22s ease, visibility 0.22s ease;
+}
+
+.thoughts-confirm.is-open,
+.thoughts-confirm.is-closing {
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.thoughts-confirm.is-open {
+    opacity: 1;
+}
+
+.thoughts-confirm.is-closing {
+    opacity: 0;
+}
+
+.thoughts-confirm__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(2, 8, 23, 0.62);
+    pointer-events: auto;
+}
+
+.thoughts-confirm__card {
+    position: relative;
+    z-index: 1;
+    width: min(88vw, 390px);
+    padding: 22px;
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(13, 26, 51, 0.96);
+    color: #fff;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.42);
+    text-align: center;
+    transform: translateY(8px) scale(0.98);
+    transition: transform 0.22s ease;
+}
+
+.thoughts-confirm.is-open .thoughts-confirm__card {
+    transform: translateY(0) scale(1);
+}
+
+.thoughts-confirm__message {
+    margin: 0 0 16px;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.55;
+    color: var(--text-muted);
+}
+
+.thoughts-confirm__actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.thoughts-confirm__actions button {
+    min-height: 42px;
+    padding: 9px 12px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    color: #fff;
+    font-weight: 800;
+    cursor: pointer;
+    transition: transform 0.12s ease, background 0.12s ease, border-color 0.12s ease;
+}
+
+.thoughts-confirm__actions button:hover {
+    transform: translateY(-2px);
+}
+
+.thoughts-confirm__accept {
+    background: linear-gradient(90deg, rgba(59, 130, 246, 0.42), rgba(37, 99, 235, 0.3));
+    border-color: rgba(96, 165, 250, 0.36);
+    color: #e6f4ff;
+}
+
+.thoughts-confirm__decline {
+    background: rgba(255, 255, 255, 0.05);
 }
 
 /* ---------- Join Form ---------- */
@@ -589,6 +693,10 @@
 
     .life-card__title {
         font-size: 14px;
+    }
+
+    .thoughts-confirm {
+        padding-top: 116px;
     }
 
     .gallery-panel {
