@@ -46,6 +46,10 @@
             panel.classList.remove('is-open');
             panel.setAttribute('aria-hidden', 'true');
         });
+        document.querySelectorAll('[data-panel-target]').forEach(function (btn) {
+            btn.classList.remove('is-active');
+            btn.setAttribute('aria-expanded', 'false');
+        });
         panelHistoryActive = false;
     }
 
@@ -63,6 +67,12 @@
             panel.classList.toggle('is-open', isTarget);
             panel.setAttribute('aria-hidden', isTarget ? 'false' : 'true');
         });
+
+        document.querySelectorAll('[data-panel-target]').forEach(function (btn) {
+            var isActive = btn.getAttribute('data-panel-target') === panelId;
+            btn.classList.toggle('is-active', isActive);
+            btn.setAttribute('aria-expanded', isActive ? 'true' : 'false');
+        });
     }
 
     document.querySelectorAll('[data-panel-target]').forEach(function (btn) {
@@ -70,6 +80,35 @@
             openLinkPanel(btn.getAttribute('data-panel-target'));
         });
     });
+
+    function prefetchPage(url) {
+        if (!url || !document.createElement) return;
+        var link = document.createElement('link');
+        link.rel = 'prefetch';
+        link.href = url;
+        document.head.appendChild(link);
+    }
+
+    function navigateWithTransition(url) {
+        if (!url) return;
+        var mainCard = document.querySelector('.bio-card');
+        if (mainCard) {
+            mainCard.classList.add('is-exiting');
+        }
+        document.body.classList.add('is-page-transitioning');
+        setTimeout(function () {
+            window.location.href = url;
+        }, 180);
+    }
+
+    var personalLink = document.getElementById('link-life');
+    if (personalLink) {
+        personalLink.addEventListener('click', function (e) {
+            e.preventDefault();
+            navigateWithTransition(personalLink.getAttribute('href'));
+        });
+        prefetchPage(personalLink.getAttribute('href'));
+    }
 
     document.querySelectorAll('[data-panel-back]').forEach(function (btn) {
         btn.addEventListener('click', function () {
@@ -100,6 +139,7 @@
                     qrAlt: qrAlt || 'Ma QR phong to'
                 });
             }
+            document.body.classList.add('is-modal-open');
             lightbox.classList.add('is-open');
             lightbox.setAttribute('aria-hidden', 'false');
         }
@@ -111,6 +151,7 @@
                 window.history.back();
                 return;
             }
+            document.body.classList.remove('is-modal-open');
             lightbox.classList.remove('is-open');
             lightbox.setAttribute('aria-hidden', 'true');
             qrHistoryActive = false;
@@ -176,6 +217,7 @@
 
     function openProfileModal() {
         if (profileModal) {
+            document.body.classList.add('is-modal-open');
             profileModal.classList.add('is-open');
             profileModal.setAttribute('aria-hidden', 'false');
         }
@@ -183,6 +225,7 @@
 
     function closeProfileModal() {
         if (profileModal) {
+            document.body.classList.remove('is-modal-open');
             profileModal.classList.remove('is-open');
             profileModal.setAttribute('aria-hidden', 'true');
         }
@@ -223,12 +266,14 @@
             photoLightboxCaption.textContent = caption;
             photoLightboxCaption.hidden = !caption;
         }
+        document.body.classList.add('is-modal-open');
         photoLightbox.classList.add('is-open');
         photoLightbox.setAttribute('aria-hidden', 'false');
     }
 
     function closePhotoLightbox() {
         if (!photoLightbox) return;
+        document.body.classList.remove('is-modal-open');
         photoLightbox.classList.remove('is-open');
         photoLightbox.setAttribute('aria-hidden', 'true');
     }
