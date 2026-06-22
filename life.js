@@ -15,8 +15,7 @@
     var joinCreatedAt = document.getElementById('join-created-at');
     var toastTimer = null;
     var JOIN_STORAGE_KEY = 'life-join-submissions';
-    var OPEN_CATEGORY_STORAGE_KEY = 'life-open-category';
-    var DEFAULT_TOAST_MESSAGE = toast ? toast.textContent : 'Chưa update. Hãy quay lại sau nhé!';
+    var DEFAULT_TOAST_MESSAGE = toast ? toast.textContent : 'Mục này đang được cập nhật, hãy quay lại sau nhé!';
     var THOUGHTS_STORAGE_KEY = 'life-thoughts-selected';
     var thoughtsQuotes = [
         'Nghe hàng nghìn đạo lý — nhưng vẫn chưa sống tốt ở hiện tại.',
@@ -127,10 +126,6 @@
         quoteEl.classList.remove('is-visible');
         quoteEl.innerHTML = '';
 
-        try {
-            localStorage.setItem(OPEN_CATEGORY_STORAGE_KEY, categoryKey);
-        } catch (e) {}
-
         if (categoryKey === 'thoughts') {
             renderThoughtsQuotes();
         } else if (cat.images.length === 0) {
@@ -158,7 +153,7 @@
         toast.classList.add('is-visible');
         toastTimer = setTimeout(function () {
             toast.classList.remove('is-visible');
-        }, 2600);
+        }, 900);
     }
 
     function closeGallery() {
@@ -167,6 +162,12 @@
         document.body.classList.remove('is-modal-open');
         overlay.classList.remove('is-open');
         overlay.setAttribute('aria-hidden', 'true');
+
+        var url = new URL(window.location.href);
+        if (url.searchParams.has('category')) {
+            url.searchParams.delete('category');
+            history.replaceState({}, '', url.pathname + (url.search ? '?' + url.searchParams.toString() : ''));
+        }
     }
 
     function openJoinModal() {
@@ -231,14 +232,12 @@
         joinClose.addEventListener('click', closeJoinModal);
     }
 
-    var savedGalleryCategory = null;
-    try {
-        savedGalleryCategory = localStorage.getItem(OPEN_CATEGORY_STORAGE_KEY);
-    } catch (e) {}
-    if (savedGalleryCategory && categories[savedGalleryCategory]) {
-        openGallery(savedGalleryCategory);
+    // Auto-open category only when the URL explicitly requests one.
+    var params = new URLSearchParams(window.location.search);
+    var categoryParam = params.get('category');
+    if (categoryParam && categories[categoryParam]) {
+        openGallery(categoryParam);
     }
-
     if (joinModal) {
         joinModal.querySelector('.join-modal__backdrop').addEventListener('click', closeJoinModal);
     }

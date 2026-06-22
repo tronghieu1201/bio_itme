@@ -19,8 +19,8 @@
 <body>
     <main class="bio-card album-page">
         <header class="album-header">
-            <a href="./life.html" class="album-back" aria-label="Ve Goc ca nhan">
-                <i class="fas fa-arrow-left" aria-hidden="true"></i>         
+            <a href="#" class="album-back" id="album-back" aria-label="Về Góc cá nhân">
+                <i class="fas fa-arrow-left" aria-hidden="true"></i>
             </a>
         </header>
 
@@ -39,6 +39,23 @@
     </div>
 
     <script src="theme.js"></script>
+    <script>
+        (function () {
+            var backBtn = document.getElementById('album-back');
+            if (!backBtn) return;
+
+            backBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                var ref = document.referrer ? new URL(document.referrer, window.location.href) : null;
+                if (ref && ref.pathname.endsWith('/life.html')) {
+                    window.location.href = './life.html';
+                } else {
+                    window.location.href = './';
+                }
+            });
+        })();
+    </script>
 </body>
 
 </html>

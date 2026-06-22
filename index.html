@@ -58,7 +58,7 @@
                 <i class="fas fa-chevron-right group-card__arrow" aria-hidden="true"></i>
             </button>
 
-            <a href="./life.html" class="group-card group-card--link" id="link-life">
+            <a href="./life.html" class="group-card">
                 <span class="group-card__icon"><i class="fas fa-heart" aria-hidden="true"></i></span>
                 <span class="group-card__body">
                     <span class="group-card__title">Góc cá nhân</span>
@@ -123,6 +123,15 @@
             </div>
         </section>
 
+        <section class="link-panel" id="life-panel" aria-label="Góc cá nhân" aria-hidden="true">
+            <button type="button" class="panel-back" data-panel-back>
+                <i class="fas fa-arrow-left" aria-hidden="true"></i>
+            </button>
+            <div class="life-grid" id="life-grid-container">
+                <!-- Life category cards will be inserted here by JS -->
+            </div>
+        </section>
+
 
         <!-- QR Lightbox -->
         <div class="lightbox" id="qr-lightbox" role="dialog" aria-label="QR phóng to" aria-hidden="true">
@@ -150,6 +159,128 @@
     <div class="toast" id="toast" aria-live="polite"></div>
 
     <script src="theme.js"></script>
+    <script>
+        // Handle Góc cá nhân panel
+        (function() {
+            var lifePanel = document.getElementById('life-panel');
+            var lifeGridContainer = document.getElementById('life-grid-container');
+            var groupCardButtons = document.querySelectorAll('[data-panel-target]');
+            var panelBackButtons = document.querySelectorAll('[data-panel-back]');
+
+            // Life categories config
+            var lifeCategories = [
+                {
+                    id: 'cooking',
+                    title: 'Nấu ăn',
+                    icon: 'fas fa-utensils',
+                    href: './cooking.html',
+                    desc: 'Cơm sinh viên.'
+                },
+                {
+                    id: 'thoughts',
+                    title: 'Tâm sự',
+                    icon: 'fas fa-pen',
+                    href: './life.html?category=thoughts',
+                    desc: 'Vài câu nói...'
+                },
+                {
+                    id: 'friends',
+                    title: 'Bạn bè',
+                    icon: 'fas fa-user-group',
+                    href: './life.html?category=friends',
+                    desc: 'Bạn bè của Hiếu.'
+                },
+                {
+                    id: 'daily',
+                    title: 'Khoảnh khắc',
+                    icon: 'fas fa-camera',
+                    href: './life.html?category=daily',
+                    desc: 'Một tí sự vô tri.'
+                },
+                {
+                    id: 'join',
+                    title: 'Information',
+                    icon: 'fas fa-handshake',
+                    href: './life.html',
+                    desc: 'Gửi thông tin tại đây...'
+                }
+            ];
+
+            // Render life categories
+            function renderLifeCategories() {
+                lifeGridContainer.innerHTML = '';
+                lifeCategories.forEach(function(cat) {
+                    var link = document.createElement('a');
+                    link.href = cat.href || '#';
+                    link.className = 'life-card';
+                    link.id = 'life-card-' + cat.id;
+                    link.innerHTML = '<div class="life-card__icon"><i class="' + cat.icon + '" aria-hidden="true"></i></div>' +
+                                     '<div class="life-card__body">' +
+                                     '<h2 class="life-card__title">' + cat.title + '</h2>' +
+                                     '<p class="life-card__desc">' + cat.desc + '</p>' +
+                                     '</div>' +
+                                     '<i class="fas fa-chevron-right life-card__arrow" aria-hidden="true"></i>';
+                    lifeGridContainer.appendChild(link);
+                });
+            }
+
+            // Open panel
+            function openPanel(targetId) {
+                var targetPanel = document.getElementById(targetId);
+                if (!targetPanel) return;
+
+                // Hide all other panels
+                var allPanels = document.querySelectorAll('.link-panel');
+                allPanels.forEach(function(panel) {
+                    panel.classList.remove('is-open');
+                    panel.setAttribute('aria-hidden', 'true');
+                });
+
+                // Hide link hub
+                var linkHub = document.getElementById('link-hub');
+                if (linkHub) linkHub.classList.add('is-hidden');
+
+                // Show target panel
+                targetPanel.classList.add('is-open');
+                targetPanel.setAttribute('aria-hidden', 'false');
+
+                // Render life categories if life panel
+                if (targetId === 'life-panel') {
+                    renderLifeCategories();
+                }
+            }
+
+            // Close panel
+            function closePanel() {
+                var allPanels = document.querySelectorAll('.link-panel');
+                allPanels.forEach(function(panel) {
+                    panel.classList.remove('is-open');
+                    panel.setAttribute('aria-hidden', 'true');
+                });
+
+                var linkHub = document.getElementById('link-hub');
+                if (linkHub) linkHub.classList.remove('is-hidden');
+            }
+
+            // Attach click handlers
+            groupCardButtons.forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    var targetId = btn.getAttribute('data-panel-target');
+                    openPanel(targetId);
+                    btn.classList.add('is-active');
+                });
+            });
+
+            panelBackButtons.forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    closePanel();
+                    groupCardButtons.forEach(function(btn) {
+                        btn.classList.remove('is-active');
+                    });
+                });
+            });
+        })();
+    </script>
 </body>
 
 </html>
