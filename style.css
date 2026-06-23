@@ -1786,3 +1786,20 @@ button.link-btn {
         transition: none !important;
     }
 }
+
+/* ---------- Transparent Page Cards ---------- */
+.bio-card.home-bio-card,
+.bio-card.life-page,
+.bio-card.album-page,
+.photo-card {
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+.dark .bio-card.home-bio-card,
+.dark .bio-card.life-page,
+.dark .bio-card.album-page,
+.dark .photo-card {
+    background: transparent;
+}
