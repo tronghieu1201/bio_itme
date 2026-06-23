@@ -37,7 +37,7 @@
     --qr-border: rgba(59, 130, 246, 0.35);
     --toggle-bg: rgba(14, 26, 52, 0.85);
     --toggle-color: #f0f4ff;
-    --page-bg-image: url("images/backgrod.jpg");
+    --page-bg-image: url("images/backgrod.webp");
     --page-bg-overlay: rgba(4, 9, 26, 0.82);
     --blob-1: rgba(59, 130, 246, 0.10);
     --blob-2: rgba(6, 182, 212, 0.08);
@@ -1374,7 +1374,7 @@ body.is-page-transitioning {
         --accent-soft: rgba(30, 58, 138, 0.68);
         --status-bg: rgba(30, 58, 138, 0.62);
         --toggle-bg: transparent;
-        --page-bg-image: url("images/backgrod.jpg");
+        --page-bg-image: url("images/backgrod.webp");
     }
 
     .dark {
@@ -1383,7 +1383,7 @@ body.is-page-transitioning {
         --accent-soft: rgba(30, 58, 138, 0.68);
         --status-bg: rgba(30, 58, 138, 0.62);
         --toggle-bg: transparent;
-        --page-bg-image: url("images/backgrod.jpg");
+        --page-bg-image: url("images/backgrod.webp");
     }
 
     body {

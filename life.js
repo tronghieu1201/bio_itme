@@ -6,6 +6,8 @@
     var quoteEl = document.getElementById('gallery-quote');
     var emptyEl = document.getElementById('gallery-empty');
     var closeBtn = document.getElementById('gallery-close');
+    var thoughtsGuide = document.getElementById('thoughts-guide');
+    var thoughtsGuideBtn = document.getElementById('thoughts-guide-btn');
     var backBtn = document.getElementById('life-back');
     var toast = document.getElementById('life-toast');
     var joinBtn = document.getElementById('card-join');
@@ -34,6 +36,64 @@
         'Anh học thêm, để kể em nhiều — Em học thêm, để hiểu những gì anh kể.'
     ];
     var specialThoughtIndexes = [1, 7, 11];
+    var thoughtsGuideNotice = null;
+    var thoughtsGuideCloseTimer = null;
+    var GUIDE_BIRTH_DATE = '17/04/2004';
+    var GUIDE_BIRTH_DIGITS = '17042004';
+
+    function sumDigits(value) {
+        return String(value).replace(/\D/g, '').split('').reduce(function (total, digit) {
+            return total + Number(digit);
+        }, 0);
+    }
+
+    function getDigitSumExpression(value) {
+        return String(value).replace(/\D/g, '').split('').join(' + ');
+    }
+
+    function reduceToSingleDigit(value) {
+        var current = value;
+        var steps = [];
+
+        while (current >= 10) {
+            var expression = getDigitSumExpression(current);
+            current = sumDigits(current);
+            steps.push(expression + ' = ' + current);
+        }
+
+        return {
+            result: current,
+            steps: steps
+        };
+    }
+
+    function getThoughtsGuideMessage() {
+        var currentDay = new Date().getDate();
+        var birthSum = sumDigits(GUIDE_BIRTH_DIGITS);
+        var total = birthSum + currentDay;
+        var reduced = reduceToSingleDigit(total);
+        var reductionRows = reduced.steps.map(function (step) {
+            return '<p>' + step + '</p>';
+        }).join('');
+
+        return '' +
+            '<h3>C&aacute;ch t&iacute;nh sai s&#7889;</h3>' +
+            '<ol>' +
+                '<li>C&#7897;ng t&#7845;t c&#7843; c&aacute;c ch&#7919; s&#7889; c&#7911;a ng&agrave;y sinh (dd/mm/yyyy).</li>' +
+                '<li>C&#7897;ng th&ecirc;m ng&agrave;y hi&#7879;n t&#7841;i (' + currentDay + ').</li>' +
+                '<li>N&#7871;u k&#7871;t qu&#7843; c&oacute; t&#7915; 2 ch&#7919; s&#7889; tr&#7903; l&ecirc;n, ti&#7871;p t&#7909;c c&#7897;ng c&aacute;c ch&#7919; s&#7889; c&#7911;a k&#7871;t qu&#7843; cho &#273;&#7871;n khi c&ograve;n 1 ch&#7919; s&#7889; duy nh&#7845;t.</li>' +
+            '</ol>' +
+            '<div class="thoughts-guide-notice__example">' +
+                '<strong>V&iacute; d&#7909;</strong>' +
+                '<p>Ng&agrave;y sinh: ' + GUIDE_BIRTH_DATE + '</p>' +
+                '<p>T&#7893;ng c&aacute;c ch&#7919; s&#7889; ng&agrave;y sinh: ' + getDigitSumExpression(GUIDE_BIRTH_DIGITS) + ' = ' + birthSum + '</p>' +
+                '<p>H&ocirc;m nay l&agrave; ng&agrave;y ' + currentDay + ':</p>' +
+                '<p>' + birthSum + ' + ' + currentDay + ' = ' + total + '</p>' +
+                '<p>R&uacute;t g&#7885;n:</p>' +
+                reductionRows +
+                '<p>K&#7871;t qu&#7843; cu&#7889;i c&ugrave;ng: ' + reduced.result + '</p>' +
+            '</div>';
+    }
 
     // Category config: map category key → display name and image folder
     var categories = {
@@ -95,6 +155,9 @@
         gridEl.innerHTML = '';
         gridEl.dataset.mode = 'thoughts';
         emptyEl.hidden = true;
+        if (thoughtsGuide) {
+            thoughtsGuide.hidden = false;
+        }
         quoteEl.className = 'gallery-panel__quote';
         quoteEl.innerHTML = '';
         quoteEl.hidden = true;
@@ -119,6 +182,7 @@
         titleEl.textContent = cat.title;
         gridEl.innerHTML = '';
         gridEl.dataset.mode = '';
+        if (thoughtsGuide) thoughtsGuide.hidden = true;
         clearTimeout(toastTimer);
         document.body.classList.add('is-modal-open');
         emptyEl.hidden = false;
@@ -156,6 +220,45 @@
         toastTimer = setTimeout(function () {
             toast.classList.remove('is-visible');
         }, 900);
+    }
+
+    function ensureThoughtsGuideNotice() {
+        if (thoughtsGuideNotice) return thoughtsGuideNotice;
+
+        thoughtsGuideNotice = document.createElement('div');
+        thoughtsGuideNotice.className = 'thoughts-guide-notice';
+        thoughtsGuideNotice.setAttribute('aria-hidden', 'true');
+        thoughtsGuideNotice.innerHTML =
+            '<div class="thoughts-guide-notice__backdrop"></div>' +
+            '<article class="thoughts-guide-notice__card" role="dialog" aria-modal="true" aria-label="H&#432;&#7899;ng d&#7851;n">' +
+                '<button type="button" class="thoughts-guide-notice__close" aria-label="&#272;&#243;ng">&times;</button>' +
+                '<div class="thoughts-guide-notice__message"></div>' +
+            '</article>';
+
+        thoughtsGuideNotice.querySelector('.thoughts-guide-notice__backdrop').addEventListener('click', closeThoughtsGuideNotice);
+        thoughtsGuideNotice.querySelector('.thoughts-guide-notice__close').addEventListener('click', closeThoughtsGuideNotice);
+        document.body.appendChild(thoughtsGuideNotice);
+        return thoughtsGuideNotice;
+    }
+
+    function openThoughtsGuideNotice() {
+        var notice = ensureThoughtsGuideNotice();
+        var messageEl = notice.querySelector('.thoughts-guide-notice__message');
+        if (messageEl) messageEl.innerHTML = getThoughtsGuideMessage();
+        clearTimeout(thoughtsGuideCloseTimer);
+        notice.classList.remove('is-closing');
+        notice.classList.add('is-open');
+        notice.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeThoughtsGuideNotice() {
+        if (!thoughtsGuideNotice) return;
+        thoughtsGuideNotice.classList.remove('is-open');
+        thoughtsGuideNotice.classList.add('is-closing');
+        thoughtsGuideNotice.setAttribute('aria-hidden', 'true');
+        thoughtsGuideCloseTimer = setTimeout(function () {
+            if (thoughtsGuideNotice) thoughtsGuideNotice.classList.remove('is-closing');
+        }, 220);
     }
 
     function stopConfirmEvent(ev) {
@@ -309,6 +412,10 @@
         joinClose.addEventListener('click', closeJoinModal);
     }
 
+    if (thoughtsGuideBtn) {
+        thoughtsGuideBtn.addEventListener('click', openThoughtsGuideNotice);
+    }
+
     // Auto-open category only when the URL explicitly requests one.
     var params = new URLSearchParams(window.location.search);
     var categoryParam = params.get('category');
@@ -370,6 +477,7 @@
         if (e.key === 'Escape') {
             closeGallery();
             closeJoinModal();
+            closeThoughtsGuideNotice();
         }
     });
 })();
