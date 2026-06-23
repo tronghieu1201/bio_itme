@@ -414,6 +414,25 @@
             });
     }
 
+    function getStaticGalleryPhotos(gallery, dir) {
+        var imageList = gallery.getAttribute('data-gallery-images') || '';
+        if (!imageList.trim()) return [];
+
+        return imageList.split(',')
+            .map(function (name) {
+                return name.trim();
+            })
+            .filter(function (name) {
+                return name && isImageFile(name);
+            })
+            .map(function (name, index, files) {
+                return {
+                    src: dir + name,
+                    name: name,
+                    time: files.length - index
+                };
+            });
+    }
     function addGithubPhotoTimes(gallery, photos) {
         var owner = gallery.getAttribute('data-github-owner');
         var repo = gallery.getAttribute('data-github-repo');
@@ -451,6 +470,12 @@
         loadingDiv.textContent = 'Đang tải ảnh...';
         gallery.innerHTML = '';
         gallery.appendChild(loadingDiv);
+
+        var staticPhotos = getStaticGalleryPhotos(gallery, dir);
+        if (staticPhotos.length) {
+            renderPhotoGallery(gallery, staticPhotos);
+            return;
+        }
 
         fetch(dir)
             .then(function (response) {
