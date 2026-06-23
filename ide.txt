@@ -1,0 +1,4 @@
+fix 2 chỗ 
+
+1 chữ Chỉ có bạn của Hiếu mới biết key chỉ lại thu nhỏ chữ lại chữ nhỏ thôi hiện tại chữ hơi to 
+2 Nhập sai key lại báo Nh&#7853;p key tr&#7853;t l&#7845;t nếu sai thì báo Nhập key trật lất
