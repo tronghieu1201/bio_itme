@@ -801,6 +801,121 @@
     color: #f0f4ff;
 }
 
+.key-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 2400;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.24s ease, visibility 0.24s ease;
+}
+
+.key-modal.is-open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.key-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(2, 6, 23, 0.68);
+}
+
+.key-modal__card {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 380px);
+    border-radius: 20px;
+    padding: 22px;
+    background: rgba(13, 26, 51, 0.96);
+    border: 1px solid rgba(96, 165, 250, 0.28);
+    color: #fff;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.42);
+    transform: translateY(12px) scale(0.96);
+    transition: transform 0.24s ease;
+}
+
+.key-modal.is-open .key-modal__card {
+    transform: translateY(0) scale(1);
+}
+
+.key-modal__close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    color: inherit;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.key-modal__title {
+    margin: 0 38px 8px 0;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.key-modal__note {
+    margin: 0 0 16px;
+    color: var(--text-secondary);
+    font-size: 13px;
+    line-height: 1.55;
+}
+
+.key-form {
+    display: grid;
+    gap: 10px;
+}
+
+.key-form input {
+    width: 100%;
+    min-height: 44px;
+    border-radius: 12px;
+    border: 1px solid rgba(96, 165, 250, 0.28);
+    padding: 0 12px;
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff;
+    font: inherit;
+    outline: none;
+}
+
+.key-form input::placeholder {
+    color: rgba(226, 232, 240, 0.58);
+    font-size: 11px;
+}
+
+.key-form input:focus {
+    border-color: var(--accent-strong);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18);
+}
+
+.key-form button {
+    min-height: 44px;
+    border: 0;
+    border-radius: 12px;
+    background: #3b82f6;
+    color: #f0f4ff;
+    font: inherit;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.key-modal__error {
+    min-height: 18px;
+    color: #fca5a5;
+    font-size: 12px;
+    font-weight: 700;
+}
+
 @keyframes fadeSlideUpCentered {
     from {
         opacity: 0;

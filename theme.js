@@ -302,6 +302,28 @@
         gallery.appendChild(card);
     }
 
+    function createPlaceholderPhotoCard(gallery, index) {
+        var card = document.createElement('div');
+        card.className = 'photo-card photo-card--placeholder';
+        card.setAttribute('aria-label', 'Khung anh dang cho cap nhat ' + index);
+        card.innerHTML =
+            '<div class="photo-placeholder">' +
+                '<i class="fas fa-image" aria-hidden="true"></i>' +
+                '<span>Dang cho anh</span>' +
+            '</div>';
+        gallery.appendChild(card);
+    }
+
+    function renderPlaceholderGallery(gallery, count) {
+        var total = Math.max(1, Number(count) || 9);
+        var oldPager = gallery.parentElement.querySelector('.photo-pager');
+        if (oldPager) oldPager.remove();
+        gallery.innerHTML = '';
+        for (var i = 1; i <= total; i += 1) {
+            createPlaceholderPhotoCard(gallery, i);
+        }
+    }
+
     function getPhotoTime(photo) {
         return photo.time || 0;
     }
@@ -469,6 +491,12 @@
         var staticPhotos = getStaticGalleryPhotos(gallery, dir);
         if (staticPhotos.length) {
             renderPhotoGallery(gallery, staticPhotos);
+            return;
+        }
+
+        var placeholderCount = gallery.getAttribute('data-gallery-placeholders');
+        if (placeholderCount) {
+            renderPlaceholderGallery(gallery, placeholderCount);
             return;
         }
 
