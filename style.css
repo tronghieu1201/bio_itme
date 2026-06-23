@@ -1654,7 +1654,8 @@ body.is-page-transitioning {
     }
 
     .photo-pager {
-        display: none;
+        display: flex;
+        flex-wrap: wrap;
     }
 
     .photo-lightbox {

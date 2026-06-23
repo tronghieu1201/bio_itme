@@ -314,14 +314,11 @@
         });
     }
 
-    function isCompactPhotoGrid() {
-        return window.matchMedia && window.matchMedia('(max-width: 480px)').matches;
-    }
 
     function createPhotoPager(gallery, pageCount, currentPage, onPageChange) {
         var oldPager = gallery.parentElement.querySelector('.photo-pager');
         if (oldPager) oldPager.remove();
-        if (pageCount <= 1 || isCompactPhotoGrid()) return;
+        if (pageCount <= 1) return;
 
         var pager = document.createElement('nav');
         pager.className = 'photo-pager';
@@ -348,12 +345,10 @@
     }
 
     function renderPhotoGalleryPage(gallery, photos, page) {
-        var perPage = isCompactPhotoGrid() ? Math.max(photos.length, 1) : 9;
+        var perPage = 9;
         var pageCount = Math.max(1, Math.ceil(photos.length / perPage));
         var currentPage = Math.min(Math.max(page || 1, 1), pageCount);
-        var visiblePhotos = isCompactPhotoGrid()
-            ? photos
-            : photos.slice((currentPage - 1) * perPage, currentPage * perPage);
+        var visiblePhotos = photos.slice((currentPage - 1) * perPage, currentPage * perPage);
 
         gallery.innerHTML = '';
         gallery._currentPage = currentPage;
