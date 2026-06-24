@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Best Friends - Trong Hieu</title>
+    <meta name="description" content="Best Friends - Trong Hieu.">
+    <link rel="canonical" href="https://tronghieu1201.github.io/bio_itme/best-friends.html">
+    <link rel="icon" type="image/webp" href="https://res.cloudinary.com/dtpw5htqs/image/upload/v1782284174/4eae1994-3eea-4630-bc8e-10974bcad260_vvwupz.webp">
+    <link rel="apple-touch-icon" href="https://res.cloudinary.com/dtpw5htqs/image/upload/v1782284174/4eae1994-3eea-4630-bc8e-10974bcad260_vvwupz.webp">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="life.css">
+    <script>
+        (function () {
+            var filename = window.location.pathname.split('/').filter(Boolean).pop() || 'best-friends.html';
+            var unlockKey = 'life-unlocked:' + filename;
+            try {
+                if (sessionStorage.getItem(unlockKey) === '1') return;
+            } catch (e) {}
+            window.location.replace('./bite-mark.html');
+        })();
+    </script></head>
+
+<body>
+    <main class="bio-card album-page">
+        <header class="life-header">
+            <a href="./bite-mark.html" class="life-back" aria-label="Ve Bite Mark"><i class="fas fa-arrow-left" aria-hidden="true"></i></a>
+            <h1 class="life-title">𝖊𝖒 𝖍í𝖚</h1>
+        </header>
+
+        <section class="photo-gallery" aria-label="Album Best Friends" data-gallery-cloudinary="https://res.cloudinary.com/dtpw5htqs/image/upload/v1782285735/z7970828591662_7287208052dbaa6a8a1637bec96113f7_ggy62w.webp,https://res.cloudinary.com/dtpw5htqs/image/upload/v1782285193/IMG_1458_qexx6a.webp,https://res.cloudinary.com/dtpw5htqs/image/upload/v1782285192/IMG_1457_juqln5.webp,https://res.cloudinary.com/dtpw5htqs/image/upload/v1782285191/df711c41-215c-40da-9737-0fe450b9be96_whjnnx.webp,https://res.cloudinary.com/dtpw5htqs/image/upload/v1782285190/cf891f1f-21f1-440d-b49f-2d86efa462ea_ubvgwp.webp,https://res.cloudinary.com/dtpw5htqs/image/upload/v1782285188/cd942cc0-cf13-4e00-ba61-65a0e5435340_r94gy3.webp,https://res.cloudinary.com/dtpw5htqs/image/upload/v1782285187/643c91de-691e-4ba4-8ef3-ceb05b586c5c_bawxlb.webp,https://res.cloudinary.com/dtpw5htqs/image/upload/v1782285185/z7968429834343_5b9e8278fc949764c79f2744244c449e_vh9pcp.webp,https://res.cloudinary.com/dtpw5htqs/image/upload/v1782285186/0d1d757b-1e88-4f78-bc10-613370b6b7ce_tihgyu.webp,https://res.cloudinary.com/dtpw5htqs/image/upload/v1782285183/z7968429774386_c18dda87d14938d0c632f4e15391a9dc_s6oq3y.webp,https://res.cloudinary.com/dtpw5htqs/image/upload/v1782285181/z7961712141973_cdc3cbe101365e1b34abe5ffdaf78a4d_e2jtbp.webp,https://res.cloudinary.com/dtpw5htqs/image/upload/v1782285180/z7429701366088_8556aaaf9a0a19a2b05ce342b7e6fec2_piqmpy.webp,https://res.cloudinary.com/dtpw5htqs/image/upload/v1782285179/IMG_4147_vmjxjx.webp,https://res.cloudinary.com/dtpw5htqs/image/upload/v1782285178/IMG_3753_rlcxk9.webp,https://res.cloudinary.com/dtpw5htqs/image/upload/v1782285176/IMG_3720_poncwz.webp,https://res.cloudinary.com/dtpw5htqs/image/upload/v1782285176/IMG_3718_sxxsqt.webp,https://res.cloudinary.com/dtpw5htqs/image/upload/v1782285175/IMG_3072_ncbq6o.webp" data-pinned-image="https://res.cloudinary.com/dtpw5htqs/image/upload/v1782285181/z7961712141973_cdc3cbe101365e1b34abe5ffdaf78a4d_e2jtbp.webp"></section>
+    </main>
+
+    <div class="photo-lightbox" id="photo-lightbox" role="dialog" aria-label="Anh phong to" aria-hidden="true">
+        <div class="photo-lightbox__backdrop"></div>
+        <div class="photo-lightbox__content">
+            <button class="photo-lightbox__close" id="photo-lightbox-close" aria-label="Dong">&times;</button>
+            <img class="photo-lightbox__img" id="photo-lightbox-img" src="" alt="" loading="lazy" decoding="async">
+            <div class="photo-lightbox__caption" id="photo-lightbox-caption"></div>
+        </div>
+    </div>
+
+    <script src="theme.js"></script>
+</body>
+
+</html>

@@ -29,11 +29,12 @@
         'Biết đủ để không cần nói.',
         'Ai cũng nghĩ mình là nạn nhân nhưng đâu nghĩ rằng ai cũng có lỗi.',
         'Một khoảnh khắc nhỏ đã biến ngày hôm đó thành kỷ niệm.',
-        'Mình đang yêu người đó theo cách hiện tại, hay mình đang giữ một phần của bản thân mình trong quá khứ.',
+        'Không cho em được gì nhiều nên chẳng dám đòi hỏi bao nhiêu.',
         'Khởi đầu đầy lời tạm biệt.',
         'Hãy chấp nhận góc nhìn của người khác mà không cần chứng minh mình đúng.',
-        'Bất kể là mối quan hệ gì, khi người khác không cần. Bạn phải học cách thu hồi sự nhiệt tình và lịch sự rời đi.',
-        'Anh học thêm, để kể em nhiều — Em học thêm, để hiểu những gì anh kể.'
+        'Mình đang yêu người đó theo cách hiện tại, hay mình đang giữ một phần của bản thân mình trong quá khứ.',
+        'Anh học thêm, để kể em nhiều — Em học thêm, để hiểu những gì anh kể.',
+        'Bất kể là mối quan hệ gì, khi người khác không cần. Bạn phải học cách thu hồi sự nhiệt tình và lịch sự rời đi.'
     ];
     var specialThoughtIndexes = [1, 7, 11];
     var thoughtsGuideNotice = null;
@@ -105,7 +106,7 @@
             title: 'Sai số thứ...',
             images: []
         },
-        friends: {
+        connections: {
             title: 'Bạn bè',
             images: []
         },

@@ -456,7 +456,7 @@
     }
 
     function renderPhotoGallery(gallery, photos) {
-        var sortedPhotos = sortPhotosNewestFirst(photos);
+        var sortedPhotos = applyPinnedPhotoOrder(gallery, sortPhotosNewestFirst(photos));
         gallery._photos = sortedPhotos;
         renderPhotoGalleryPage(gallery, sortedPhotos, 1);
     }

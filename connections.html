@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ban be - Trong Hieu</title>
-    <meta name="description" content="Menu ban be cua Trong Hieu.">
-    <link rel="canonical" href="https://tronghieu1201.github.io/bio_itme/friends.html">
+    <title>Connections - Trong Hieu</title>
+    <meta name="description" content="Connections cua Trong Hieu.">
+    <link rel="canonical" href="https://tronghieu1201.github.io/bio_itme/connections.html">
     <link rel="icon" type="image/webp" href="https://res.cloudinary.com/dtpw5htqs/image/upload/v1782284174/4eae1994-3eea-4630-bc8e-10974bcad260_vvwupz.webp">
     <link rel="apple-touch-icon" href="https://res.cloudinary.com/dtpw5htqs/image/upload/v1782284174/4eae1994-3eea-4630-bc8e-10974bcad260_vvwupz.webp">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,17 +30,17 @@
             <h1 class="life-title">𝖊𝖒 𝖍í𝖚</h1>
         </header>
 
-        <section class="life-grid" aria-label="Danh muc ban be">
+        <section class="life-grid" aria-label="Danh muc Connections">
             <button type="button" class="life-card life-card--button life-card--family" data-locked-href="./family.html" data-key="Hieu2004@mmm" data-key-placeholder="" data-key-error="Chỉ có gia đình Hiếu mới mở được">
                 <div class="life-card__icon"><i class="fas fa-house-user" aria-hidden="true"></i></div>
                 <div class="life-card__body"><h2 class="life-card__title">Gia đình</h2><p class="life-card__desc">Gia đình của Hiếu</p></div>
                 <i class="fas fa-chevron-right life-card__arrow" aria-hidden="true"></i>
             </button>
-            <button type="button" class="life-card life-card--button" data-locked-href="./memories.html" data-key-placeholder="" data-key-error="Chỉ có bạn Hiếu mới mở được">
+            <a href="./bite-mark.html" class="life-card">
                 <div class="life-card__icon"><i class="fas fa-images" aria-hidden="true"></i></div>
-                <div class="life-card__body"><h2 class="life-card__title">Kỷ niệm</h2><p class="life-card__desc">22 năm kỷ niệm</p></div>
+                <div class="life-card__body"><h2 class="life-card__title">Dấu răng</h2><p class="life-card__desc">Sự tích dấu răng</p></div>
                 <i class="fas fa-chevron-right life-card__arrow" aria-hidden="true"></i>
-            </button>
+            </a>
 
             <button type="button" class="life-card life-card--button" data-locked-href="./students.html" data-key-placeholder="" data-key-error="Chỉ có bạn Hiếu mới mở được">
                 <div class="life-card__icon"><i class="fas fa-users-line" aria-hidden="true"></i></div>
@@ -83,6 +83,18 @@
             var defaultPlaceholder = '';
             var KEY = '171209';
 
+            function getUnlockStorageKey(url) {
+                var targetUrl = new URL(url, window.location.href);
+                var filename = targetUrl.pathname.split('/').filter(Boolean).pop() || targetUrl.pathname;
+                return 'life-unlocked:' + filename;
+            }
+
+            function rememberUnlockedPage(url) {
+                try {
+                    sessionStorage.setItem(getUnlockStorageKey(url), '1');
+                } catch (e) {}
+            }
+
             function openModal(card) {
                 targetHref = card ? card.getAttribute('data-locked-href') || '' : '';
                 targetKey = card ? card.getAttribute('data-key') || KEY : KEY;
@@ -121,6 +133,7 @@
                     return;
                 }
                 if (keyValue === targetKey && targetHref) {
+                    rememberUnlockedPage(targetHref);
                     window.location.href = targetHref;
                     return;
                 }

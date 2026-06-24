@@ -1,3 +1,1 @@
-Đổi ở trang http://127.0.0.1:5500/friends.html có tên tiêu đề bạn bè đổi sang 𝖊𝖒 𝖍í𝖚 giống tiêu đề ở trang http://127.0.0.1:5500/life.html và ở trang http://127.0.0.1:5500/cooking.html cũng ghi tiêu đề đó vào
-
-ở trang xem ảnh gia đình ahy kỷ niệm hay là nhữung thằng sinh viên và con nghệ 22 thì đổi hết k ghi tiêu đó mà ghi tiêu đề 𝖊𝖒 𝖍í𝖚  vị trí kích thước giống http://127.0.0.1:5500/life.html
+Tôi muốn update sự bảo mật hiện tại ở trang http://127.0.0.1:5500/friends.html ấn vào task Gia định nhập key xong vào trang http://127.0.0.1:5500/friends.html và đang dùng trình duyệt edge và tôi copy link http://127.0.0.1:5500/friends.html qua gg chomer pass vào thì vẫn vào được trang http://127.0.0.1:5500/friends.html đó là sự vô lý vì ở trang chome chưa nhập key sao vào được nên bắt buộc phải nhập key tuy là link http://127.0.0.1:5500/friends.html đã nhập nhưgn đúng thì vẫn phải nhập key và áp dụng cho tất cả các task nhập key
