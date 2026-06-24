@@ -609,7 +609,8 @@ body.is-page-transitioning {
 }
 
 .link-panel .life-card {
-    display: flex;
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr) 14px;
     align-items: center;
     gap: 14px;
     width: 100%;
@@ -645,16 +646,23 @@ body.is-page-transitioning {
 }
 
 .link-panel .life-card__icon {
-    font-size: 18px;
     width: 44px;
     height: 44px;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     border-radius: 12px;
-    background: transparent;
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    background: rgba(255, 255, 255, 0.035);
     color: var(--accent);
     flex-shrink: 0;
+    line-height: 1;
+}
+.link-panel .life-card__icon i {
+    width: 1.15em;
+    font-size: 18px;
+    line-height: 1;
+    text-align: center;
 }
 
 .link-panel .life-card:nth-child(1) .life-card__icon {
@@ -679,32 +687,34 @@ body.is-page-transitioning {
 
 .link-panel .life-card:nth-child(5) .life-card__icon,
 #life-card-join .life-card__icon {
-    color: #F5C542;
-    text-shadow: 0 0 14px rgba(245, 197, 66, 0.42);
+    color: #ffffff;
+    text-shadow: 0 0 14px rgba(255, 255, 255, 0.34);
 }
 
 .link-panel .life-card__body {
-    flex: 1;
+    display: grid;
+    gap: 3px;
     min-width: 0;
 }
 
 .link-panel .life-card__title {
     font-size: 15px;
-    font-weight: 600;
+    font-weight: 700;
+    line-height: 1.25;
     color: var(--text-primary);
-    margin-bottom: 3px;
+    margin: 0;
 }
 
 .link-panel .life-card__desc {
     font-size: 12px;
-    line-height: 1.5;
+    line-height: 1.45;
     color: var(--text-secondary);
 }
 
 .link-panel .life-card__arrow {
+    justify-self: end;
     font-size: 12px;
     color: var(--text-muted);
-    flex-shrink: 0;
     transition: transform 0.2s ease, color 0.2s ease;
 }
 
@@ -1700,9 +1710,22 @@ body.is-page-transitioning {
         border-radius: 14px;
     }
 
+    .link-panel .life-card {
+        grid-template-columns: 38px minmax(0, 1fr) 12px;
+    }
+
     .group-card__icon {
         width: 38px;
         height: 38px;
+        font-size: 17px;
+    }
+
+    .link-panel .life-card__icon {
+        width: 38px;
+        height: 38px;
+    }
+
+    .link-panel .life-card__icon i {
         font-size: 17px;
     }
 

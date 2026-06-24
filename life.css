@@ -87,7 +87,8 @@
 }
 
 .life-card {
-    display: flex;
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr) 14px;
     align-items: center;
     gap: 14px;
     width: 100%;
@@ -134,16 +135,23 @@
 }
 
 .life-card__icon {
-    font-size: 18px;
     width: 44px;
     height: 44px;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     border-radius: 12px;
-    background: transparent;
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    background: rgba(255, 255, 255, 0.035);
     color: var(--accent);
     flex-shrink: 0;
+    line-height: 1;
+}
+.life-card__icon i {
+    width: 1.15em;
+    font-size: 18px;
+    line-height: 1;
+    text-align: center;
 }
 
 .life-card:nth-child(1) .life-card__icon {
@@ -168,32 +176,34 @@
 
 .life-card:nth-child(5) .life-card__icon,
 #card-join .life-card__icon {
-    color: #F5C542;
-    text-shadow: 0 0 14px rgba(245, 197, 66, 0.42);
+    color: #ffffff;
+    text-shadow: 0 0 14px rgba(255, 255, 255, 0.34);
 }
 
 .life-card__body {
-    flex: 1;
+    display: grid;
+    gap: 3px;
     min-width: 0;
 }
 
 .life-card__title {
     font-size: 15px;
-    font-weight: 600;
+    font-weight: 700;
+    line-height: 1.25;
     color: var(--text-primary);
-    margin-bottom: 3px;
+    margin: 0;
 }
 
 .life-card__desc {
     font-size: 12px;
-    line-height: 1.5;
+    line-height: 1.45;
     color: var(--text-secondary);
 }
 
 .life-card__arrow {
+    justify-self: end;
     font-size: 12px;
     color: var(--text-muted);
-    flex-shrink: 0;
     transition: transform 0.2s ease, color 0.2s ease;
 }
 
@@ -860,9 +870,10 @@
 }
 
 .key-modal__title {
-    margin: 0 38px 8px 0;
-    font-size: 18px;
+    margin: 0 38px 16px 0;
+    font-size: 15px;
     font-weight: 800;
+    opacity: 0.9;
 }
 
 .key-modal__note {
@@ -929,6 +940,10 @@
 }
 /* ---------- Responsive ---------- */
 @media (max-width: 480px) {
+    .life-card {
+        grid-template-columns: 38px minmax(0, 1fr) 12px;
+    }
+
     .life-page {
         padding: 24px 16px 20px;
     }
@@ -958,10 +973,12 @@
     }
 
     .life-card__icon {
-        font-size: 17px;
         width: 38px;
         height: 38px;
-        background: transparent;
+    }
+
+    .life-card__icon i {
+        font-size: 17px;
     }
 
     .life-card__title {
@@ -1202,6 +1219,7 @@
     }
 
     .life-card {
+        grid-template-columns: 34px minmax(0, 1fr) 0;
         gap: 10px;
         padding: 12px;
     }
@@ -1209,6 +1227,9 @@
     .life-card__icon {
         width: 34px;
         height: 34px;
+    }
+
+    .life-card__icon i {
         font-size: 15px;
     }
 
@@ -1244,4 +1265,9 @@
 .life-card--family .life-card__icon {
     color: #FF4D8D;
     text-shadow: 0 0 14px rgba(255, 77, 141, 0.35);
+}
+
+.life-card.life-card--secret .life-card__icon {
+    color: #94a3b8;
+    text-shadow: 0 0 14px rgba(148, 163, 184, 0.28);
 }
