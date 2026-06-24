@@ -258,9 +258,30 @@
         var title = card.getAttribute('data-title') || '';
         var meta = card.getAttribute('data-meta') || '';
         var img = card.querySelector('img');
+        var nextSrc = src || (img ? img.src : '');
+        var requestId = String(Date.now()) + Math.random();
 
-        photoLightboxImg.src = src || (img ? img.src : '');
+        photoLightboxImg.dataset.requestId = requestId;
+        photoLightbox.classList.add('is-loading');
+        photoLightboxImg.removeAttribute('srcset');
+        photoLightboxImg.removeAttribute('src');
         photoLightboxImg.alt = title || (img ? img.alt : '');
+
+        photoLightboxImg.onload = function () {
+            if (photoLightboxImg.dataset.requestId !== requestId) return;
+            photoLightbox.classList.remove('is-loading');
+        };
+        photoLightboxImg.onerror = function () {
+            if (photoLightboxImg.dataset.requestId !== requestId) return;
+            photoLightbox.classList.remove('is-loading');
+        };
+
+        photoLightboxImg.sizes = '(max-width: 1000px) calc(100vw - 44px), 960px';
+        photoLightboxImg.srcset = card.getAttribute('data-full-srcset') || '';
+        photoLightboxImg.src = nextSrc;
+        if (photoLightboxImg.complete && photoLightboxImg.naturalWidth) {
+            photoLightbox.classList.remove('is-loading');
+        }
         if (photoLightboxCaption) {
             var caption = [title, meta].filter(Boolean).join(' - ');
             photoLightboxCaption.textContent = caption;
@@ -274,7 +295,7 @@
     function closePhotoLightbox() {
         if (!photoLightbox) return;
         document.body.classList.remove('is-modal-open');
-        photoLightbox.classList.remove('is-open');
+        photoLightbox.classList.remove('is-open', 'is-loading');
         photoLightbox.setAttribute('aria-hidden', 'true');
     }
 
@@ -300,7 +321,7 @@
         return candidates.indexOf(pinnedNormalized) !== -1;
     }
 
-    function createPhotoCard(gallery, src, name, fullSrc, originalSrc) {
+    function createPhotoCard(gallery, src, name, fullSrc, originalSrc, thumbSrcset, fullSrcset, isPriority) {
         var card = document.createElement('button');
         var img = document.createElement('img');
         var isPinned = isPinnedPhotoCard(gallery, originalSrc || fullSrc || src, fullSrc || src);
@@ -308,16 +329,26 @@
         card.className = 'photo-card';
         card.type = 'button';
         card.setAttribute('data-full', fullSrc || src);
+        if (fullSrcset) {
+            card.setAttribute('data-full-srcset', fullSrcset);
+        }
         if (isPinned) {
             card.classList.add('photo-card--pinned');
         }
 
+        if (thumbSrcset) {
+            img.srcset = thumbSrcset;
+            img.sizes = '(max-width: 480px) calc((100vw - 44px) / 3), (max-width: 820px) calc((100vw - 58px) / 2), 244px';
+        }
         img.src = src;
         img.alt = name || 'Anh nau an';
         img.width = 360;
         img.height = 450;
-        img.loading = 'lazy';
+        img.loading = isPriority ? 'eager' : 'lazy';
         img.decoding = 'async';
+        if (isPriority) {
+            img.fetchPriority = 'high';
+        }
         
         img.onload = function () {
             img.classList.add('is-loaded');
@@ -412,8 +443,8 @@
 
         gallery.innerHTML = '';
         gallery._currentPage = currentPage;
-        visiblePhotos.forEach(function (photo) {
-            createPhotoCard(gallery, photo.thumb || photo.src, photo.name, photo.full || photo.src, photo.src);
+        visiblePhotos.forEach(function (photo, index) {
+            createPhotoCard(gallery, photo.thumb || photo.src, photo.name, photo.full || photo.src, photo.src, photo.thumbSrcset, photo.fullSrcset, index < 3);
         });
         createPhotoPager(gallery, pageCount, currentPage, function (nextPage) {
             gallery.classList.add('is-changing');
@@ -478,6 +509,13 @@
         return src.replace('/image/upload/', '/image/upload/' + transform + '/');
     }
 
+    function getCloudinarySrcset(src, widths, quality) {
+        if (!src || src.indexOf('/image/upload/') === -1) return '';
+        return widths.map(function (width) {
+            return getCloudinaryVariant(src, 'f_auto,' + quality + ',c_limit,w_' + width) + ' ' + width + 'w';
+        }).join(', ');
+    }
+
     function normalizeGalleryPhotoUrl(url) {
         if (!url) return '';
         return decodeURIComponent(url.split('?')[0]).replace(/\/+$/, '');
@@ -526,8 +564,10 @@
             var name = decodeURIComponent(cleanUrl.split('/').pop() || 'Anh ky niem');
             return {
                 src: url,
-                thumb: getCloudinaryVariant(url, 'f_auto,q_auto,w_360'),
-                full: getCloudinaryVariant(url, 'f_auto,q_auto,w_1600'),
+                thumb: getCloudinaryVariant(url, 'f_auto,q_auto:good,c_limit,w_720'),
+                thumbSrcset: getCloudinarySrcset(url, [360, 540, 720, 960], 'q_auto:good'),
+                full: getCloudinaryVariant(url, 'f_auto,q_auto:best,c_limit,w_2400'),
+                fullSrcset: getCloudinarySrcset(url, [1200, 1800, 2400], 'q_auto:best'),
                 name: name,
                 time: urls.length - index
             };

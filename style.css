@@ -1380,19 +1380,58 @@ body.is-page-transitioning {
     transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+.photo-lightbox__content::before {
+    content: "";
+    position: absolute;
+    inset: 50% auto auto 50%;
+    width: 34px;
+    height: 34px;
+    margin: -17px 0 0 -17px;
+    border-radius: 50%;
+    border: 3px solid rgba(255, 255, 255, 0.26);
+    border-top-color: #fff;
+    opacity: 0;
+    transform: scale(0.86);
+    transition: opacity 0.16s ease, transform 0.16s ease;
+    animation: photoLightboxSpin 0.8s linear infinite;
+    pointer-events: none;
+}
+
+.photo-lightbox.is-loading .photo-lightbox__content {
+    min-width: min(220px, calc(100vw - 44px));
+    min-height: 220px;
+}
+
+.photo-lightbox.is-loading .photo-lightbox__content::before {
+    opacity: 1;
+    transform: scale(1);
+}
+
 .photo-lightbox.is-open .photo-lightbox__content {
     transform: scale(1) translateY(0);
 }
 
 .photo-lightbox__img {
     display: block;
+    width: min(960px, calc(100vw - 44px));
     max-width: 100%;
     max-height: 82vh;
-    width: auto;
     height: auto;
     border-radius: 24px;
     object-fit: contain;
+    opacity: 1;
     box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
+    transition: opacity 0.16s ease;
+}
+
+.photo-lightbox.is-loading .photo-lightbox__img {
+    opacity: 0;
+}
+
+@keyframes photoLightboxSpin {
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .photo-lightbox__caption {
