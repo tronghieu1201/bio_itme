@@ -677,9 +677,10 @@ body.is-page-transitioning {
     text-shadow: 0 0 14px rgba(34, 197, 94, 0.35);
 }
 
-.link-panel .life-card:nth-child(5) .life-card__icon {
-    color: #60A5FA;
-    text-shadow: 0 0 14px rgba(96, 165, 250, 0.35);
+.link-panel .life-card:nth-child(5) .life-card__icon,
+#life-card-join .life-card__icon {
+    color: #F5C542;
+    text-shadow: 0 0 14px rgba(245, 197, 66, 0.42);
 }
 
 .link-panel .life-card__body {
@@ -1171,9 +1172,15 @@ body.is-page-transitioning {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 14px;
+    transition: opacity 0.18s ease-in-out;
+}
+
+.photo-gallery.is-changing {
+    opacity: 0.25;
 }
 
 .photo-card {
+    position: relative;
     display: block;
     width: 100%;
     aspect-ratio: 4 / 5;
@@ -1211,6 +1218,72 @@ body.is-page-transitioning {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out;
+}
+
+.photo-card img.is-loaded {
+    opacity: 1;
+}
+
+/* Skeleton Loading (Shimmer Effect) */
+.photo-card {
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.02) 25%,
+        rgba(255, 255, 255, 0.06) 37%,
+        rgba(255, 255, 255, 0.02) 63%
+    );
+    background-size: 400% 100%;
+    animation: skeleton-shimmer 1.4s ease infinite;
+}
+
+.photo-card img.is-loaded ~ .photo-card {
+    animation: none;
+}
+
+@keyframes skeleton-shimmer {
+    0% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Gallery Loading Text styling (fallback fallback) */
+.gallery-loading {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px;
+    color: var(--text-muted);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.photo-card__pin {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    z-index: 5;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.55);
+    color: rgba(200, 210, 225, 0.85);
+    border: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    pointer-events: none;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+.photo-card__pin i {
+    font-size: 11px;
+    line-height: 1;
 }
 
 .photo-card--placeholder {

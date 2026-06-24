@@ -8,8 +8,8 @@
     <meta name="description"
         content="Trang bio cá nhân của Trọng Hiếu – Learning Technology, Cloud & AI Journey. Liên hệ qua Facebook, Instagram, LinkedIn, GitHub, Email và Zalo.">
     <link rel="canonical" href="https://tronghieu1201.github.io/bio_itme/">
-    <link rel="icon" type="image/png" href="images/favicon/favicon.png">
-    <link rel="apple-touch-icon" href="images/favicon/favicon.png">
+    <link rel="icon" type="image/webp" href="https://res.cloudinary.com/dtpw5htqs/image/upload/v1782284174/4eae1994-3eea-4630-bc8e-10974bcad260_vvwupz.webp">
+    <link rel="apple-touch-icon" href="https://res.cloudinary.com/dtpw5htqs/image/upload/v1782284174/4eae1994-3eea-4630-bc8e-10974bcad260_vvwupz.webp">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -31,7 +31,7 @@
         <!-- Profile header -->
         <header class="profile-header">
             <div class="avatar-ring">
-                <img src="images/personal_photo.jpg" alt="Ảnh đại diện Trọng Hiếu" width="140" height="140">
+                <img src="https://res.cloudinary.com/dtpw5htqs/image/upload/v1782284229/personal_photo_yobmmh.webp" alt="Ảnh đại diện Trọng Hiếu" width="140" height="140">
             </div>
             <button type="button" class="profile-name profile-name-btn" id="profile-info-open">
                 Trọng Hiếu
@@ -84,7 +84,7 @@
                     <span>LinkedIn</span>
                 </a>
                 <button type="button" class="link-btn link-btn--zalo" id="link-zalo"
-                    data-qr-src="images/qr_zalo.jpg" data-qr-alt="Mã QR Zalo phóng to">
+                    data-qr-src="https://res.cloudinary.com/dtpw5htqs/image/upload/v1782284227/qr_zalo_huh7bk.webp" data-qr-alt="Mã QR Zalo phóng to">
                     <i class="fas fa-qrcode" aria-hidden="true"></i>
                     <span>Zalo QR</span>
                 </button>
@@ -117,7 +117,7 @@
                     <span>Locket</span>
                 </a>
                 <button type="button" class="link-btn link-btn--telegram" id="link-telegram"
-                    data-qr-src="images/qr_lete.jpg" data-qr-alt="Mã QR Telegram phóng to">
+                    data-qr-src="https://res.cloudinary.com/dtpw5htqs/image/upload/v1782284226/qr_lete_ucynnk.webp" data-qr-alt="Mã QR Telegram phóng to">
                     <i class="fab fa-telegram-plane" aria-hidden="true"></i>
                     <span>Telegram QR</span>
                 </button>
@@ -138,7 +138,7 @@
         <div class="lightbox" id="qr-lightbox" role="dialog" aria-label="QR phóng to" aria-hidden="true">
             <div class="lightbox__backdrop"></div>
             <div class="lightbox__content">
-                <img src="images/qr_zalo.jpg" alt="Mã QR Zalo phóng to" class="lightbox__img" id="qr-lightbox-img" loading="lazy" decoding="async">
+                <img src="https://res.cloudinary.com/dtpw5htqs/image/upload/v1782284227/qr_zalo_huh7bk.webp" alt="Mã QR Zalo phóng to" class="lightbox__img" id="qr-lightbox-img" loading="lazy" decoding="async">
             </div>
         </div>
 
@@ -171,25 +171,25 @@
             // Life categories config
             var lifeCategories = [
                 {
+                    id: 'friends',
+                    title: 'Kỷ niệm',
+                    icon: 'fas fa-user-group',
+                    href: './friends.html',
+                    desc: 'Những người quanh Hiếu'
+                },
+                {
+                    id: 'thoughts',
+                    title: 'Lăng kính của Hiếu',
+                    icon: 'fas fa-pen',
+                    href: './life.html?category=thoughts',
+                    desc: 'Có thể bạn đã thấy ở đâu đó...'
+                },
+                {
                     id: 'cooking',
                     title: 'Nấu ăn',
                     icon: 'fas fa-utensils',
                     href: './cooking.html',
                     desc: 'Cơm sinh viên.'
-                },
-                {
-                    id: 'thoughts',
-                    title: 'Tâm sự',
-                    icon: 'fas fa-pen',
-                    href: './life.html?category=thoughts',
-                    desc: 'Vài câu nói...'
-                },
-                {
-                    id: 'friends',
-                    title: 'Bạn bè',
-                    icon: 'fas fa-user-group',
-                    href: './friends.html',
-                    desc: 'Bạn bè của Hiếu.'
                 },
                 {
                     id: 'daily',
@@ -200,10 +200,10 @@
                 },
                 {
                     id: 'join',
-                    title: 'Information',
-                    icon: 'fas fa-handshake',
+                    title: 'Feedback',
+                    icon: 'fas fa-heart',
                     href: './life.html',
-                    desc: 'Gửi thông tin tại đây...'
+                    desc: 'Gửi feedback tại đây...'
                 }
             ];
 

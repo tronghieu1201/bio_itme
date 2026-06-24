@@ -129,13 +129,13 @@
             var qrSrc = trigger ? trigger.getAttribute('data-qr-src') : '';
             var qrAlt = trigger ? trigger.getAttribute('data-qr-alt') : '';
             if (trigger && qrLightboxImg) {
-                qrLightboxImg.src = qrSrc || 'images/qr_zalo.jpg';
+                qrLightboxImg.src = qrSrc || 'https://res.cloudinary.com/dtpw5htqs/image/upload/v1782284227/qr_zalo_huh7bk.webp';
                 qrLightboxImg.alt = qrAlt || 'Ma QR phong to';
             }
             if (!skipHistory) {
                 qrHistoryActive = pushUiState({
                     qrLightbox: true,
-                    qrSrc: qrSrc || 'images/qr_zalo.jpg',
+                    qrSrc: qrSrc || 'https://res.cloudinary.com/dtpw5htqs/image/upload/v1782284227/qr_zalo_huh7bk.webp',
                     qrAlt: qrAlt || 'Ma QR phong to'
                 });
             }
@@ -176,7 +176,7 @@
     window.addEventListener('popstate', function (e) {
         if (e.state && e.state.qrLightbox) {
             if (qrLightboxImg) {
-                qrLightboxImg.src = e.state.qrSrc || 'images/qr_zalo.jpg';
+                qrLightboxImg.src = e.state.qrSrc || 'https://res.cloudinary.com/dtpw5htqs/image/upload/v1782284227/qr_zalo_huh7bk.webp';
                 qrLightboxImg.alt = e.state.qrAlt || 'Ma QR phong to';
             }
             qrHistoryActive = true;
@@ -282,20 +282,58 @@
         return /\.(avif|gif|jpe?g|png|webp)$/i.test(path || '');
     }
 
-    function createPhotoCard(gallery, src, name) {
+    function normalizeGalleryPhotoUrl(url) {
+        if (!url) return '';
+        return decodeURIComponent(url.split('?')[0]).replace(/\/+$/, '');
+    }
+
+    function getPinnedPhotoUrl(gallery) {
+        return (gallery.getAttribute('data-pinned-image') || '').trim();
+    }
+
+    function isPinnedPhotoCard(gallery, src, fullSrc) {
+        var pinnedUrl = getPinnedPhotoUrl(gallery);
+        if (!pinnedUrl) return false;
+
+        var pinnedNormalized = normalizeGalleryPhotoUrl(pinnedUrl);
+        var candidates = [src, fullSrc].map(normalizeGalleryPhotoUrl).filter(Boolean);
+        return candidates.indexOf(pinnedNormalized) !== -1;
+    }
+
+    function createPhotoCard(gallery, src, name, fullSrc, originalSrc) {
         var card = document.createElement('button');
         var img = document.createElement('img');
+        var isPinned = isPinnedPhotoCard(gallery, originalSrc || fullSrc || src, fullSrc || src);
 
         card.className = 'photo-card';
         card.type = 'button';
-        card.setAttribute('data-full', src);
+        card.setAttribute('data-full', fullSrc || src);
+        if (isPinned) {
+            card.classList.add('photo-card--pinned');
+        }
 
         img.src = src;
         img.alt = name || 'Anh nau an';
+        img.width = 360;
+        img.height = 450;
         img.loading = 'lazy';
         img.decoding = 'async';
+        
+        img.onload = function () {
+            img.classList.add('is-loaded');
+        };
+        if (img.complete) {
+            img.classList.add('is-loaded');
+        }
 
         card.appendChild(img);
+        if (isPinned) {
+            var pinBadge = document.createElement('span');
+            pinBadge.className = 'photo-card__pin';
+            pinBadge.innerHTML = '<i class="fas fa-thumbtack" aria-hidden="true"></i>';
+            pinBadge.setAttribute('aria-label', 'Ảnh ghim');
+            card.appendChild(pinBadge);
+        }
         card.addEventListener('click', function () {
             openPhotoLightbox(card);
         });
@@ -375,10 +413,14 @@
         gallery.innerHTML = '';
         gallery._currentPage = currentPage;
         visiblePhotos.forEach(function (photo) {
-            createPhotoCard(gallery, photo.src, photo.name);
+            createPhotoCard(gallery, photo.thumb || photo.src, photo.name, photo.full || photo.src, photo.src);
         });
         createPhotoPager(gallery, pageCount, currentPage, function (nextPage) {
-            renderPhotoGalleryPage(gallery, photos, nextPage);
+            gallery.classList.add('is-changing');
+            setTimeout(function () {
+                renderPhotoGalleryPage(gallery, photos, nextPage);
+                gallery.classList.remove('is-changing');
+            }, 180);
         });
     }
 
@@ -431,6 +473,66 @@
             });
     }
 
+    function getCloudinaryVariant(src, transform) {
+        if (!src || src.indexOf('/image/upload/') === -1) return src;
+        return src.replace('/image/upload/', '/image/upload/' + transform + '/');
+    }
+
+    function normalizeGalleryPhotoUrl(url) {
+        if (!url) return '';
+        return decodeURIComponent(url.split('?')[0]).replace(/\/+$/, '');
+    }
+
+    function getPinnedPhotoUrl(gallery) {
+        var pinnedUrl = gallery.getAttribute('data-pinned-image') || '';
+        return pinnedUrl.trim();
+    }
+
+    function applyPinnedPhotoOrder(gallery, photos) {
+        var pinnedUrl = getPinnedPhotoUrl(gallery);
+        if (!pinnedUrl || !photos.length) return photos;
+
+        var normalizedPinned = normalizeGalleryPhotoUrl(pinnedUrl);
+        var pinnedIndex = -1;
+
+        photos.forEach(function (photo, index) {
+            if (normalizeGalleryPhotoUrl(photo.src) === normalizedPinned) {
+                pinnedIndex = index;
+            }
+        });
+
+        if (pinnedIndex < 1) return photos;
+
+        var reordered = photos.slice();
+        var pinnedPhoto = reordered.splice(pinnedIndex, 1)[0];
+        reordered.unshift(pinnedPhoto);
+        return reordered;
+    }
+
+    function getCloudinaryGalleryPhotos(gallery) {
+        var imageList = gallery.getAttribute('data-gallery-cloudinary') || '';
+        if (!imageList.trim()) return [];
+
+        var urls = imageList.split(',')
+            .map(function (url) {
+                return url.trim();
+            })
+            .filter(function (url) {
+                return url && isImageFile(url);
+            });
+
+        return urls.map(function (url, index) {
+            var cleanUrl = url.split('?')[0];
+            var name = decodeURIComponent(cleanUrl.split('/').pop() || 'Anh ky niem');
+            return {
+                src: url,
+                thumb: getCloudinaryVariant(url, 'f_auto,q_auto,w_360'),
+                full: getCloudinaryVariant(url, 'f_auto,q_auto,w_1600'),
+                name: name,
+                time: urls.length - index
+            };
+        });
+    }
     function getStaticGalleryPhotos(gallery, dir) {
         var imageList = gallery.getAttribute('data-gallery-images') || '';
         if (!imageList.trim()) return [];
@@ -479,6 +581,11 @@
 
     function loadPhotoGallery(gallery) {
         var dir = gallery.getAttribute('data-gallery-dir');
+        var cloudinaryPhotos = getCloudinaryGalleryPhotos(gallery);
+        if (cloudinaryPhotos.length) {
+            renderPhotoGallery(gallery, applyPinnedPhotoOrder(gallery, cloudinaryPhotos));
+            return;
+        }
         if (!dir) return;
 
         // Show loading state
@@ -490,7 +597,7 @@
 
         var staticPhotos = getStaticGalleryPhotos(gallery, dir);
         if (staticPhotos.length) {
-            renderPhotoGallery(gallery, staticPhotos);
+            renderPhotoGallery(gallery, applyPinnedPhotoOrder(gallery, staticPhotos));
             return;
         }
 
@@ -508,7 +615,7 @@
             .then(function (html) {
                 var photos = getLocalPhotosFromListing(html, dir);
                 if (!photos.length) throw new Error('No local photos');
-                renderPhotoGallery(gallery, photos);
+                renderPhotoGallery(gallery, applyPinnedPhotoOrder(gallery, photos));
             })
             .catch(function () {
                 var githubUrl = getGithubGalleryUrl(gallery, dir);
@@ -530,7 +637,7 @@
                     })
                     .then(function (photos) {
                         if (!photos.length) throw new Error('No photos');
-                        renderPhotoGallery(gallery, photos);
+                        renderPhotoGallery(gallery, applyPinnedPhotoOrder(gallery, photos));
                     })
                     .catch(function () {
                         var emptyDiv = document.createElement('div');
@@ -542,7 +649,7 @@
             });
     }
 
-    document.querySelectorAll('.photo-gallery[data-gallery-dir]').forEach(function (gallery) {
+    document.querySelectorAll('.photo-gallery[data-gallery-dir], .photo-gallery[data-gallery-cloudinary]').forEach(function (gallery) {
         loadPhotoGallery(gallery);
     });
 
@@ -552,7 +659,7 @@
         window.addEventListener('resize', function () {
             clearTimeout(resizeTimer);
             resizeTimer = setTimeout(function () {
-                document.querySelectorAll('.photo-gallery[data-gallery-dir]').forEach(function (gallery) {
+                document.querySelectorAll('.photo-gallery[data-gallery-dir], .photo-gallery[data-gallery-cloudinary]').forEach(function (gallery) {
                     if (gallery._photos) {
                         var currentPage = gallery._currentPage || 1;
                         renderPhotoGalleryPage(gallery, gallery._photos, currentPage);

@@ -7,8 +7,8 @@
     <title>Góc cá nhân – Trọng Hiếu</title>
     <meta name="description" content="Góc cá nhân của Trọng Hiếu – Nấu ăn, tâm sự, bạn bè và những khoảnh khắc đời thường.">
     <link rel="canonical" href="https://tronghieu1201.github.io/bio_itme/life.html">
-    <link rel="icon" type="image/png" href="images/favicon/favicon.png">
-    <link rel="apple-touch-icon" href="images/favicon/favicon.png">
+    <link rel="icon" type="image/webp" href="https://res.cloudinary.com/dtpw5htqs/image/upload/v1782284174/4eae1994-3eea-4630-bc8e-10974bcad260_vvwupz.webp">
+    <link rel="apple-touch-icon" href="https://res.cloudinary.com/dtpw5htqs/image/upload/v1782284174/4eae1994-3eea-4630-bc8e-10974bcad260_vvwupz.webp">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -34,19 +34,19 @@
 
         <!-- Category Cards -->
         <section class="life-grid" aria-label="Danh mục">
-            <!-- Nấu ăn -->
-            <a href="./cooking.html" class="life-card" id="card-cooking">
+            <!-- Kỷ niệm -->
+            <a href="./friends.html" class="life-card" id="card-friends">
                 <div class="life-card__icon">
-                    <i class="fas fa-utensils" aria-hidden="true"></i>
+                    <i class="fas fa-user-group" aria-hidden="true"></i>
                 </div>
                 <div class="life-card__body">
-                    <h2 class="life-card__title">Nấu ăn</h2>
-                    <p class="life-card__desc">Cơm sinh viên.</p>
+                    <h2 class="life-card__title">Kỷ niệm</h2>
+                    <p class="life-card__desc">Những người quanh Hiếu</p>
                 </div>
                 <i class="fas fa-chevron-right life-card__arrow" aria-hidden="true"></i>
             </a>
 
-            <!-- Tâm sự -->
+            <!-- Lăng kính của Hiếu -->
             <a href="#" class="life-card" id="card-thoughts" data-category="thoughts">
                 <div class="life-card__icon">
                     <i class="fas fa-pen" aria-hidden="true"></i>
@@ -58,14 +58,14 @@
                 <i class="fas fa-chevron-right life-card__arrow" aria-hidden="true"></i>
             </a>
 
-            <!-- Bạn bè -->
-            <a href="./friends.html" class="life-card" id="card-friends">
+            <!-- Nấu ăn -->
+            <a href="./cooking.html" class="life-card" id="card-cooking">
                 <div class="life-card__icon">
-                    <i class="fas fa-user-group" aria-hidden="true"></i>
+                    <i class="fas fa-utensils" aria-hidden="true"></i>
                 </div>
                 <div class="life-card__body">
-                    <h2 class="life-card__title">Bạn bè</h2>
-                    <p class="life-card__desc">Bạn bè của Hiếu.</p>
+                    <h2 class="life-card__title">Nấu ăn</h2>
+                    <p class="life-card__desc">Cơm sinh viên.</p>
                 </div>
                 <i class="fas fa-chevron-right life-card__arrow" aria-hidden="true"></i>
             </a>
@@ -82,14 +82,14 @@
                 <i class="fas fa-chevron-right life-card__arrow" aria-hidden="true"></i>
             </a>
 
-            <!-- Information -->
+            <!-- Feedback -->
             <button type="button" class="life-card life-card--button" id="card-join">
                 <div class="life-card__icon">
-                    <i class="fas fa-handshake" aria-hidden="true"></i>
+                    <i class="fas fa-heart" aria-hidden="true"></i>
                 </div>
                 <div class="life-card__body">
-                    <h2 class="life-card__title">Information</h2>
-                    <p class="life-card__desc">Gửi thông tin tại đây...</p>
+                    <h2 class="life-card__title">Feedback</h2>
+                    <p class="life-card__desc">Gửi feedback tại đây...</p>
                 </div>
                 <i class="fas fa-chevron-right life-card__arrow" aria-hidden="true"></i>
             </button>
@@ -113,23 +113,15 @@
             </div>
         </div>
         <!-- Join modal -->
-        <div class="join-modal" id="join-modal" role="dialog" aria-label="Information" aria-hidden="true">
+        <div class="join-modal" id="join-modal" role="dialog" aria-label="Feedback" aria-hidden="true">
             <div class="join-modal__backdrop"></div>
             <article class="join-modal__card">
                 <button type="button" class="join-modal__close" id="join-close" aria-label="Đóng">&times;</button>
-                <h2 class="join-modal__title">Information</h2>
-                <p class="join-modal__note">Ghi chữ cái đầu tiên của tên bạn là được.</p>
                 <form class="join-form" id="join-form" action="https://script.google.com/macros/s/AKfycbzGVKOJ3meMpsssRLv-ZTdEa4Jtj3UyN1YupOwfdaezYV9LporQk_e2frmrAVWBihvLBA/exec"
                     method="POST">
                     <input type="hidden" name="createdAt" id="join-created-at">
                     <label class="join-form__field">
-                        <span>Họ tên</span>
-                        <input type="text" id="join-name" name="name" placeholder="Ví dụ: H" required>
-                    </label>
-                    <label class="join-form__field">
-                        <span>Email</span>
-                        <input type="email" id="join-email" name="email" placeholder="tenban@gmail.com"
-                            title="Vui lòng nhập đúng địa chỉ Gmail" required>
+                        <input type="text" id="join-name" name="name" placeholder="Nhập suy nghĩ..." required>
                     </label>
                     <button type="submit" class="join-form__submit">Gửi</button>
                 </form>

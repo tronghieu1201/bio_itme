@@ -95,26 +95,22 @@
             '</div>';
     }
 
-    // Category config: map category key → display name and image folder
+    // Category config: map category key → display name
     var categories = {
         cooking: {
             title: 'Nấu ăn',
-            folder: 'images/life/cooking/',
-            images: [] // Add image filenames here, e.g. ['mon1.jpg', 'mon2.jpg']
+            images: []
         },
         thoughts: {
             title: 'Sai số thứ...',
-            folder: 'images/life/daily/', // reuse daily folder or create a separate one
             images: []
         },
         friends: {
             title: 'Bạn bè',
-            folder: 'images/life/friends/',
             images: []
         },
         daily: {
             title: 'Khoảnh khắc',
-            folder: 'images/life/daily/',
             images: []
         }
     };
@@ -431,18 +427,11 @@
             var formData = new FormData(joinForm);
             var data = {
                 name: String(formData.get('name') || '').trim(),
-                email: String(formData.get('email') || '').trim(),
                 createdAt: new Date().toISOString()
             };
 
-            if (!data.name || !data.email) {
+            if (!data.name) {
                 e.preventDefault();
-                return;
-            }
-
-            if (!isValidGmail(data.email)) {
-                e.preventDefault();
-                showLifeToast('Nhập đúng địa chỉ Gmail nhé!');
                 return;
             }
 
@@ -458,7 +447,7 @@
 
             joinForm.reset();
             closeJoinModal();
-            showLifeToast('Nhớ check mail nhé 😉');
+            showLifeToast('Cảm ơn bạn đã góp ý');
         });
     }
 

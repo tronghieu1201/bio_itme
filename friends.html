@@ -7,8 +7,8 @@
     <title>Ban be - Trong Hieu</title>
     <meta name="description" content="Menu ban be cua Trong Hieu.">
     <link rel="canonical" href="https://tronghieu1201.github.io/bio_itme/friends.html">
-    <link rel="icon" type="image/png" href="images/favicon/favicon.png">
-    <link rel="apple-touch-icon" href="images/favicon/favicon.png">
+    <link rel="icon" type="image/webp" href="https://res.cloudinary.com/dtpw5htqs/image/upload/v1782284174/4eae1994-3eea-4630-bc8e-10974bcad260_vvwupz.webp">
+    <link rel="apple-touch-icon" href="https://res.cloudinary.com/dtpw5htqs/image/upload/v1782284174/4eae1994-3eea-4630-bc8e-10974bcad260_vvwupz.webp">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -31,6 +31,11 @@
         </header>
 
         <section class="life-grid" aria-label="Danh muc ban be">
+            <button type="button" class="life-card life-card--button life-card--family" data-locked-href="./family.html" data-key="Hieu2004@mmm" data-key-placeholder="Chỉ có gia đình Hiếu mới biết key">
+                <div class="life-card__icon"><i class="fas fa-heart" aria-hidden="true"></i></div>
+                <div class="life-card__body"><h2 class="life-card__title">Gia đình</h2><p class="life-card__desc">Gia đình của Hiếu</p></div>
+                <i class="fas fa-chevron-right life-card__arrow" aria-hidden="true"></i>
+            </button>
             <button type="button" class="life-card life-card--button" data-locked-href="./memories.html">
                 <div class="life-card__icon"><i class="fas fa-star" aria-hidden="true"></i></div>
                 <div class="life-card__body"><h2 class="life-card__title">K&#7927; ni&#7879;m</h2><p class="life-card__desc">22 n&#259;m k&#7927; ni&#7879;m</p></div>
@@ -58,7 +63,7 @@
             <h2 class="key-modal__title">X&aacute;c nh&#7853;n</h2>
             <p class="key-modal__note">Nh&#7853;p key &#273;&#7875; m&#7903;</p>
             <form class="key-form" id="key-form">
-                <input type="password" id="key-input" inputmode="numeric" autocomplete="off" placeholder="Ch&#7881; c&oacute; b&#7841;n c&#7911;a Hi&#7871;u m&#7899;i bi&#7871;t key">
+                <input type="password" id="key-input" autocomplete="off" placeholder="Chỉ có bạn của Hiếu mới biết key">
                 <button type="submit">M&#7903;</button>
                 <p class="key-modal__error" id="key-error" aria-live="polite"></p>
             </form>
@@ -74,10 +79,14 @@
             var error = document.getElementById('key-error');
             var closeBtn = document.getElementById('key-close');
             var targetHref = '';
+            var targetKey = '';
+            var defaultPlaceholder = input ? input.getAttribute('placeholder') : 'Chỉ có bạn của Hiếu mới biết key';
             var KEY = '171209';
 
-            function openModal(href) {
-                targetHref = href || '';
+            function openModal(card) {
+                targetHref = card ? card.getAttribute('data-locked-href') || '' : '';
+                targetKey = card ? card.getAttribute('data-key') || KEY : KEY;
+                if (input) input.setAttribute('placeholder', card ? card.getAttribute('data-key-placeholder') || defaultPlaceholder : defaultPlaceholder);
                 if (error) error.textContent = '';
                 if (input) input.value = '';
                 document.body.classList.add('is-modal-open');
@@ -91,11 +100,13 @@
                 modal.classList.remove('is-open');
                 modal.setAttribute('aria-hidden', 'true');
                 targetHref = '';
+                targetKey = '';
+                if (input) input.setAttribute('placeholder', defaultPlaceholder);
             }
 
             document.querySelectorAll('[data-locked-href]').forEach(function (card) {
                 card.addEventListener('click', function () {
-                    openModal(card.getAttribute('data-locked-href'));
+                    openModal(card);
                 });
             });
 
@@ -107,7 +118,7 @@
                     input.focus();
                     return;
                 }
-                if (keyValue === KEY && targetHref) {
+                if (keyValue === targetKey && targetHref) {
                     window.location.href = targetHref;
                     return;
                 }

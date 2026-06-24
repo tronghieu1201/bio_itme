@@ -166,9 +166,10 @@
     text-shadow: 0 0 14px rgba(34, 197, 94, 0.35);
 }
 
-.life-card:nth-child(5) .life-card__icon {
-    color: #60A5FA;
-    text-shadow: 0 0 14px rgba(96, 165, 250, 0.35);
+.life-card:nth-child(5) .life-card__icon,
+#card-join .life-card__icon {
+    color: #F5C542;
+    text-shadow: 0 0 14px rgba(245, 197, 66, 0.42);
 }
 
 .life-card__body {
@@ -1238,4 +1239,9 @@
     .gallery-panel {
         transform: none !important;
     }
+}
+
+.life-card--family .life-card__icon {
+    color: #FF4D8D;
+    text-shadow: 0 0 14px rgba(255, 77, 141, 0.35);
 }
