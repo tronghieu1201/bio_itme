@@ -147,7 +147,8 @@
     flex-shrink: 0;
     line-height: 1;
 }
-.life-card__icon i {
+
+.life-card__icon i {
     width: 1.15em;
     font-size: 18px;
     line-height: 1;
@@ -451,15 +452,15 @@
     width: min(86vw, 340px);
     padding: 16px 22px;
     border-radius: 18px;
-    background: rgba(20, 20, 30, 0.86);
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    color: #ffffff;
-    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+    background: rgba(10, 20, 40, 0.65);
+    border: 1px solid rgba(59, 130, 246, 0.5);
+    color: rgba(226, 232, 240, 0.9);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35), inset 0 0 20px rgba(59, 130, 246, 0.08);
     font-size: 15px;
     font-weight: 700;
     line-height: 1.5;
     text-align: center;
-    text-shadow: none;
+    text-shadow: 0 0 12px rgba(59, 130, 246, 0.3);
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
@@ -794,7 +795,6 @@
     border-color: var(--accent);
     box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.18);
 }
-
 .join-form__submit {
     min-height: 46px;
     margin-top: 4px;
@@ -846,18 +846,59 @@
     position: relative;
     z-index: 1;
     width: min(100%, 380px);
-    border-radius: 20px;
+    border-radius: 18px;
     padding: 22px;
     background: rgba(13, 26, 51, 0.96);
-    border: 1px solid rgba(96, 165, 250, 0.28);
+    border: 1px solid rgba(59, 130, 246, 0.35);
     color: #fff;
     box-shadow: 0 24px 70px rgba(0, 0, 0, 0.42);
     transform: translateY(12px) scale(0.96);
     transition: transform 0.24s ease;
+    overflow: hidden;
+    --border-angle: 0deg;
 }
 
 .key-modal.is-open .key-modal__card {
     transform: translateY(0) scale(1);
+}
+
+.key-modal__card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 20px;
+    right: 20px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.8), rgba(96, 165, 250, 0.6), transparent);
+    opacity: 0.8;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.key-modal__card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    padding: 1px;
+    border-radius: inherit;
+    background:
+        conic-gradient(from var(--border-angle),
+            transparent 0deg,
+            transparent 40deg,
+            rgba(59, 130, 246, 0.2) 65deg,
+            rgba(6, 182, 212, 0.9) 90deg,
+            rgba(103, 232, 249, 0.9) 110deg,
+            rgba(96, 165, 250, 0.2) 135deg,
+            transparent 160deg,
+            transparent 360deg);
+    -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    pointer-events: none;
+    animation: borderCrawler 5s linear infinite;
 }
 
 .key-modal__close {
@@ -898,12 +939,15 @@
     width: 100%;
     min-height: 44px;
     border-radius: 12px;
-    border: 1px solid rgba(96, 165, 250, 0.28);
+    border: 2px solid rgba(96, 165, 250, 0.25);
     padding: 0 12px;
-    background: rgba(255, 255, 255, 0.06);
+    background: transparent;
     color: #fff;
     font: inherit;
     outline: none;
+    position: relative;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    --input-angle: 0deg;
 }
 
 .key-form input::placeholder {
@@ -912,8 +956,12 @@
 }
 
 .key-form input:focus {
-    border-color: var(--accent-strong);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18);
+    border-color: rgba(6, 182, 212, 0.6);
+    box-shadow: 
+        0 0 0 3px rgba(6, 182, 212, 0.15),
+        inset 0 0 12px rgba(56, 189, 248, 0.08),
+        inset 0 0 0 1px rgba(6, 182, 212, 0.3);
+    animation: ledBorderDown 3s linear infinite;
 }
 
 .key-form button {
@@ -942,6 +990,51 @@
     to {
         opacity: 1;
         transform: translate(-50%, -50%);
+    }
+}
+
+@keyframes borderCrawler {
+    to {
+        --border-angle: 360deg;
+    }
+}
+
+@keyframes ledBorderDown {
+    0% {
+        --input-angle: 0deg;
+        box-shadow: 
+            0 0 0 3px rgba(6, 182, 212, 0.15),
+            inset 0 0 12px rgba(56, 189, 248, 0.08),
+            inset 0 0 0 1px rgba(6, 182, 212, 0.3),
+            inset 0 0px 8px 0 rgba(6, 182, 212, 0.5);
+    }
+    25% {
+        box-shadow: 
+            0 0 0 3px rgba(6, 182, 212, 0.15),
+            inset 0 0 12px rgba(56, 189, 248, 0.08),
+            inset 0 8px 16px 0 rgba(6, 182, 212, 0.5),
+            inset 0 0 0 1px rgba(6, 182, 212, 0.3);
+    }
+    50% {
+        box-shadow: 
+            0 0 0 3px rgba(6, 182, 212, 0.15),
+            inset 0 0 12px rgba(56, 189, 248, 0.08),
+            inset 0 16px 12px 0 rgba(6, 182, 212, 0.5),
+            inset 0 0 0 1px rgba(6, 182, 212, 0.3);
+    }
+    75% {
+        box-shadow: 
+            0 0 0 3px rgba(6, 182, 212, 0.15),
+            inset 0 0 12px rgba(56, 189, 248, 0.08),
+            inset 0 28px 8px 0 rgba(6, 182, 212, 0.5),
+            inset 0 0 0 1px rgba(6, 182, 212, 0.3);
+    }
+    100% {
+        box-shadow: 
+            0 0 0 3px rgba(6, 182, 212, 0.15),
+            inset 0 0 12px rgba(56, 189, 248, 0.08),
+            inset 0 35px 0 0 rgba(6, 182, 212, 0.5),
+            inset 0 0 0 1px rgba(6, 182, 212, 0.3);
     }
 }
 /* ---------- Responsive ---------- */
@@ -1276,4 +1369,137 @@
 .life-card.life-card--secret .life-card__icon {
     color: #94a3b8;
     text-shadow: 0 0 14px rgba(148, 163, 184, 0.28);
+}
+
+.cooking-upload-widget {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 80;
+    width: 110px;
+    border: 1px solid rgba(96, 165, 250, 0.25);
+    border-radius: 8px;
+    background: rgba(15, 23, 42, 0.92);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(10px);
+    padding: 5px;
+    color: #f8fafc;
+}
+
+.cooking-upload-widget__hint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(226, 232, 240, 0.8);
+    font-size: 9px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.cooking-upload-widget__hint:hover {
+    background: rgba(56, 189, 248, 0.1);
+}
+
+.cooking-upload-widget__hint i {
+    font-size: 10px;
+    animation: bobbing 1.5s ease-in-out infinite;
+}
+
+.cooking-upload-widget__preview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(32px, 1fr));
+    gap: 2px;
+    margin-bottom: 5px;
+}
+
+.cooking-upload-widget__preview img {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 5px;
+    object-fit: cover;
+    border: 1px solid rgba(96, 165, 250, 0.15);
+}
+
+.cooking-upload-widget__send {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 5px;
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    border-radius: 5px;
+    background: rgba(56, 189, 248, 0.12);
+    color: rgba(56, 189, 248, 0.8);
+    font-size: 10px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+}
+
+.cooking-upload-widget__send:hover:not(:disabled) {
+    border-color: rgba(56, 189, 248, 0.6);
+    background: rgba(56, 189, 248, 0.22);
+    color: rgba(56, 189, 248, 1);
+}
+
+.cooking-upload-widget__send:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.cooking-upload-widget__status {
+    position: fixed !important;
+    left: 50% !important;
+    top: 50% !important;
+    right: auto !important;
+    bottom: auto !important;
+    transform: translate(-50%, -50%) scale(0.95) !important;
+    z-index: 9999 !important;
+    width: min(85vw, 320px) !important;
+    padding: 18px 20px !important;
+    border-radius: 16px !important;
+    background: rgba(10, 20, 40, 0.65) !important;
+    border: 1px solid rgba(59, 130, 246, 0.5) !important;
+    color: rgba(226, 232, 240, 0.9) !important;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), inset 0 0 20px rgba(59, 130, 246, 0.08) !important;
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    line-height: 1.5 !important;
+    text-align: center !important;
+    text-shadow: 0 0 12px rgba(59, 130, 246, 0.3) !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease !important;
+}
+
+.cooking-upload-widget__status.is-visible {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translate(-50%, -50%) scale(1) !important;
+}
+
+@keyframes bobbing {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(1px); }
+}
+
+@media (max-width: 480px) {
+    .cooking-upload-widget {
+        position: static;
+        width: 100%;
+        max-width: 360px;
+        margin: 16px auto 0;
+        border: 1px solid rgba(96, 165, 250, 0.25);
+        border-radius: 8px;
+        background: rgba(15, 23, 42, 0.92);
+        padding: 5px;
+    }
+    
+    .cooking-upload-widget__hint {
+        font-size: 9px;
+        padding: 4px;
+    }
 }

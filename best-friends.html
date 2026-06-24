@@ -34,6 +34,18 @@
         </header>
 
         <section class="photo-gallery" aria-label="Album Best Friends" data-gallery-cloudinary="https://res.cloudinary.com/dtpw5htqs/image/upload/v1782285735/z7970828591662_7287208052dbaa6a8a1637bec96113f7_ggy62w.webp,https://res.cloudinary.com/dtpw5htqs/image/upload/v1782285193/IMG_1458_qexx6a.webp,https://res.cloudinary.com/dtpw5htqs/image/upload/v1782285192/IMG_1457_juqln5.webp,https://res.cloudinary.com/dtpw5htqs/image/upload/v1782285191/df711c41-215c-40da-9737-0fe450b9be96_whjnnx.webp,https://res.cloudinary.com/dtpw5htqs/image/upload/v1782285190/cf891f1f-21f1-440d-b49f-2d86efa462ea_ubvgwp.webp,https://res.cloudinary.com/dtpw5htqs/image/upload/v1782285188/cd942cc0-cf13-4e00-ba61-65a0e5435340_r94gy3.webp,https://res.cloudinary.com/dtpw5htqs/image/upload/v1782285187/643c91de-691e-4ba4-8ef3-ceb05b586c5c_bawxlb.webp,https://res.cloudinary.com/dtpw5htqs/image/upload/v1782285185/z7968429834343_5b9e8278fc949764c79f2744244c449e_vh9pcp.webp,https://res.cloudinary.com/dtpw5htqs/image/upload/v1782285186/0d1d757b-1e88-4f78-bc10-613370b6b7ce_tihgyu.webp,https://res.cloudinary.com/dtpw5htqs/image/upload/v1782285183/z7968429774386_c18dda87d14938d0c632f4e15391a9dc_s6oq3y.webp,https://res.cloudinary.com/dtpw5htqs/image/upload/v1782285181/z7961712141973_cdc3cbe101365e1b34abe5ffdaf78a4d_e2jtbp.webp,https://res.cloudinary.com/dtpw5htqs/image/upload/v1782285180/z7429701366088_8556aaaf9a0a19a2b05ce342b7e6fec2_piqmpy.webp,https://res.cloudinary.com/dtpw5htqs/image/upload/v1782285179/IMG_4147_vmjxjx.webp,https://res.cloudinary.com/dtpw5htqs/image/upload/v1782285178/IMG_3753_rlcxk9.webp,https://res.cloudinary.com/dtpw5htqs/image/upload/v1782285176/IMG_3720_poncwz.webp,https://res.cloudinary.com/dtpw5htqs/image/upload/v1782285176/IMG_3718_sxxsqt.webp,https://res.cloudinary.com/dtpw5htqs/image/upload/v1782285175/IMG_3072_ncbq6o.webp" data-pinned-image="https://res.cloudinary.com/dtpw5htqs/image/upload/v1782285181/z7961712141973_cdc3cbe101365e1b34abe5ffdaf78a4d_e2jtbp.webp"></section>
+
+        <div class="cooking-upload-widget" id="cooking-upload-widget" aria-label="Upload ảnh">
+            <div class="cooking-upload-widget__hint" id="cooking-upload-hint">
+                <span>Ném ảnh lại đây</span>
+            </div>
+            <div class="cooking-upload-widget__preview" id="cooking-upload-preview" hidden></div>
+            <button type="button" class="cooking-upload-widget__send" id="cooking-send-btn" hidden>
+                <i class="fas fa-paper-plane" aria-hidden="true"></i>
+            </button>
+            <input type="file" id="cooking-upload-input" accept="image/jpeg,image/png,image/webp,image/gif" multiple hidden>
+        </div>
+        <p class="cooking-upload-widget__status" id="cooking-upload-status" aria-live="polite"></p>
     </main>
 
     <div class="photo-lightbox" id="photo-lightbox" role="dialog" aria-label="Anh phong to" aria-hidden="true">
@@ -46,6 +58,161 @@
     </div>
 
     <script src="theme.js"></script>
-</body>
+    <script>
+        (function () {
+            var cloudName = 'dtpw5htqs';
+            var uploadPreset = 'Upload_img';
+            var maxFiles = 5;
+            var maxSize = 5 * 1024 * 1024;
+            var selectedCookingFiles = [];
+            var uploadInput = document.getElementById('cooking-upload-input');
+            var uploadHint = document.getElementById('cooking-upload-hint');
+            var sendBtn = document.getElementById('cooking-send-btn');
+            var preview = document.getElementById('cooking-upload-preview');
+            var status = document.getElementById('cooking-upload-status');
+
+            function setStatus(message) {
+                if (status) {
+                    status.textContent = message || '';
+                    if (message) {
+                        status.classList.add('is-visible');
+                    } else {
+                        status.classList.remove('is-visible');
+                    }
+                }
+            }
+
+            function renderPreview() {
+                if (!preview || !sendBtn || !uploadHint) return;
+                
+                if (!selectedCookingFiles.length) {
+                    preview.hidden = true;
+                    uploadHint.hidden = false;
+                    sendBtn.hidden = true;
+                    return;
+                }
+
+                preview.innerHTML = '';
+                selectedCookingFiles.forEach(function (file) {
+                    var img = document.createElement('img');
+                    img.alt = file.name;
+                    img.src = URL.createObjectURL(file);
+                    img.onload = function () {
+                        URL.revokeObjectURL(img.src);
+                    };
+                    preview.appendChild(img);
+                });
+                
+                uploadHint.hidden = true;
+                preview.hidden = false;
+                sendBtn.hidden = false;
+            }
+
+            function uploadToCloudinary(file) {
+                return new Promise(function (resolve, reject) {
+                    var formData = new FormData();
+                    formData.append('file', file);
+                    formData.append('upload_preset', uploadPreset);
+
+                    fetch('https://api.cloudinary.com/v1_1/' + cloudName + '/image/upload', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(function (response) {
+                        return response.json();
+                    })
+                    .then(function (data) {
+                        if (data.secure_url) {
+                            resolve(data.secure_url);
+                        } else {
+                            reject(new Error('Upload failed'));
+                        }
+                    })
+                    .catch(reject);
+                });
+            }
+
+            function handleFileSelect(files) {
+                var fileArray = Array.prototype.slice.call(files || []);
+                uploadInput.value = '';
+                if (!fileArray.length) return;
+
+                for (var i = 0; i < fileArray.length; i += 1) {
+                    if (selectedCookingFiles.length >= maxFiles) {
+                        setStatus('Hiếu chưa pro nên chưa nâng cấp nhận nhiều ảnh');
+                        setTimeout(function () {
+                            setStatus('');
+                        }, 4500);
+                        break;
+                    }
+
+                    var file = fileArray[i];
+                    if (!/^image\/(jpeg|png|webp|gif)$/i.test(file.type)) {
+                        setStatus('Chỉ nhận ảnh JPG, PNG, WEBP hoặc GIF');
+                        continue;
+                    }
+
+                    if (file.size > maxSize) {
+                        setStatus('Ảnh tối đa 5MB');
+                        continue;
+                    }
+
+                    selectedCookingFiles.push(file);
+                }
+
+                renderPreview();
+            }
+
+            if (uploadHint) {
+                uploadHint.addEventListener('click', function () {
+                    uploadInput.click();
+                });
+            }
+
+            if (uploadInput) {
+                uploadInput.addEventListener('change', function () {
+                    handleFileSelect(uploadInput.files);
+                });
+            }
+
+            if (sendBtn) {
+                sendBtn.addEventListener('click', function () {
+                    if (!selectedCookingFiles.length) return;
+                    sendBtn.disabled = true;
+
+                    selectedCookingFiles.reduce(function (chain, file) {
+                        return chain.then(function () {
+                            return uploadToCloudinary(file);
+                        });
+                    }, Promise.resolve()).then(function () {
+                        // Clear files FIRST
+                        selectedCookingFiles = [];
+                        // Clear preview HTML immediately
+                        if (preview) {
+                            preview.innerHTML = '';
+                            preview.hidden = true;
+                        }
+                        // Reset hint and button
+                        if (uploadHint) uploadHint.hidden = false;
+                        if (sendBtn) sendBtn.hidden = true;
+                        // Show success message at center
+                        setStatus('Cảm ơn bro đã gửi ảnh');
+                        // Auto-hide after 3 seconds
+                        setTimeout(function () {
+                            setStatus('');
+                        }, 3000);
+                    }).catch(function (error) {
+                        setStatus('Lỗi gửi ảnh');
+                        console.error('Upload error:', error);
+                        setTimeout(function () {
+                            setStatus('');
+                        }, 3000);
+                    }).finally(function () {
+                        sendBtn.disabled = false;
+                    });
+                });
+            }
+        })();
+    </script>
 
 </html>

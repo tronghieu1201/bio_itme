@@ -658,7 +658,8 @@ body.is-page-transitioning {
     flex-shrink: 0;
     line-height: 1;
 }
-.link-panel .life-card__icon i {
+
+.link-panel .life-card__icon i {
     width: 1.15em;
     font-size: 18px;
     line-height: 1;

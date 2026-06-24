@@ -377,7 +377,6 @@
     function isValidGmail(email) {
         return /^[a-zA-Z0-9._%+-]+@gmail\.com$/i.test(email);
     }
-
     // Attach click to each category card
     document.querySelectorAll('.life-card').forEach(function (card) {
         card.addEventListener('click', function (e) {
@@ -425,30 +424,39 @@
 
     if (joinForm) {
         joinForm.addEventListener('submit', function (e) {
-            var formData = new FormData(joinForm);
-            var data = {
-                name: String(formData.get('name') || '').trim(),
-                createdAt: new Date().toISOString()
-            };
-
-            if (!data.name) {
-                e.preventDefault();
-                return;
-            }
-
-            if (joinCreatedAt) joinCreatedAt.value = data.createdAt;
-            saveJoinSubmission(data);
-
             e.preventDefault();
-            fetch(joinForm.action, {
-                method: 'POST',
-                mode: 'no-cors',
-                body: new FormData(joinForm)
+
+            var content = String(document.getElementById('join-content').value || '').trim();
+            var createdAt = new Date().toISOString();
+            var submitBtn = joinForm.querySelector('.join-form__submit');
+
+            if (!content) return;
+
+            if (joinCreatedAt) joinCreatedAt.value = createdAt;
+            saveJoinSubmission({
+                content: content,
+                createdAt: createdAt
             });
 
+            if (submitBtn) submitBtn.disabled = true;
+
+            // Báo cảm ơn ngay, gửi dữ liệu ở background
             joinForm.reset();
             closeJoinModal();
             showLifeToast('Cảm ơn bạn đã góp ý');
+            if (submitBtn) submitBtn.disabled = false;
+
+            // Build URL params for Apps Script
+            var params = new URLSearchParams();
+            params.append('content', content);
+            params.append('createdAt', createdAt);
+            params.append('type', 'feedback');
+
+            var scriptUrl = 'https://script.google.com/macros/s/AKfycby-reALynElbYg4QpU4P6PVcD8qj3qObR3SPil7rOLZkjJv7w0jXzxbv03IgAKyGAu6HA/exec';
+
+            // Gửi dữ liệu ở background bằng Image Beacon
+            var img = new Image();
+            img.src = scriptUrl + '?' + params.toString();
         });
     }
 
