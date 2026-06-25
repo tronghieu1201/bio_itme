@@ -308,17 +308,20 @@
         return decodeURIComponent(url.split('?')[0]).replace(/\/+$/, '');
     }
 
-    function getPinnedPhotoUrl(gallery) {
-        return (gallery.getAttribute('data-pinned-image') || '').trim();
+    function getPinnedPhotoUrls(gallery) {
+        return (gallery.getAttribute('data-pinned-image') || '').split(',').map(function (url) {
+            return url.trim();
+        }).filter(Boolean);
     }
 
     function isPinnedPhotoCard(gallery, src, fullSrc) {
-        var pinnedUrl = getPinnedPhotoUrl(gallery);
-        if (!pinnedUrl) return false;
+        var pinnedUrls = getPinnedPhotoUrls(gallery).map(normalizeGalleryPhotoUrl);
+        if (!pinnedUrls.length) return false;
 
-        var pinnedNormalized = normalizeGalleryPhotoUrl(pinnedUrl);
         var candidates = [src, fullSrc].map(normalizeGalleryPhotoUrl).filter(Boolean);
-        return candidates.indexOf(pinnedNormalized) !== -1;
+        return candidates.some(function (candidate) {
+            return pinnedUrls.indexOf(candidate) !== -1;
+        });
     }
 
     function createPhotoCard(gallery, src, name, fullSrc, originalSrc, thumbSrcset, fullSrcset, isPriority) {
@@ -521,30 +524,34 @@
         return decodeURIComponent(url.split('?')[0]).replace(/\/+$/, '');
     }
 
-    function getPinnedPhotoUrl(gallery) {
-        var pinnedUrl = gallery.getAttribute('data-pinned-image') || '';
-        return pinnedUrl.trim();
+    function getPinnedPhotoUrls(gallery) {
+        return (gallery.getAttribute('data-pinned-image') || '').split(',').map(function (url) {
+            return url.trim();
+        }).filter(Boolean);
     }
 
     function applyPinnedPhotoOrder(gallery, photos) {
-        var pinnedUrl = getPinnedPhotoUrl(gallery);
-        if (!pinnedUrl || !photos.length) return photos;
+        var pinnedUrls = getPinnedPhotoUrls(gallery).map(normalizeGalleryPhotoUrl);
+        if (!pinnedUrls.length || !photos.length) return photos;
 
-        var normalizedPinned = normalizeGalleryPhotoUrl(pinnedUrl);
-        var pinnedIndex = -1;
+        var pinnedPhotos = [];
+        var remainingPhotos = photos.slice();
 
-        photos.forEach(function (photo, index) {
-            if (normalizeGalleryPhotoUrl(photo.src) === normalizedPinned) {
-                pinnedIndex = index;
+        pinnedUrls.forEach(function (pinnedUrl) {
+            var pinnedIndex = -1;
+
+            remainingPhotos.forEach(function (photo, index) {
+                if (pinnedIndex === -1 && normalizeGalleryPhotoUrl(photo.src) === pinnedUrl) {
+                    pinnedIndex = index;
+                }
+            });
+
+            if (pinnedIndex !== -1) {
+                pinnedPhotos.push(remainingPhotos.splice(pinnedIndex, 1)[0]);
             }
         });
 
-        if (pinnedIndex < 1) return photos;
-
-        var reordered = photos.slice();
-        var pinnedPhoto = reordered.splice(pinnedIndex, 1)[0];
-        reordered.unshift(pinnedPhoto);
-        return reordered;
+        return pinnedPhotos.concat(remainingPhotos);
     }
 
     function getCloudinaryGalleryPhotos(gallery) {
