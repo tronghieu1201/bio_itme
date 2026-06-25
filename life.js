@@ -28,7 +28,8 @@
     var MOMENTS_UPLOAD_CLOUD_NAME = 'dtpw5htqs';
     var MOMENTS_UPLOAD_PRESET = 'Upload_img';
     var MOMENTS_MAX_FILES = 5;
-    var MOMENTS_MAX_SIZE = 5 * 1024 * 1024;
+    var MOMENTS_MAX_SIZE_MB = 20;
+    var MOMENTS_MAX_SIZE = MOMENTS_MAX_SIZE_MB * 1024 * 1024;
     var selectedMomentsFiles = [];
     var momentsStatusTimer = null;
     var DEFAULT_TOAST_MESSAGE = toast ? toast.textContent : 'Mục này đang được cập nhật, hãy quay lại sau nhé!';
@@ -365,7 +366,7 @@
             }
 
             if (file.size > MOMENTS_MAX_SIZE) {
-                setMomentsStatus('Ảnh tối đa 5MB');
+                setMomentsStatus('Ảnh tối đa ' + MOMENTS_MAX_SIZE_MB + 'MB');
                 continue;
             }
 
@@ -542,21 +543,20 @@
     if (momentsSendBtn) {
         momentsSendBtn.addEventListener('click', function () {
             if (!selectedMomentsFiles.length) return;
+            var filesToUpload = selectedMomentsFiles.slice();
             momentsSendBtn.disabled = true;
 
-            selectedMomentsFiles.reduce(function (chain, file) {
+            resetMomentsUpload();
+            if (momentsUploadWidget) momentsUploadWidget.hidden = true;
+            setMomentsStatus('C\u1ea3m \u01a1n bro \u0111\u00e3 g\u1eedi \u1ea3nh \ud83c\udf37', 1300, closeGallery);
+            momentsSendBtn.disabled = false;
+
+            filesToUpload.reduce(function (chain, file) {
                 return chain.then(function () {
                     return uploadMomentToCloudinary(file);
                 });
-            }, Promise.resolve()).then(function () {
-                resetMomentsUpload();
-                if (momentsUploadWidget) momentsUploadWidget.hidden = true;
-                setMomentsStatus('C\u1ea3m \u01a1n bro \u0111\u00e3 g\u1eedi \u1ea3nh \ud83c\udf37', 1300, closeGallery);
-            }).catch(function (error) {
-                setMomentsStatus('Lỗi gửi ảnh');
+            }, Promise.resolve()).catch(function (error) {
                 console.error('Upload error:', error);
-            }).finally(function () {
-                momentsSendBtn.disabled = false;
             });
         });
     }
