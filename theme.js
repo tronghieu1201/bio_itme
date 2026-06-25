@@ -733,6 +733,87 @@
         });
     }
 
+    /* ---- Browser open note ---- */
+    function ensureBrowserNote() {
+        var note = document.getElementById('browser-note');
+        if (note) return note;
+
+        note = document.createElement('div');
+        note.className = 'browser-note';
+        note.id = 'browser-note';
+        note.setAttribute('role', 'dialog');
+        note.setAttribute('aria-modal', 'true');
+        note.setAttribute('aria-labelledby', 'browser-note-title');
+        note.setAttribute('aria-hidden', 'true');
+        note.hidden = true;
+        note.innerHTML =
+            '<div class="browser-note__backdrop" data-browser-note-ok></div>' +
+            '<article class="browser-note__card">' +
+                '<h2 class="browser-note__title" id="browser-note-title">L&#432;u &yacute;</h2>' +
+                '<p class="browser-note__text">N&ecirc;n m&#7903; b&#7857;ng tr&igrave;nh duy&#7879;t &#273;&#7875; kh&ocirc;ng b&#7883; treo</p>' +
+                '<div class="browser-note__actions">' +
+                    '<button type="button" class="browser-note__btn browser-note__btn--primary" data-browser-note-ok>OK</button>' +
+                    '<button type="button" class="browser-note__btn" data-browser-note-snooze>T&#7855;t 1 gi&#7901;</button>' +
+                '</div>' +
+            '</article>';
+        document.body.appendChild(note);
+        return note;
+    }
+
+    var browserNote = ensureBrowserNote();
+    var BROWSER_NOTE_STORAGE_KEY = 'browser-note-hidden-until';
+    var BROWSER_NOTE_SNOOZE_MS = 60 * 60 * 1000;
+
+    function getBrowserNoteHiddenUntil() {
+        try {
+            return Number(localStorage.getItem(BROWSER_NOTE_STORAGE_KEY) || 0);
+        } catch (e) {
+            return 0;
+        }
+    }
+
+    function setBrowserNoteHiddenUntil(timestamp) {
+        try {
+            localStorage.setItem(BROWSER_NOTE_STORAGE_KEY, String(timestamp));
+        } catch (e) {}
+    }
+
+    function openBrowserNote() {
+        if (!browserNote) return;
+        browserNote.hidden = false;
+        browserNote.setAttribute('aria-hidden', 'false');
+        requestAnimationFrame(function () {
+            browserNote.classList.add('is-open');
+        });
+    }
+
+    function closeBrowserNote() {
+        if (!browserNote) return;
+        browserNote.classList.remove('is-open');
+        browserNote.setAttribute('aria-hidden', 'true');
+        setTimeout(function () {
+            if (!browserNote.classList.contains('is-open')) {
+                browserNote.hidden = true;
+            }
+        }, 240);
+    }
+
+    if (browserNote) {
+        if (Date.now() >= getBrowserNoteHiddenUntil()) {
+            openBrowserNote();
+        }
+
+        browserNote.querySelectorAll('[data-browser-note-ok]').forEach(function (btn) {
+            btn.addEventListener('click', closeBrowserNote);
+        });
+
+        browserNote.querySelectorAll('[data-browser-note-snooze]').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                setBrowserNoteHiddenUntil(Date.now() + BROWSER_NOTE_SNOOZE_MS);
+                closeBrowserNote();
+            });
+        });
+    }
     /* ---- Copy Email to Clipboard ---- */
     var emailBtn = document.getElementById('link-email');
     var toast = document.getElementById('toast');
