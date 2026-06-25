@@ -82,6 +82,8 @@
             var targetErrorMsg = '';
             var defaultPlaceholder = '';
             var KEY = '171209';
+            var KEY_NOTICE_MESSAGE = 'V&igrave; B&#7843;n test n&ecirc;n c&#7847;n x&aacute;c minh.';
+            var keyNoticeTimer = null;
 
             function getUnlockStorageKey(url) {
                 var targetUrl = new URL(url, window.location.href);
@@ -95,10 +97,33 @@
                 } catch (e) {}
             }
 
+            function ensureKeyNotice() {
+                var notice = document.getElementById('key-notice');
+                if (notice) return notice;
+
+                notice = document.createElement('div');
+                notice.id = 'key-notice';
+                notice.className = 'key-notice';
+                notice.setAttribute('role', 'status');
+                notice.setAttribute('aria-live', 'polite');
+                document.body.appendChild(notice);
+                return notice;
+            }
+
+            function showKeyNotice() {
+                var notice = ensureKeyNotice();
+                clearTimeout(keyNoticeTimer);
+                notice.innerHTML = KEY_NOTICE_MESSAGE;
+                notice.classList.add('is-visible');
+                keyNoticeTimer = setTimeout(function () {
+                    notice.classList.remove('is-visible');
+                }, 3200);
+            }
+
             function openModal(card) {
                 targetHref = card ? card.getAttribute('data-locked-href') || '' : '';
                 targetKey = card ? card.getAttribute('data-key') || KEY : KEY;
-                targetErrorMsg = card ? card.getAttribute('data-key-error') || 'Nhập key trật lất' : 'Nhập key trật lất';
+                targetErrorMsg = 'X&aacute;c nh&#7853;n kh&ocirc;ng th&agrave;nh c&ocirc;ng';
                 if (input) input.setAttribute('placeholder', card ? card.getAttribute('data-key-placeholder') || defaultPlaceholder : defaultPlaceholder);
                 if (error) error.textContent = '';
                 if (input) input.value = '';
@@ -120,6 +145,7 @@
 
             document.querySelectorAll('[data-locked-href]').forEach(function (card) {
                 card.addEventListener('click', function () {
+                    showKeyNotice();
                     openModal(card);
                 });
             });
@@ -128,7 +154,7 @@
                 e.preventDefault();
                 var keyValue = input.value.trim();
                 if (!keyValue) {
-                    error.innerHTML = 'Hãy nhập key';
+                    error.innerHTML = 'M&#7903; v&ocirc; hi&#7879;u';
                     input.focus();
                     return;
                 }

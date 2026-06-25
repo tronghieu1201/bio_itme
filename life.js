@@ -15,10 +15,22 @@
     var joinClose = document.getElementById('join-close');
     var joinForm = document.getElementById('join-form');
     var joinCreatedAt = document.getElementById('join-created-at');
+    var momentsUploadWidget = document.getElementById('moments-upload-widget');
+    var momentsUploadInput = document.getElementById('moments-upload-input');
+    var momentsUploadHint = document.getElementById('moments-upload-hint');
+    var momentsSendBtn = document.getElementById('moments-send-btn');
+    var momentsPreview = document.getElementById('moments-upload-preview');
+    var momentsStatus = document.getElementById('moments-upload-status');
     var toastTimer = null;
     var thoughtsConfirmModal = null;
     var thoughtsConfirmCloseTimer = null;
     var JOIN_STORAGE_KEY = 'life-join-submissions';
+    var MOMENTS_UPLOAD_CLOUD_NAME = 'dtpw5htqs';
+    var MOMENTS_UPLOAD_PRESET = 'Upload_img';
+    var MOMENTS_MAX_FILES = 5;
+    var MOMENTS_MAX_SIZE = 5 * 1024 * 1024;
+    var selectedMomentsFiles = [];
+    var momentsStatusTimer = null;
     var DEFAULT_TOAST_MESSAGE = toast ? toast.textContent : 'Mục này đang được cập nhật, hãy quay lại sau nhé!';
     var THOUGHTS_STORAGE_KEY = 'life-thoughts-selected';
     var thoughtsQuotes = [
@@ -111,7 +123,7 @@
             images: []
         },
         daily: {
-            title: 'Khoảnh khắc',
+            title: 'Upload',
             images: []
         }
     };
@@ -177,9 +189,12 @@
         if (!cat || !overlay) return;
 
         titleEl.textContent = cat.title;
+        overlay.classList.toggle('is-upload-mode', categoryKey === 'daily');
         gridEl.innerHTML = '';
         gridEl.dataset.mode = '';
         if (thoughtsGuide) thoughtsGuide.hidden = true;
+        if (momentsUploadWidget) momentsUploadWidget.hidden = categoryKey !== 'daily';
+        if (momentsStatus) momentsStatus.classList.remove('is-visible');
         clearTimeout(toastTimer);
         document.body.classList.add('is-modal-open');
         emptyEl.hidden = false;
@@ -192,8 +207,11 @@
         if (categoryKey === 'thoughts') {
             renderThoughtsQuotes();
         } else if (cat.images.length === 0) {
-            showLifeToast();
-            return;
+            if (categoryKey !== 'daily') {
+                showLifeToast();
+                return;
+            }
+            emptyEl.hidden = true;
         } else {
             emptyEl.classList.remove('is-visible');
             emptyEl.hidden = true;
@@ -258,6 +276,114 @@
         }, 220);
     }
 
+    function setMomentsStatus(message, duration, onDone) {
+        if (!momentsStatus) return;
+        clearTimeout(momentsStatusTimer);
+        momentsStatus.textContent = message || '';
+        momentsStatus.classList.toggle('is-visible', Boolean(message));
+        if (message) {
+            momentsStatusTimer = setTimeout(function () {
+                momentsStatus.classList.remove('is-visible');
+                if (typeof onDone === 'function') onDone();
+            }, duration || 3000);
+        }
+    }
+
+    function renderMomentsPreview() {
+        if (!momentsPreview || !momentsSendBtn || !momentsUploadHint) return;
+
+        momentsPreview.innerHTML = '';
+
+        if (!selectedMomentsFiles.length) {
+            momentsPreview.hidden = true;
+            momentsUploadHint.hidden = false;
+            momentsSendBtn.hidden = true;
+            return;
+        }
+
+        selectedMomentsFiles.forEach(function (file, index) {
+            var item = document.createElement('div');
+            var img = document.createElement('img');
+            var removeBtn = document.createElement('button');
+
+            item.className = 'moments-upload-preview__item';
+            img.alt = file.name;
+            img.src = URL.createObjectURL(file);
+            img.onload = function () {
+                URL.revokeObjectURL(img.src);
+            };
+            removeBtn.type = 'button';
+            removeBtn.className = 'moments-upload-preview__remove';
+            removeBtn.setAttribute('aria-label', 'Xóa ảnh ' + file.name);
+            removeBtn.innerHTML = '&times;';
+            removeBtn.addEventListener('click', function () {
+                selectedMomentsFiles.splice(index, 1);
+                renderMomentsPreview();
+            });
+
+            item.appendChild(img);
+            item.appendChild(removeBtn);
+            momentsPreview.appendChild(item);
+        });
+
+        momentsUploadHint.hidden = true;
+        momentsPreview.hidden = false;
+        momentsSendBtn.hidden = false;
+    }
+
+    function uploadMomentToCloudinary(file) {
+        var formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', MOMENTS_UPLOAD_PRESET);
+
+        return fetch('https://api.cloudinary.com/v1_1/' + MOMENTS_UPLOAD_CLOUD_NAME + '/image/upload', {
+            method: 'POST',
+            body: formData
+        }).then(function (response) {
+            return response.json();
+        }).then(function (data) {
+            if (!data.secure_url) throw new Error('Upload failed');
+            return data.secure_url;
+        });
+    }
+
+    function handleMomentsFileSelect(files) {
+        var fileArray = Array.prototype.slice.call(files || []);
+        if (momentsUploadInput) momentsUploadInput.value = '';
+        if (!fileArray.length) return;
+
+        for (var i = 0; i < fileArray.length; i += 1) {
+            if (selectedMomentsFiles.length >= MOMENTS_MAX_FILES) {
+                setMomentsStatus('Hi\u1ebfu ch\u01b0a pro n\u00ean ch\u01b0a n\u00e2ng c\u1ea5p nh\u1eadn nhi\u1ec1u \u1ea3nh \ud83e\udd72');
+                break;
+            }
+
+            var file = fileArray[i];
+            if (!/^image\/(jpeg|png|webp|gif)$/i.test(file.type)) {
+                setMomentsStatus('Chỉ nhận ảnh JPG, PNG, WEBP hoặc GIF');
+                continue;
+            }
+
+            if (file.size > MOMENTS_MAX_SIZE) {
+                setMomentsStatus('Ảnh tối đa 5MB');
+                continue;
+            }
+
+            selectedMomentsFiles.push(file);
+        }
+
+        renderMomentsPreview();
+    }
+
+    function resetMomentsUpload() {
+        selectedMomentsFiles = [];
+        if (momentsPreview) {
+            momentsPreview.innerHTML = '';
+            momentsPreview.hidden = true;
+        }
+        if (momentsUploadHint) momentsUploadHint.hidden = false;
+        if (momentsSendBtn) momentsSendBtn.hidden = true;
+    }
     function stopConfirmEvent(ev) {
         ev.preventDefault();
         ev.stopPropagation();
@@ -332,6 +458,7 @@
         clearTimeout(toastTimer);
         document.body.classList.remove('is-modal-open');
         overlay.classList.remove('is-open');
+        overlay.classList.remove('is-upload-mode');
         overlay.setAttribute('aria-hidden', 'true');
 
         var url = new URL(window.location.href);
@@ -400,6 +527,39 @@
         });
     }
 
+    if (momentsUploadHint && momentsUploadInput) {
+        momentsUploadHint.addEventListener('click', function () {
+            momentsUploadInput.click();
+        });
+    }
+
+    if (momentsUploadInput) {
+        momentsUploadInput.addEventListener('change', function () {
+            handleMomentsFileSelect(momentsUploadInput.files);
+        });
+    }
+
+    if (momentsSendBtn) {
+        momentsSendBtn.addEventListener('click', function () {
+            if (!selectedMomentsFiles.length) return;
+            momentsSendBtn.disabled = true;
+
+            selectedMomentsFiles.reduce(function (chain, file) {
+                return chain.then(function () {
+                    return uploadMomentToCloudinary(file);
+                });
+            }, Promise.resolve()).then(function () {
+                resetMomentsUpload();
+                if (momentsUploadWidget) momentsUploadWidget.hidden = true;
+                setMomentsStatus('C\u1ea3m \u01a1n bro \u0111\u00e3 g\u1eedi \u1ea3nh \ud83c\udf37', 1300, closeGallery);
+            }).catch(function (error) {
+                setMomentsStatus('Lỗi gửi ảnh');
+                console.error('Upload error:', error);
+            }).finally(function () {
+                momentsSendBtn.disabled = false;
+            });
+        });
+    }
     if (joinBtn) {
         joinBtn.addEventListener('click', openJoinModal);
     }
@@ -443,7 +603,7 @@
             // Báo cảm ơn ngay, gửi dữ liệu ở background
             joinForm.reset();
             closeJoinModal();
-            showLifeToast('Cảm ơn bạn đã góp ý');
+            showLifeToast('C\u1ea3m \u01a1n b\u1ea1n \u0111\u00e3 g\u00f3p \u00fd \ud83c\udf37');
             if (submitBtn) submitBtn.disabled = false;
 
             // Build URL params for Apps Script

@@ -61,7 +61,7 @@
             <!-- Nấu ăn -->
             <a href="./cooking.html" class="life-card" id="card-cooking">
                 <div class="life-card__icon">
-                    <i class="fas fa-bowl-food" aria-hidden="true"></i>
+                    <i class="fas fa-utensils" aria-hidden="true"></i>
                 </div>
                 <div class="life-card__body">
                     <h2 class="life-card__title">Nấu ăn</h2>
@@ -70,14 +70,14 @@
                 <i class="fas fa-chevron-right life-card__arrow" aria-hidden="true"></i>
             </a>
 
-            <!-- Khoảnh khắc -->
+            <!-- Upload -->
             <a href="#" class="life-card" id="card-daily" data-category="daily">
                 <div class="life-card__icon">
-                    <i class="fas fa-camera-retro" aria-hidden="true"></i>
+                    <i class="fas fa-upload" aria-hidden="true"></i>
                 </div>
                 <div class="life-card__body">
-                    <h2 class="life-card__title">Khoảnh khắc</h2>
-                    <p class="life-card__desc">Một tí sự vô tri.</p>
+                    <h2 class="life-card__title">Upload</h2>
+                    <p class="life-card__desc">Ném ảnh tại đây.</p>
                 </div>
                 <i class="fas fa-chevron-right life-card__arrow" aria-hidden="true"></i>
             </a>
@@ -110,6 +110,17 @@
                 </div>
                 <p class="gallery-panel__quote" id="gallery-quote" hidden></p>
                 <p class="gallery-panel__empty" id="gallery-empty">Chưa update. Hãy quay lại sau nhé!🌷</p>
+                <div class="cooking-upload-widget moments-upload-widget" id="moments-upload-widget" aria-label="Upload ảnh" hidden>
+                    <div class="cooking-upload-widget__hint" id="moments-upload-hint">
+                        <span>Ném ảnh tại đây</span>
+                    </div>
+                    <div class="cooking-upload-widget__preview" id="moments-upload-preview" hidden></div>
+                    <button type="button" class="cooking-upload-widget__send" id="moments-send-btn" hidden>
+                        <i class="fas fa-paper-plane" aria-hidden="true"></i>
+                    </button>
+                    <input type="file" id="moments-upload-input" accept="image/jpeg,image/png,image/webp,image/gif" multiple hidden>
+                </div>
+                <p class="cooking-upload-widget__status moments-upload-status" id="moments-upload-status" aria-live="polite"></p>
             </div>
         </div>
         <!-- Join modal -->
