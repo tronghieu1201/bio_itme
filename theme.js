@@ -573,6 +573,9 @@
         return urls.map(function (url, index) {
             var cleanUrl = url.split('?')[0];
             var name = decodeURIComponent(cleanUrl.split('/').pop() || 'Anh ky niem');
+            // Lấy version timestamp từ URL Cloudinary (v1782486xxx) — số lớn hơn = mới hơn
+            var versionMatch = cleanUrl.match(/\/v(\d+)\//);
+            var time = versionMatch ? parseInt(versionMatch[1], 10) : (urls.length - index);
             return {
                 src: url,
                 thumb: getCloudinaryVariant(url, 'f_auto,q_auto:good,c_limit,w_720'),
@@ -580,7 +583,7 @@
                 full: getCloudinaryVariant(url, 'f_auto,q_auto:best,c_limit,w_2400'),
                 fullSrcset: getCloudinarySrcset(url, [1200, 1800, 2400], 'q_auto:best'),
                 name: name,
-                time: urls.length - index
+                time: time
             };
         });
     }
