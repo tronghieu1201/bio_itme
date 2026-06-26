@@ -554,7 +554,7 @@
             // Ẩn nút X và vô hiệu overlay click khi đang upload
             if (closeBtn) closeBtn.disabled = true;
 
-            setMomentsStatus('Đang gửi ' + filesToUpload.length + ' ảnh... \ud83d\udce4');
+            setMomentsStatus('Đang gửi ' + filesToUpload.length + ' ảnh...');
 
             Promise.allSettled(filesToUpload.map(function (file) {
                 return uploadMomentToCloudinary(file);

@@ -438,8 +438,12 @@
         gallery.insertAdjacentElement('afterend', pager);
     }
 
+    function getPerPage() {
+        return window.innerWidth >= 768 ? 12 : 9;
+    }
+
     function renderPhotoGalleryPage(gallery, photos, page) {
-        var perPage = 9;
+        var perPage = getPerPage();
         var pageCount = Math.max(1, Math.ceil(photos.length / perPage));
         var currentPage = Math.min(Math.max(page || 1, 1), pageCount);
         var visiblePhotos = photos.slice((currentPage - 1) * perPage, currentPage * perPage);

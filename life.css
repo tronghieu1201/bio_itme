@@ -1804,3 +1804,337 @@
         font-size: 12px;
     }
 }
+
+/* =====================================================
+   FAMILY UPLOAD – FAB + Mobile button + Modal
+   ===================================================== */
+
+/* --- FAB desktop: góc dưới phải trong .bio-card --- */
+.family-upload-fab {
+    display: none; /* ẩn trên mobile */
+    position: absolute;
+    bottom: 18px;
+    right: 18px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid rgba(96, 165, 250, 0.35);
+    background: rgba(13, 26, 51, 0.88);
+    color: rgba(147, 197, 253, 0.9);
+    font-size: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28);
+    transition: transform 0.18s ease, background 0.18s ease;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    z-index: 10;
+}
+
+.family-upload-fab:hover {
+    transform: scale(1.08);
+    background: rgba(30, 58, 138, 0.92);
+}
+
+/* --- Mobile button: hiện dưới gallery --- */
+.family-upload-mobile {
+    display: none;
+    margin-top: 14px;
+    text-align: center;
+}
+
+.family-upload-mobile__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 20px;
+    border-radius: 12px;
+    border: 1px solid rgba(96, 165, 250, 0.35);
+    background: rgba(13, 26, 51, 0.88);
+    color: rgba(147, 197, 253, 0.9);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 0.18s ease, transform 0.18s ease;
+}
+
+.family-upload-mobile__btn:active {
+    transform: scale(0.97);
+}
+
+/* Responsive: desktop hiện FAB, mobile hiện button */
+@media (min-width: 768px) {
+    .family-upload-fab {
+        display: flex;
+    }
+    .family-upload-mobile {
+        display: none !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .family-upload-fab {
+        display: none !important;
+    }
+    .family-upload-mobile {
+        display: block;
+    }
+}
+
+/* --- Upload Modal --- */
+#family-upload-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 3000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.24s ease, visibility 0.24s ease;
+}
+
+#family-upload-modal.is-open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.fup-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(2, 6, 23, 0.72);
+}
+
+.fup-panel {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 280px);
+    padding: 14px;
+    border-radius: 16px;
+    border: 1px solid rgba(96, 165, 250, 0.3);
+    background: rgba(13, 26, 51, 0.96);
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.42);
+    color: #f8fafc;
+    transform: translateY(10px) scale(0.97);
+    transition: transform 0.24s ease;
+}
+
+#family-upload-modal.is-open .fup-panel {
+    transform: translateY(0) scale(1);
+}
+
+.fup-close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: inherit;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: manipulation;
+}
+
+.fup-hint {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 80px;
+    border: 1.5px dashed rgba(96, 165, 250, 0.45);
+    border-radius: 10px;
+    background: rgba(56, 189, 248, 0.04);
+    color: rgba(148, 163, 184, 0.85);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    margin-top: 8px;
+}
+
+.fup-hint i {
+    font-size: 24px;
+    color: rgba(147, 197, 253, 0.85);
+}
+
+.fup-hint:hover {
+    border-color: rgba(96, 165, 250, 0.75);
+    background: rgba(56, 189, 248, 0.1);
+}
+
+.fup-preview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(52px, 1fr));
+    gap: 5px;
+    margin: 8px 0 6px;
+}
+
+.fup-preview__item {
+    position: relative;
+}
+
+.fup-preview__item img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 7px;
+    display: block;
+    border: 1px solid rgba(96, 165, 250, 0.15);
+}
+
+.fup-preview__remove {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 20px;
+    height: 20px;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(15, 23, 42, 0.92);
+    color: #f8fafc;
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: manipulation;
+}
+
+.fup-send {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 8px;
+    margin-top: 4px;
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    border-radius: 8px;
+    background: rgba(56, 189, 248, 0.12);
+    color: rgba(56, 189, 248, 0.9);
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.18s ease;
+    touch-action: manipulation;
+}
+
+.fup-send:hover:not(:disabled) {
+    background: rgba(56, 189, 248, 0.22);
+    color: rgba(56, 189, 248, 1);
+}
+
+.fup-send:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.fup-status {
+    margin-top: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+    color: rgba(148, 163, 184, 0.9);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+    min-height: 18px;
+}
+
+.fup-status.is-visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* =====================================================
+   FAMILY NOTICE – Thông báo ảnh gia đình
+   ===================================================== */
+#family-notice {
+    position: fixed;
+    inset: 0;
+    z-index: 4000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.26s ease, visibility 0.26s ease;
+}
+
+#family-notice.is-open {
+    opacity: 1;
+    visibility: visible;
+}
+
+#family-notice.is-closing {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.fn-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(2, 6, 23, 0.72);
+}
+
+.fn-card {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 360px);
+    padding: 24px 22px 20px;
+    border-radius: 20px;
+    border: 1px solid rgba(96, 165, 250, 0.3);
+    background: rgba(13, 26, 51, 0.97);
+    color: #f0f4ff;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
+    text-align: center;
+    transform: translateY(10px) scale(0.97);
+    transition: transform 0.26s ease;
+}
+
+#family-notice.is-open .fn-card {
+    transform: translateY(0) scale(1);
+}
+
+.fn-msg {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.65;
+    color: rgba(226, 232, 240, 0.92);
+    margin-bottom: 20px;
+}
+
+.fn-ok {
+    min-width: 90px;
+    padding: 10px 28px;
+    border: 0;
+    border-radius: 12px;
+    background: #3b82f6;
+    color: #f0f4ff;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.fn-ok:hover {
+    background: #2563eb;
+    transform: translateY(-1px);
+}
+
+.fn-ok:active {
+    transform: scale(0.96);
+}
