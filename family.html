@@ -15,6 +15,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="life.css">
+    <script>
+        (function () {
+            var filename = window.location.pathname.split('/').filter(Boolean).pop() || 'family.html';
+            var unlockKey = 'life-unlocked:' + filename;
+            try {
+                if (sessionStorage.getItem(unlockKey) === '1') return;
+            } catch (e) {}
+            window.location.replace('./connections.html');
+        })();
+    </script>
     <!-- Preload pinned image thumbnail for faster loading -->
     <link rel="preload" as="image" href="https://res.cloudinary.com/dtpw5htqs/image/upload/f_auto,q_auto:good,c_limit,w_720/v1782445536/z7977421421246_e1124cbeb01bdb34a57c1b077465222e_agkjdu.webp" imagesrcset="https://res.cloudinary.com/dtpw5htqs/image/upload/f_auto,q_auto:good,c_limit,w_360/v1782445536/z7977421421246_e1124cbeb01bdb34a57c1b077465222e_agkjdu.webp 360w, https://res.cloudinary.com/dtpw5htqs/image/upload/f_auto,q_auto:good,c_limit,w_540/v1782445536/z7977421421246_e1124cbeb01bdb34a57c1b077465222e_agkjdu.webp 540w, https://res.cloudinary.com/dtpw5htqs/image/upload/f_auto,q_auto:good,c_limit,w_720/v1782445536/z7977421421246_e1124cbeb01bdb34a57c1b077465222e_agkjdu.webp 720w, https://res.cloudinary.com/dtpw5htqs/image/upload/f_auto,q_auto:good,c_limit,w_960/v1782445536/z7977421421246_e1124cbeb01bdb34a57c1b077465222e_agkjdu.webp 960w" imagesizes="(max-width: 480px) calc((100vw - 44px) / 3), (max-width: 820px) calc((100vw - 58px) / 2), 244px"></head>
 
