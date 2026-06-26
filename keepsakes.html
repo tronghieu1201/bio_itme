@@ -15,16 +15,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="life.css">
-    <script>
-        (function () {
-            var filename = window.location.pathname.split('/').filter(Boolean).pop() || 'keepsakes.html';
-            var unlockKey = 'life-unlocked:' + filename;
-            try {
-                if (sessionStorage.getItem(unlockKey) === '1') return;
-            } catch (e) {}
-            window.location.replace('./bite-mark.html');
-        })();
-    </script></head>
+</head>
 
 <body>
     <main class="bio-card album-page">
