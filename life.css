@@ -1642,3 +1642,165 @@
         padding: 4px;
     }
 }
+
+/* =====================================================
+   RESPONSIVE ENHANCEMENTS – life.css
+   ===================================================== */
+
+/* ---------- Touch targets: all close/action buttons ≥44px ---------- */
+.key-modal__close {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 8px;
+    right: 8px;
+}
+
+.thoughts-guide-notice__close {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 6px;
+    right: 6px;
+}
+
+.join-modal__close {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ---------- Remove button: bigger hit area ---------- */
+.moments-upload-preview__remove {
+    width: 24px;
+    height: 24px;
+    top: -6px;
+    right: -6px;
+    font-size: 14px;
+    line-height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ---------- Font floor: nothing below 12px ---------- */
+.life-card__desc {
+    font-size: 12px;
+}
+
+.thoughts-guide-notice__message {
+    font-size: 12px;
+}
+
+.gallery-panel .moments-upload-widget .cooking-upload-widget__hint .hint-label {
+    font-size: 12px;
+}
+
+.cooking-upload-widget__hint {
+    font-size: 12px;
+}
+
+/* ---------- Key form input: larger, easier to use ---------- */
+.key-form input[type="password"] {
+    min-height: 48px;
+    font-size: 16px; /* Prevents iOS auto-zoom */
+    padding: 0 14px;
+}
+
+.key-form button[type="submit"] {
+    min-height: 48px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* ---------- Tap feedback for number buttons ---------- */
+.thoughts-number-btn {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+.thoughts-number-btn:active {
+    transform: scale(0.94);
+}
+
+/* ---------- Hover: disable on touch ---------- */
+@media (hover: none) and (pointer: coarse) {
+    .key-modal__close:hover,
+    .join-modal__close:hover,
+    .thoughts-guide-notice__close:hover,
+    .moments-upload-preview__remove:hover {
+        transform: none;
+        background: rgba(255, 255, 255, 0.08);
+    }
+
+    .thoughts-confirm__actions button:hover,
+    .join-form__submit:hover {
+        transform: none;
+        box-shadow: none;
+    }
+
+    .cooking-upload-widget__hint:hover {
+        background: rgba(56, 189, 248, 0.04);
+        border-color: rgba(96, 165, 250, 0.45);
+    }
+}
+
+/* ---------- Desktop (≥1024px): gallery panel wider ---------- */
+@media (min-width: 1024px) {
+    .gallery-panel {
+        width: min(100%, 720px);
+        max-height: min(88dvh, 800px);
+    }
+
+    .gallery-panel__grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 14px;
+    }
+
+    .life-page {
+        max-width: 600px;
+    }
+}
+
+/* ---------- Mobile (≤480px): upload widget font floor ---------- */
+@media (max-width: 480px) {
+    .cooking-upload-widget__hint {
+        font-size: 12px;
+    }
+
+    .gallery-panel .moments-upload-widget .cooking-upload-widget__hint .hint-label {
+        font-size: 12px;
+    }
+
+    /* Tighter key modal on small screens */
+    .key-modal__card {
+        width: min(100%, 340px);
+        padding: 20px 18px;
+    }
+
+    .key-modal__title {
+        font-size: 16px;
+    }
+}
+
+/* ---------- Very small (≤360px) ---------- */
+@media (max-width: 360px) {
+    .gallery-panel {
+        padding: 14px 12px;
+    }
+
+    .gallery-panel__title {
+        font-size: 15px;
+    }
+
+    .thoughts-number-btn {
+        min-height: 40px;
+        font-size: 12px;
+    }
+}

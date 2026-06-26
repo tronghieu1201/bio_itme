@@ -2119,3 +2119,154 @@ button.link-btn {
 .dark .photo-card {
     background: transparent;
 }
+
+/* =====================================================
+   RESPONSIVE ENHANCEMENTS – Cross-device UX
+   ===================================================== */
+
+/* ---------- Base: touch-action & tap-highlight for all interactive elements ---------- */
+a,
+button,
+.link-btn,
+.group-card,
+[data-locked-href],
+[data-category],
+[data-panel-target] {
+    touch-action: manipulation;
+}
+
+a,
+button,
+.link-btn,
+.group-card {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* ---------- Base: overflow-wrap for long text ---------- */
+.profile-tagline,
+.profile-subtagline,
+.bio-intro p,
+.status-text,
+.group-card__title,
+.link-btn {
+    overflow-wrap: anywhere;
+}
+
+/* ---------- Hover: disable transform on touch devices ---------- */
+@media (hover: none) and (pointer: coarse) {
+    .link-btn:hover,
+    .group-card:hover,
+    .profile-name-btn:hover,
+    .link-btn:hover::before,
+    .link-btn:hover::after,
+    .group-card:hover::before,
+    .group-card:hover .group-card__arrow {
+        transform: none;
+        box-shadow: none;
+    }
+
+    .link-btn:active {
+        transform: scale(0.97);
+    }
+
+    .group-card:active {
+        transform: scale(0.98);
+    }
+}
+
+/* ---------- Desktop (≥1024px): wider gallery, larger bio card ---------- */
+@media (min-width: 1024px) {
+    .bio-card {
+        max-width: 560px;
+    }
+
+    .album-page {
+        max-width: 1200px;
+        padding: 36px 40px;
+    }
+
+    .photo-gallery {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 18px;
+    }
+
+    .photo-lightbox__img {
+        max-height: 85vh;
+    }
+}
+
+/* ---------- Tablet (481px–1023px): comfortable spacing ---------- */
+@media (min-width: 481px) and (max-width: 1023px) {
+    .bio-card {
+        max-width: 520px;
+    }
+
+    body {
+        padding: 40px 20px;
+    }
+}
+
+/* ---------- Mobile (≤480px): touch targets & font floors ---------- */
+@media (max-width: 480px) {
+    /* Touch target minimums – all close/action buttons ≥44px */
+    .profile-modal__close,
+    .photo-lightbox__close {
+        width: 44px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Improve tap feedback */
+    .link-btn:active,
+    .group-card:active {
+        transform: scale(0.97);
+        transition: transform 0.1s ease;
+    }
+
+    /* Prevent text from being too small to read */
+    .status-text,
+    .bio-intro p {
+        font-size: 13px;
+    }
+
+    /* Better lightbox on mobile */
+    .photo-lightbox {
+        padding: 10px;
+        align-items: center;
+    }
+
+    .photo-lightbox__content {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .photo-lightbox__img {
+        max-width: 100%;
+        max-height: calc(100dvh - 80px);
+        border-radius: 14px;
+    }
+}
+
+/* ---------- Very small (≤360px) ---------- */
+@media (max-width: 360px) {
+    .profile-name {
+        font-size: 20px;
+    }
+
+    .profile-tagline {
+        font-size: 12px;
+    }
+
+    .link-btn {
+        font-size: 13px;
+        padding: 9px 14px;
+    }
+
+    .group-card__title {
+        font-size: 13px;
+    }
+}
