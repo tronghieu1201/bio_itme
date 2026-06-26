@@ -31,7 +31,7 @@
         </header>
 
         <section class="life-grid" aria-label="Danh muc Connections">
-            <button type="button" class="life-card life-card--button life-card--family" data-locked-href="./family.html" data-key="Hieu2004@mmm" data-key-placeholder="" data-key-error="Chỉ có gia đình Hiếu mới mở được">
+            <button type="button" class="life-card life-card--button life-card--family" data-locked-href="./family.html" data-key="13ca9fd1b27606cd386c3e4dfbdb7a615173bf1e04eefdab5b43a89c0a13391e" data-key-placeholder="" data-key-error="Chỉ có gia đình Hiếu mới mở được">
                 <div class="life-card__icon"><i class="fas fa-house-user" aria-hidden="true"></i></div>
                 <div class="life-card__body"><h2 class="life-card__title">Gia đình</h2><p class="life-card__desc">Gia đình của Hiếu</p></div>
                 <i class="fas fa-chevron-right life-card__arrow" aria-hidden="true"></i>
@@ -48,7 +48,7 @@
                 <i class="fas fa-chevron-right life-card__arrow" aria-hidden="true"></i>
             </button>
 
-            <button type="button" class="life-card life-card--button life-card--secret" data-locked-href="./love-22.html" data-key="03421571650377144616" data-key-placeholder="" data-key-error="Chỉ có người đặc biệt mới mở được">
+            <button type="button" class="life-card life-card--button life-card--secret" data-locked-href="./love-22.html" data-key="eaee99b2646f560efec784d0eaf65b0ae6deaf2effc4b8717955f71e5fa86e39" data-key-placeholder="" data-key-error="Chỉ có người đặc biệt mới mở được">
                 <div class="life-card__icon"><i class="fas fa-lock" aria-hidden="true"></i></div>
                 <div class="life-card__body"><h2 class="life-card__title">Điều không kể</h2><p class="life-card__desc">6 mùa hè</p></div>
                 <i class="fas fa-chevron-right life-card__arrow" aria-hidden="true"></i>
@@ -78,12 +78,21 @@
             var error = document.getElementById('key-error');
             var closeBtn = document.getElementById('key-close');
             var targetHref = '';
-            var targetKey = '';
+            var targetKeyHash = '';
             var targetErrorMsg = '';
             var defaultPlaceholder = '';
-            var KEY = '171209';
+            var KEY_HASH = '8c0c09a2e480836be00a0957b3dee97f5fc337846357a573b13751df70f43f5b';
             var KEY_NOTICE_MESSAGE = 'V&igrave; b&#7843;n test n&ecirc;n c&#7847;n x&aacute;c minh...';
             var keyNoticeTimer = null;
+
+            function sha256(str) {
+                var buf = new TextEncoder().encode(str);
+                return crypto.subtle.digest('SHA-256', buf).then(function (hashBuf) {
+                    return Array.from(new Uint8Array(hashBuf)).map(function (b) {
+                        return b.toString(16).padStart(2, '0');
+                    }).join('');
+                });
+            }
 
             function getUnlockStorageKey(url) {
                 var targetUrl = new URL(url, window.location.href);
@@ -92,15 +101,12 @@
             }
 
             function rememberUnlockedPage(url) {
-                try {
-                    sessionStorage.setItem(getUnlockStorageKey(url), '1');
-                } catch (e) {}
+                try { sessionStorage.setItem(getUnlockStorageKey(url), '1'); } catch (e) {}
             }
 
             function ensureKeyNotice() {
                 var notice = document.getElementById('key-notice');
                 if (notice) return notice;
-
                 notice = document.createElement('div');
                 notice.id = 'key-notice';
                 notice.className = 'key-notice';
@@ -115,14 +121,12 @@
                 clearTimeout(keyNoticeTimer);
                 notice.innerHTML = KEY_NOTICE_MESSAGE;
                 notice.classList.add('is-visible');
-                keyNoticeTimer = setTimeout(function () {
-                    notice.classList.remove('is-visible');
-                }, 3200);
+                keyNoticeTimer = setTimeout(function () { notice.classList.remove('is-visible'); }, 3200);
             }
 
             function openModal(card) {
                 targetHref = card ? card.getAttribute('data-locked-href') || '' : '';
-                targetKey = card ? card.getAttribute('data-key') || KEY : KEY;
+                targetKeyHash = card ? card.getAttribute('data-key') || KEY_HASH : KEY_HASH;
                 targetErrorMsg = 'X&aacute;c nh&#7853;n kh&ocirc;ng th&agrave;nh c&ocirc;ng';
                 if (input) input.setAttribute('placeholder', card ? card.getAttribute('data-key-placeholder') || defaultPlaceholder : defaultPlaceholder);
                 if (error) error.textContent = '';
@@ -138,7 +142,7 @@
                 modal.classList.remove('is-open');
                 modal.setAttribute('aria-hidden', 'true');
                 targetHref = '';
-                targetKey = '';
+                targetKeyHash = '';
                 targetErrorMsg = '';
                 if (input) input.setAttribute('placeholder', defaultPlaceholder);
             }
@@ -158,13 +162,19 @@
                     input.focus();
                     return;
                 }
-                if (keyValue === targetKey && targetHref) {
-                    rememberUnlockedPage(targetHref);
-                    window.location.href = targetHref;
-                    return;
-                }
-                error.innerHTML = targetErrorMsg;
-                input.select();
+                var submitBtn = form.querySelector('button[type="submit"]');
+                if (submitBtn) submitBtn.disabled = true;
+
+                sha256(keyValue).then(function (hash) {
+                    if (hash === targetKeyHash && targetHref) {
+                        rememberUnlockedPage(targetHref);
+                        window.location.href = targetHref;
+                    } else {
+                        error.innerHTML = targetErrorMsg;
+                        input.select();
+                        if (submitBtn) submitBtn.disabled = false;
+                    }
+                });
             });
 
             closeBtn.addEventListener('click', closeModal);

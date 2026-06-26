@@ -59,7 +59,7 @@
             </a>
 
             <!-- Nấu ăn -->
-            <button type="button" class="life-card life-card--button" data-locked-href="./cooking.html" data-key="171209" data-key-placeholder="" data-key-error="Chỉ có bạn Hiếu mới mở được">
+            <button type="button" class="life-card life-card--button" data-locked-href="./cooking.html" data-key="8c0c09a2e480836be00a0957b3dee97f5fc337846357a573b13751df70f43f5b" data-key-placeholder="" data-key-error="Chỉ có bạn Hiếu mới mở được">
                 <div class="life-card__icon">
                     <i class="fas fa-utensils" aria-hidden="true"></i>
                 </div>
@@ -167,10 +167,19 @@
             var error = document.getElementById('key-error');
             var closeBtn = document.getElementById('key-close');
             var targetHref = '';
-            var targetKey = '';
+            var targetKeyHash = '';
             var defaultPlaceholder = '';
             var KEY_NOTICE_MESSAGE = 'Vì bạn test nên cần xác minh...';
             var keyNoticeTimer = null;
+
+            function sha256(str) {
+                var buf = new TextEncoder().encode(str);
+                return crypto.subtle.digest('SHA-256', buf).then(function (hashBuf) {
+                    return Array.from(new Uint8Array(hashBuf)).map(function (b) {
+                        return b.toString(16).padStart(2, '0');
+                    }).join('');
+                });
+            }
 
             function getUnlockStorageKey(url) {
                 var targetUrl = new URL(url, window.location.href);
@@ -204,7 +213,7 @@
 
             function openModal(card) {
                 targetHref = card ? card.getAttribute('data-locked-href') || '' : '';
-                targetKey = card ? card.getAttribute('data-key') || '' : '';
+                targetKeyHash = card ? card.getAttribute('data-key') || '' : '';
                 if (input) input.setAttribute('placeholder', card ? card.getAttribute('data-key-placeholder') || defaultPlaceholder : defaultPlaceholder);
                 if (error) error.textContent = '';
                 if (input) input.value = '';
@@ -219,7 +228,7 @@
                 modal.classList.remove('is-open');
                 modal.setAttribute('aria-hidden', 'true');
                 targetHref = '';
-                targetKey = '';
+                targetKeyHash = '';
                 if (input) input.setAttribute('placeholder', defaultPlaceholder);
             }
 
@@ -238,13 +247,19 @@
                     input.focus();
                     return;
                 }
-                if (keyValue === targetKey && targetHref) {
-                    rememberUnlockedPage(targetHref);
-                    window.location.href = targetHref;
-                    return;
-                }
-                error.innerHTML = 'Xác nhận không thành công';
-                input.select();
+                var submitBtn = form.querySelector('button[type="submit"]');
+                if (submitBtn) submitBtn.disabled = true;
+
+                sha256(keyValue).then(function (hash) {
+                    if (hash === targetKeyHash && targetHref) {
+                        rememberUnlockedPage(targetHref);
+                        window.location.href = targetHref;
+                    } else {
+                        error.innerHTML = 'Xác nhận không thành công';
+                        input.select();
+                        if (submitBtn) submitBtn.disabled = false;
+                    }
+                });
             });
 
             closeBtn.addEventListener('click', closeModal);
