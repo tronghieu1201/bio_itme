@@ -27,11 +27,12 @@
     var JOIN_STORAGE_KEY = 'life-join-submissions';
     var MOMENTS_UPLOAD_CLOUD_NAME = 'dtpw5htqs';
     var MOMENTS_UPLOAD_PRESET = 'Upload_img';
-    var MOMENTS_MAX_FILES = 5;
+    var MOMENTS_MAX_FILES = 10;
     var MOMENTS_MAX_SIZE_MB = 20;
     var MOMENTS_MAX_SIZE = MOMENTS_MAX_SIZE_MB * 1024 * 1024;
     var selectedMomentsFiles = [];
     var momentsStatusTimer = null;
+    var momentsUploading = false;
     var DEFAULT_TOAST_MESSAGE = toast ? toast.textContent : 'Mục này đang được cập nhật, hãy quay lại sau nhé!';
     var THOUGHTS_STORAGE_KEY = 'life-thoughts-selected';
     var thoughtsQuotes = [
@@ -456,6 +457,8 @@
 
     function closeGallery() {
         if (!overlay) return;
+        // Không cho đóng trong khi đang upload
+        if (momentsUploading) return;
         clearTimeout(toastTimer);
         document.body.classList.remove('is-modal-open');
         overlay.classList.remove('is-open');
@@ -543,20 +546,47 @@
     if (momentsSendBtn) {
         momentsSendBtn.addEventListener('click', function () {
             if (!selectedMomentsFiles.length) return;
+            if (momentsUploading) return;
+
             var filesToUpload = selectedMomentsFiles.slice();
+            momentsUploading = true;
             momentsSendBtn.disabled = true;
+            // Ẩn nút X và vô hiệu overlay click khi đang upload
+            if (closeBtn) closeBtn.disabled = true;
 
-            resetMomentsUpload();
-            if (momentsUploadWidget) momentsUploadWidget.hidden = true;
-            setMomentsStatus('C\u1ea3m \u01a1n bro \u0111\u00e3 g\u1eedi \u1ea3nh \ud83c\udf37', 1300, closeGallery);
-            momentsSendBtn.disabled = false;
+            setMomentsStatus('Đang gửi ' + filesToUpload.length + ' ảnh... \ud83d\udce4');
 
-            filesToUpload.reduce(function (chain, file) {
-                return chain.then(function () {
-                    return uploadMomentToCloudinary(file);
-                });
-            }, Promise.resolve()).catch(function (error) {
+            Promise.allSettled(filesToUpload.map(function (file) {
+                return uploadMomentToCloudinary(file);
+            })).then(function (results) {
+                var succeeded = results.filter(function (r) { return r.status === 'fulfilled'; }).length;
+                var failed = results.length - succeeded;
+
+                resetMomentsUpload();
+                if (momentsUploadWidget) momentsUploadWidget.hidden = true;
+
+                if (failed === 0) {
+                    setMomentsStatus('Cảm ơn bro đã gửi ảnh \ud83c\udf37', 2000, closeGallery);
+                } else if (succeeded > 0) {
+                    setMomentsStatus('Gửi được ' + succeeded + '/' + filesToUpload.length + ' ảnh \ud83c\udf37', 3000, closeGallery);
+                } else {
+                    // Toàn bộ thất bại — khôi phục lại để thử lại
+                    selectedMomentsFiles = filesToUpload;
+                    if (momentsUploadWidget) momentsUploadWidget.hidden = false;
+                    renderMomentsPreview();
+                    setMomentsStatus('Gửi ảnh thất bại, thử lại nhé!', 3000);
+                }
+            }).catch(function (error) {
                 console.error('Upload error:', error);
+                // Khôi phục lại để thử lại
+                selectedMomentsFiles = filesToUpload;
+                if (momentsUploadWidget) momentsUploadWidget.hidden = false;
+                renderMomentsPreview();
+                setMomentsStatus('Có lỗi khi gửi ảnh, thử lại nhé!', 3000);
+            }).finally(function () {
+                momentsUploading = false;
+                momentsSendBtn.disabled = false;
+                if (closeBtn) closeBtn.disabled = false;
             });
         });
     }
@@ -633,7 +663,7 @@
 
     document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') {
-            closeGallery();
+            if (!momentsUploading) closeGallery();
             closeJoinModal();
             closeThoughtsGuideNotice();
         }
