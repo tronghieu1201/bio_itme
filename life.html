@@ -59,7 +59,7 @@
             </a>
 
             <!-- Nấu ăn -->
-            <a href="./cooking.html" class="life-card" id="card-cooking">
+            <button type="button" class="life-card life-card--button" data-locked-href="./cooking.html" data-key="171209" data-key-placeholder="" data-key-error="Chỉ có bạn Hiếu mới mở được">
                 <div class="life-card__icon">
                     <i class="fas fa-utensils" aria-hidden="true"></i>
                 </div>
@@ -68,7 +68,7 @@
                     <p class="life-card__desc">Cơm sinh viên.</p>
                 </div>
                 <i class="fas fa-chevron-right life-card__arrow" aria-hidden="true"></i>
-            </a>
+            </button>
 
             <!-- Upload -->
             <a href="#" class="life-card" id="card-daily" data-category="daily">
@@ -144,8 +144,116 @@
         Thằng Hiếu chưa cập nhật, hãy quay lại sau nhé! 🌷
     </div>
 
+    <div class="key-modal" id="key-modal" role="dialog" aria-label="Nhap key" aria-hidden="true">
+        <div class="key-modal__backdrop"></div>
+        <article class="key-modal__card">
+            <button type="button" class="key-modal__close" id="key-close" aria-label="Dong">&times;</button>
+            <h2 class="key-modal__title">Xác nhận</h2>
+            <form class="key-form" id="key-form">
+                <input type="password" id="key-input" autocomplete="off" placeholder="">
+                <button type="submit">Mở</button>
+                <p class="key-modal__error" id="key-error" aria-live="polite"></p>
+            </form>
+        </article>
+    </div>
+
     <script src="theme.js"></script>
     <script src="life.js"></script>
+    <script>
+        (function () {
+            var modal = document.getElementById('key-modal');
+            var form = document.getElementById('key-form');
+            var input = document.getElementById('key-input');
+            var error = document.getElementById('key-error');
+            var closeBtn = document.getElementById('key-close');
+            var targetHref = '';
+            var targetKey = '';
+            var defaultPlaceholder = '';
+            var KEY_NOTICE_MESSAGE = 'Vì bạn test nên cần xác minh...';
+            var keyNoticeTimer = null;
+
+            function getUnlockStorageKey(url) {
+                var targetUrl = new URL(url, window.location.href);
+                var filename = targetUrl.pathname.split('/').filter(Boolean).pop() || targetUrl.pathname;
+                return 'life-unlocked:' + filename;
+            }
+
+            function rememberUnlockedPage(url) {
+                try { sessionStorage.setItem(getUnlockStorageKey(url), '1'); } catch (e) {}
+            }
+
+            function ensureKeyNotice() {
+                var notice = document.getElementById('key-notice');
+                if (notice) return notice;
+                notice = document.createElement('div');
+                notice.id = 'key-notice';
+                notice.className = 'key-notice';
+                notice.setAttribute('role', 'status');
+                notice.setAttribute('aria-live', 'polite');
+                document.body.appendChild(notice);
+                return notice;
+            }
+
+            function showKeyNotice() {
+                var notice = ensureKeyNotice();
+                clearTimeout(keyNoticeTimer);
+                notice.textContent = KEY_NOTICE_MESSAGE;
+                notice.classList.add('is-visible');
+                keyNoticeTimer = setTimeout(function () { notice.classList.remove('is-visible'); }, 3200);
+            }
+
+            function openModal(card) {
+                targetHref = card ? card.getAttribute('data-locked-href') || '' : '';
+                targetKey = card ? card.getAttribute('data-key') || '' : '';
+                if (input) input.setAttribute('placeholder', card ? card.getAttribute('data-key-placeholder') || defaultPlaceholder : defaultPlaceholder);
+                if (error) error.textContent = '';
+                if (input) input.value = '';
+                document.body.classList.add('is-modal-open');
+                modal.classList.add('is-open');
+                modal.setAttribute('aria-hidden', 'false');
+                setTimeout(function () { if (input) input.focus(); }, 60);
+            }
+
+            function closeModal() {
+                document.body.classList.remove('is-modal-open');
+                modal.classList.remove('is-open');
+                modal.setAttribute('aria-hidden', 'true');
+                targetHref = '';
+                targetKey = '';
+                if (input) input.setAttribute('placeholder', defaultPlaceholder);
+            }
+
+            document.querySelectorAll('[data-locked-href]').forEach(function (card) {
+                card.addEventListener('click', function () {
+                    showKeyNotice();
+                    openModal(card);
+                });
+            });
+
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                var keyValue = input.value.trim();
+                if (!keyValue) {
+                    error.innerHTML = 'Mở vô hiệu';
+                    input.focus();
+                    return;
+                }
+                if (keyValue === targetKey && targetHref) {
+                    rememberUnlockedPage(targetHref);
+                    window.location.href = targetHref;
+                    return;
+                }
+                error.innerHTML = 'Xác nhận không thành công';
+                input.select();
+            });
+
+            closeBtn.addEventListener('click', closeModal);
+            modal.querySelector('.key-modal__backdrop').addEventListener('click', closeModal);
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape') closeModal();
+            });
+        })();
+    </script>
 </body>
 
 </html>
