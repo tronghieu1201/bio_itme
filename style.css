@@ -555,8 +555,6 @@ body.is-page-transitioning {
     text-shadow: 0 0 14px rgba(24, 119, 242, 0.35);
 }
 
-.group-card[data-panel-target="life-panel"] .group-card__icon,
-.group-card[href="./life.html"] .group-card__icon,
 .group-card--link .group-card__icon {
     color: #FF4D8D;
     text-shadow: 0 0 14px rgba(255, 77, 141, 0.35);
