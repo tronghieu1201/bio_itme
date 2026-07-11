@@ -855,6 +855,7 @@ body.is-page-transitioning {
 .link-btn--github      { --tint: #FFFFFF; }
 .link-btn--life        { --tint: #FF4D8D; }
 .link-btn--telegram    { --tint: #26A5E4; }
+.link-btn--timebox     { --tint: #FFFFFF; }
 
 .link-btn--email i       { color: #EA4335; }
 .link-btn--zalo i        { color: #0068FF; }
@@ -865,6 +866,7 @@ body.is-page-transitioning {
 .link-btn--github i      { color: #FFFFFF; }
 .link-btn--life i        { color: #FF4D8D; }
 .link-btn--telegram i    { color: #26A5E4; }
+.link-btn--timebox i     { color: #FFFFFF; }
 
 .link-btn--instagram i {
     color: #E4405F;
