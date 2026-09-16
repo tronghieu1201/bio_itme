@@ -532,9 +532,8 @@ body.is-page-transitioning {
 }
 
 .group-card__icon {
-    width: 44px;
-    height: 44px;
-    border-radius: 8px;
+    width: 36px;
+    height: 36px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -542,22 +541,30 @@ body.is-page-transitioning {
     color: var(--accent-strong);
     font-size: 18px;
     background: transparent;
-    border: 1px solid rgba(59, 130, 246, 0.20);
+    border: none;
 }
 
-.group-card[data-panel-target="work-panel"] .group-card__icon {
+.group-card__img {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.2));
+}
+
+.group-card[data-panel-target="panel-du-an"] .group-card__icon {
+    color: #38BDF8;
+    text-shadow: 0 0 14px rgba(56, 189, 248, 0.35);
+}
+
+.group-card[data-panel-target="panel-ket-noi"] .group-card__icon {
     color: #60A5FA;
     text-shadow: 0 0 14px rgba(96, 165, 250, 0.35);
 }
 
-.group-card[data-panel-target="social-panel"] .group-card__icon {
-    color: #1877F2;
-    text-shadow: 0 0 14px rgba(24, 119, 242, 0.35);
-}
-
-.group-card--link .group-card__icon {
-    color: #FF4D8D;
-    text-shadow: 0 0 14px rgba(255, 77, 141, 0.35);
+.group-card[data-panel-target="panel-lien-he"] .group-card__icon {
+    color: #EA4335;
+    text-shadow: 0 0 14px rgba(234, 67, 53, 0.35);
 }
 
 .group-card__body {
@@ -797,6 +804,20 @@ body.is-page-transitioning {
     transition: transform 0.2s ease, color 0.2s ease;
 }
 
+.link-btn__img {
+    width: 22px;
+    height: 22px;
+    object-fit: cover;
+    flex-shrink: 0;
+    display: block;
+    border-radius: 5px;
+    transition: transform 0.2s ease;
+}
+
+.link-btn:hover .link-btn__img {
+    transform: scale(1.08);
+}
+
 .link-btn:hover {
     transform: translateY(-2px);
     box-shadow: var(--btn-hover-lift);
@@ -856,6 +877,7 @@ body.is-page-transitioning {
 .link-btn--life        { --tint: #FF4D8D; }
 .link-btn--telegram    { --tint: #26A5E4; }
 .link-btn--timebox     { --tint: #FFFFFF; }
+.link-btn--local-sound { --tint: #A78BFA; }
 
 .link-btn--email i       { color: #EA4335; }
 .link-btn--zalo i        { color: #0068FF; }

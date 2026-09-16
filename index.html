@@ -5,11 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trọng Hiếu – Bio</title>
-    <meta name="description"
-        content="Trang bio cá nhân của Trọng Hiếu – Learning Technology, Cloud & AI Journey. Liên hệ qua Facebook, Instagram, LinkedIn, GitHub, Email và Zalo.">
+    <meta name="description" content="Trang bio cá nhân của Trọng Hiếu – Dự án, Kết nối và Liên hệ.">
     <link rel="canonical" href="https://tronghieu1201.github.io/bio_itme/">
-    <link rel="icon" type="image/webp" href="https://res.cloudinary.com/dtpw5htqs/image/upload/v1782284174/4eae1994-3eea-4630-bc8e-10974bcad260_vvwupz.webp">
-    <link rel="apple-touch-icon" href="https://res.cloudinary.com/dtpw5htqs/image/upload/v1782284174/4eae1994-3eea-4630-bc8e-10974bcad260_vvwupz.webp">
+    <link rel="icon" type="image/webp"
+        href="https://res.cloudinary.com/dtpw5htqs/image/upload/v1782284174/4eae1994-3eea-4630-bc8e-10974bcad260_vvwupz.webp">
+    <link rel="apple-touch-icon"
+        href="https://res.cloudinary.com/dtpw5htqs/image/upload/v1782284174/4eae1994-3eea-4630-bc8e-10974bcad260_vvwupz.webp">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -27,68 +28,132 @@
         <!-- Profile header -->
         <header class="profile-header">
             <div class="avatar-ring">
-                <img src="https://res.cloudinary.com/dtpw5htqs/image/upload/v1782284229/personal_photo_yobmmh.webp" alt="Ảnh đại diện Trọng Hiếu" width="140" height="140">
+                <img src="https://res.cloudinary.com/dtpw5htqs/image/upload/v1782284229/personal_photo_yobmmh.webp"
+                    alt="Ảnh đại diện Trọng Hiếu" width="140" height="140">
             </div>
             <button type="button" class="profile-name profile-name-btn" id="profile-info-open">
                 trg.hy_
             </button>
-            <p class="profile-tagline">Learning Technology | Cloud &amp; AI Journey</p>
-            <p class="profile-tagline">Bootcamp - First Cloud AI Journey at AWS Study Group</p>
-            <p class="profile-subtagline">Kiến thức - Key skill - Sản phẩm</p>
         </header>
-        <!-- Links -->
-        <section class="link-group__list" aria-label="Liên kết">
-            <a href="https://www.facebook.com/trg.hy.0406" target="_blank"
-                rel="noopener noreferrer" class="link-btn link-btn--facebook" id="link-facebook">
-                <i class="fab fa-facebook-f" aria-hidden="true"></i>
-                <span>Facebook</span>
-            </a>
-            <a href="https://www.instagram.com/trg.hy_/" target="_blank" rel="noopener noreferrer"
-                class="link-btn link-btn--instagram" id="link-instagram">
-                <i class="fab fa-instagram" aria-hidden="true"></i>
-                <span>Instagram</span>
-            </a>
-            <button type="button" class="link-btn link-btn--telegram" id="link-telegram"
-                data-qr-src="https://res.cloudinary.com/dtpw5htqs/image/upload/v1782284226/qr_lete_ucynnk.webp" data-qr-alt="Mã QR Telegram phóng to">
-                <i class="fab fa-telegram-plane" aria-hidden="true"></i>
-                <span>Telegram</span>
+
+        <!-- Navigation Hub (3 phần điều hướng chính) -->
+        <section class="link-hub" id="link-hub" aria-label="Điều hướng chính">
+            <button type="button" class="group-card" data-panel-target="panel-du-an">
+                <span class="group-card__icon">
+                    <img src="images/backlog.png" alt="Dự án" class="group-card__img">
+                </span>
+                <span class="group-card__body">
+                    <span class="group-card__title">Dự án</span>
+                </span>
+                <i class="fas fa-chevron-right group-card__arrow" aria-hidden="true"></i>
             </button>
-            <a href="https://www.linkedin.com/in/tronghieu-dev/" target="_blank" rel="noopener noreferrer"
-                class="link-btn link-btn--linkedin" id="link-linkedin">
-                <i class="fab fa-linkedin-in" aria-hidden="true"></i>
-                <span>LinkedIn</span>
-            </a>
-            <a href="https://github.com/tronghieu1201" target="_blank" rel="noopener noreferrer"
-                class="link-btn link-btn--github" id="link-github">
-                <i class="fab fa-github" aria-hidden="true"></i>
-                <span>GitHub</span>
-            </a>
-            <button type="button" class="link-btn link-btn--email" id="link-email"
-                data-email="tronghieu.dev16@gmail.com">
-                <i class="fas fa-at" aria-hidden="true"></i>
-                <span>Email</span>
+
+            <button type="button" class="group-card" data-panel-target="panel-ket-noi">
+                <span class="group-card__icon">
+                    <img src="images/connection.png" alt="Kết nối" class="group-card__img">
+                </span>
+                <span class="group-card__body">
+                    <span class="group-card__title">Kết nối</span>
+                </span>
+                <i class="fas fa-chevron-right group-card__arrow" aria-hidden="true"></i>
             </button>
-            <button type="button" class="link-btn link-btn--zalo" id="link-zalo"
-                data-qr-src="https://res.cloudinary.com/dtpw5htqs/image/upload/v1782284227/qr_zalo_huh7bk.webp" data-qr-alt="Mã QR Zalo phóng to">
-                <i class="fas fa-qrcode" aria-hidden="true"></i>
-                <span>Zalo</span>
+
+            <button type="button" class="group-card" data-panel-target="panel-lien-he">
+                <span class="group-card__icon">
+                    <img src="images/contacts.png" alt="Liên hệ" class="group-card__img">
+                </span>
+                <span class="group-card__body">
+                    <span class="group-card__title">Liên hệ</span>
+                </span>
+                <i class="fas fa-chevron-right group-card__arrow" aria-hidden="true"></i>
             </button>
-            <a href="https://locket.camera/links/Z5eRuLziCZaLzkZq8" target="_blank" rel="noopener noreferrer"
-                class="link-btn link-btn--locket" id="link-locket">
-                <i class="fas fa-heart" aria-hidden="true"></i>
-                <span>Locket</span>
-            </a>
-            <a href="https://tronghieu1201.github.io/timebox/" target="_blank" rel="noopener noreferrer"
-                class="link-btn link-btn--timebox" id="link-timebox">
-                <i class="fas fa-box-open" aria-hidden="true"></i>
-                <span>timebox trg.hy_</span>
-            </a>
         </section>
+
+        <!-- Panel 1: Dự án -->
+        <div class="link-panel" id="panel-du-an" aria-hidden="true">
+            <button type="button" class="panel-back" data-panel-back aria-label="Quay lại">
+                <i class="fas fa-arrow-left" aria-hidden="true"></i>
+            </button>
+            <div class="link-group__list">
+                <a href="https://tronghieu1201.github.io/timebox/" target="_blank" rel="noopener noreferrer"
+                    class="link-btn link-btn--timebox" id="link-timebox">
+                    <img src="images/drilldown.jpg" alt="timebox" class="link-btn__img">
+                    <span>timebox</span>
+                </a>
+                <a href="https://tronghieu1201.github.io/local-sound/" target="_blank" rel="noopener noreferrer"
+                    class="link-btn link-btn--local-sound" id="link-local-sound">
+                    <img src="images/logo.png" alt="Local Music Player" class="link-btn__img">
+                    <span>Local Music Player - Trình Nghe Nhạc Offline</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Panel 2: Kết nối -->
+        <div class="link-panel" id="panel-ket-noi" aria-hidden="true">
+            <button type="button" class="panel-back" data-panel-back aria-label="Quay lại">
+                <i class="fas fa-arrow-left" aria-hidden="true"></i>
+            </button>
+            <div class="link-group__list">
+                <a href="https://www.facebook.com/trg.hy.0406" target="_blank" rel="noopener noreferrer"
+                    class="link-btn link-btn--facebook" id="link-facebook">
+                    <i class="fab fa-facebook-f" aria-hidden="true"></i>
+                    <span>Facebook</span>
+                </a>
+                <a href="https://www.instagram.com/trg.hy_/" target="_blank" rel="noopener noreferrer"
+                    class="link-btn link-btn--instagram" id="link-instagram">
+                    <i class="fab fa-instagram" aria-hidden="true"></i>
+                    <span>Instagram</span>
+                </a>
+                <button type="button" class="link-btn link-btn--telegram" id="link-telegram"
+                    data-qr-src="https://res.cloudinary.com/dtpw5htqs/image/upload/v1782284226/qr_lete_ucynnk.webp"
+                    data-qr-alt="Mã QR Telegram phóng to">
+                    <i class="fab fa-telegram-plane" aria-hidden="true"></i>
+                    <span>Telegram</span>
+                </button>
+                <a href="https://www.linkedin.com/in/tronghieu-dev/" target="_blank" rel="noopener noreferrer"
+                    class="link-btn link-btn--linkedin" id="link-linkedin">
+                    <i class="fab fa-linkedin-in" aria-hidden="true"></i>
+                    <span>LinkedIn</span>
+                </a>
+                <a href="https://github.com/tronghieu1201" target="_blank" rel="noopener noreferrer"
+                    class="link-btn link-btn--github" id="link-github">
+                    <i class="fab fa-github" aria-hidden="true"></i>
+                    <span>GitHub</span>
+                </a>
+                <button type="button" class="link-btn link-btn--zalo" id="link-zalo"
+                    data-qr-src="https://res.cloudinary.com/dtpw5htqs/image/upload/v1782284227/qr_zalo_huh7bk.webp"
+                    data-qr-alt="Mã QR Zalo phóng to">
+                    <i class="fas fa-qrcode" aria-hidden="true"></i>
+                    <span>Zalo</span>
+                </button>
+                <a href="https://locket.camera/links/Z5eRuLziCZaLzkZq8" target="_blank" rel="noopener noreferrer"
+                    class="link-btn link-btn--locket" id="link-locket">
+                    <i class="fas fa-heart" aria-hidden="true"></i>
+                    <span>Locket</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Panel 3: Liên hệ -->
+        <div class="link-panel" id="panel-lien-he" aria-hidden="true">
+            <button type="button" class="panel-back" data-panel-back aria-label="Quay lại">
+                <i class="fas fa-arrow-left" aria-hidden="true"></i>
+            </button>
+            <div class="link-group__list">
+                <button type="button" class="link-btn link-btn--email" id="link-email"
+                    data-email="tronghieu.dev16@gmail.com">
+                    <i class="fas fa-at" aria-hidden="true"></i>
+                    <span>Email</span>
+                </button>
+            </div>
+        </div>
         <!-- QR Lightbox -->
         <div class="lightbox" id="qr-lightbox" role="dialog" aria-label="QR phóng to" aria-hidden="true">
             <div class="lightbox__backdrop"></div>
             <div class="lightbox__content">
-                <img src="https://res.cloudinary.com/dtpw5htqs/image/upload/v1782284227/qr_zalo_huh7bk.webp" alt="Mã QR Zalo phóng to" class="lightbox__img" id="qr-lightbox-img" loading="lazy" decoding="async">
+                <img src="https://res.cloudinary.com/dtpw5htqs/image/upload/v1782284227/qr_zalo_huh7bk.webp"
+                    alt="Mã QR Zalo phóng to" class="lightbox__img" id="qr-lightbox-img" loading="lazy"
+                    decoding="async">
             </div>
         </div>
 
