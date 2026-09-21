@@ -23,6 +23,7 @@
     var linkPanels = Array.prototype.slice.call(document.querySelectorAll('.link-panel'));
     var panelHistoryActive = false;
     var qrHistoryActive = false;
+    let activePanelTrigger = null;
 
     function pushUiState(state) {
         if (!window.history || !window.history.pushState) return false;
@@ -40,8 +41,32 @@
         });
     }
 
+    function getPanelTrigger(panelId) {
+        const triggers = document.querySelectorAll('[data-panel-target]');
+        for (let i = 0; i < triggers.length; i += 1) {
+            if (triggers[i].getAttribute('data-panel-target') === panelId) {
+                return triggers[i];
+            }
+        }
+        return null;
+    }
+
+    function getPanelFocusTarget(panel) {
+        if (!panel) return null;
+        return panel.querySelector('[data-panel-back]') || panel.querySelector('a, button, [tabindex]');
+    }
+
     function closeLinkPanels() {
+        const openPanel = linkPanels.filter(function (panel) {
+            return panel.classList.contains('is-open');
+        })[0];
+        const focusTarget = activePanelTrigger || getPanelTrigger(openPanel && openPanel.id) ||
+            document.querySelector('[data-panel-target]');
+
         if (linkHub) linkHub.classList.remove('is-hidden');
+        if (focusTarget && typeof focusTarget.focus === 'function') {
+            focusTarget.focus();
+        }
         linkPanels.forEach(function (panel) {
             panel.classList.remove('is-open');
             panel.setAttribute('aria-hidden', 'true');
@@ -50,22 +75,38 @@
             btn.classList.remove('is-active');
             btn.setAttribute('aria-expanded', 'false');
         });
+        activePanelTrigger = null;
         panelHistoryActive = false;
     }
 
-    function openLinkPanel(panelId, skipHistory) {
+    function openLinkPanel(panelId, skipHistory, trigger) {
         var target = document.getElementById(panelId);
         if (!target || !linkHub) return;
+        const targetTrigger = trigger || getPanelTrigger(panelId);
+        const targetFocus = getPanelFocusTarget(target);
 
         if (!skipHistory) {
             panelHistoryActive = pushUiState({ bioPanel: panelId });
         }
 
-        linkHub.classList.add('is-hidden');
+        activePanelTrigger = targetTrigger;
         linkPanels.forEach(function (panel) {
             var isTarget = panel === target;
-            panel.classList.toggle('is-open', isTarget);
-            panel.setAttribute('aria-hidden', isTarget ? 'false' : 'true');
+            if (isTarget) {
+                panel.classList.add('is-open');
+                panel.setAttribute('aria-hidden', 'false');
+            }
+        });
+
+        if (targetFocus && typeof targetFocus.focus === 'function') {
+            targetFocus.focus();
+        }
+        if (linkHub) linkHub.classList.add('is-hidden');
+        linkPanels.forEach(function (panel) {
+            if (panel !== target) {
+                panel.classList.remove('is-open');
+                panel.setAttribute('aria-hidden', 'true');
+            }
         });
 
         document.querySelectorAll('[data-panel-target]').forEach(function (btn) {
@@ -77,7 +118,7 @@
 
     document.querySelectorAll('[data-panel-target]').forEach(function (btn) {
         btn.addEventListener('click', function () {
-            openLinkPanel(btn.getAttribute('data-panel-target'));
+            openLinkPanel(btn.getAttribute('data-panel-target'), false, btn);
         });
     });
 
@@ -755,24 +796,48 @@
         }, 2000);
     }
 
+    function copyEmailWithFallback(email) {
+        const tmp = document.createElement('textarea');
+        let copied = false;
+
+        try {
+            tmp.value = email;
+            tmp.style.position = 'fixed';
+            tmp.style.opacity = '0';
+            document.body.appendChild(tmp);
+            tmp.select();
+            if (typeof document.execCommand === 'function') {
+                copied = document.execCommand('copy');
+            }
+        } catch (e) {
+            copied = false;
+        } finally {
+            if (tmp.parentNode) tmp.parentNode.removeChild(tmp);
+        }
+
+        return copied;
+    }
+
     if (emailBtn) {
         emailBtn.addEventListener('click', function () {
             var email = emailBtn.getAttribute('data-email');
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(email).then(function () {
                     showToast('Đã copy email: ' + email);
+                }).catch(function () {
+                    if (copyEmailWithFallback(email)) {
+                        showToast('Đã copy email: ' + email);
+                    } else {
+                        showToast('Không thể copy email.');
+                    }
                 });
             } else {
                 // Fallback cho trình duyệt cũ
-                var tmp = document.createElement('textarea');
-                tmp.value = email;
-                tmp.style.position = 'fixed';
-                tmp.style.opacity = '0';
-                document.body.appendChild(tmp);
-                tmp.select();
-                document.execCommand('copy');
-                document.body.removeChild(tmp);
-                showToast('Đã copy email: ' + email);
+                if (copyEmailWithFallback(email)) {
+                    showToast('Đã copy email: ' + email);
+                } else {
+                    showToast('Không thể copy email.');
+                }
             }
         });
     }

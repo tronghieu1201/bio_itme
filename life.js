@@ -211,6 +211,7 @@
         } else if (cat.images.length === 0) {
             if (categoryKey !== 'daily') {
                 showLifeToast();
+                document.body.classList.remove('is-modal-open');
                 return;
             }
             emptyEl.hidden = true;
@@ -342,6 +343,9 @@
             method: 'POST',
             body: formData
         }).then(function (response) {
+            if (!response.ok) {
+                throw new Error('Upload failed with status ' + response.status);
+            }
             return response.json();
         }).then(function (data) {
             if (!data.secure_url) throw new Error('Upload failed');
@@ -488,16 +492,17 @@
 
     function readJoinSubmissions() {
         try {
-            return JSON.parse(localStorage.getItem(JOIN_STORAGE_KEY)) || [];
+            const stored = JSON.parse(localStorage.getItem(JOIN_STORAGE_KEY));
+            return Array.isArray(stored) ? stored : [];
         } catch (e) {
             return [];
         }
     }
 
     function saveJoinSubmission(data) {
-        var submissions = readJoinSubmissions();
-        submissions.push(data);
         try {
+            const submissions = readJoinSubmissions();
+            submissions.push(data);
             localStorage.setItem(JOIN_STORAGE_KEY, JSON.stringify(submissions, null, 2));
         } catch (e) {
             return false;
@@ -605,7 +610,7 @@
     // Auto-open category only when the URL explicitly requests one.
     var params = new URLSearchParams(window.location.search);
     var categoryParam = params.get('category');
-    if (categoryParam && categories[categoryParam]) {
+    if (categoryParam && Object.prototype.hasOwnProperty.call(categories, categoryParam)) {
         openGallery(categoryParam);
     }
     if (joinModal) {
@@ -623,7 +628,7 @@
             if (!content) return;
 
             if (joinCreatedAt) joinCreatedAt.value = createdAt;
-            saveJoinSubmission({
+            const localBackupSaved = saveJoinSubmission({
                 content: content,
                 createdAt: createdAt
             });
@@ -633,7 +638,9 @@
             // Báo cảm ơn ngay, gửi dữ liệu ở background
             joinForm.reset();
             closeJoinModal();
-            showLifeToast('C\u1ea3m \u01a1n b\u1ea1n \u0111\u00e3 g\u00f3p \u00fd \ud83c\udf37');
+            showLifeToast(localBackupSaved
+                ? '\u0110ang g\u1eedi g\u00f3p \u00fd...'
+                : '\u0110ang g\u1eedi g\u00f3p \u00fd; kh\u00f4ng l\u01b0u \u0111\u01b0\u1ee3c b\u1ea3n sao c\u1ee5c b\u1ed9.');
             if (submitBtn) submitBtn.disabled = false;
 
             // Build URL params for Apps Script
