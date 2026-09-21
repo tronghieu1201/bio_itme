@@ -161,28 +161,70 @@
         });
     });
 
-    /* ---- QR Lightbox ---- */
+    /* ---- QR Choice Confirmation & QR Lightbox ---- */
+    var choiceModal = document.getElementById('qr-choice-modal');
+    var choiceCloseBtn = document.getElementById('qr-choice-close');
+    var choiceBtnYes = document.getElementById('qr-choice-btn-yes');
+    var choiceBtnNo = document.getElementById('qr-choice-btn-no');
     var lightbox = document.getElementById('qr-lightbox');
     var qrLightboxImg = document.getElementById('qr-lightbox-img');
+    var qrLightboxClose = document.getElementById('qr-lightbox-close');
+    var choiceHistoryActive = false;
+    var currentChoice = null;
 
-    function openLightbox(trigger, skipHistory) {
+    function openChoiceModal(targetData, skipHistory) {
+        if (!choiceModal) return;
+        currentChoice = targetData;
+        if (!skipHistory) {
+            choiceHistoryActive = pushUiState({
+                qrChoiceModal: true,
+                targetData: targetData
+            });
+        }
+        document.body.classList.add('is-modal-open');
+        choiceModal.classList.add('is-open');
+        choiceModal.setAttribute('aria-hidden', 'false');
+        if (choiceBtnYes && typeof choiceBtnYes.focus === 'function') {
+            choiceBtnYes.focus();
+        }
+    }
+
+    function closeChoiceModal(skipHistory) {
+        if (!choiceModal) return;
+        if (!skipHistory && choiceHistoryActive) {
+            window.history.back();
+            return;
+        }
+        if (!lightbox || !lightbox.classList.contains('is-open')) {
+            document.body.classList.remove('is-modal-open');
+        }
+        choiceModal.classList.remove('is-open');
+        choiceModal.setAttribute('aria-hidden', 'true');
+        choiceHistoryActive = false;
+    }
+
+    function openLightbox(qrSrc, qrAlt, title, skipHistory) {
         if (lightbox) {
-            var qrSrc = trigger ? trigger.getAttribute('data-qr-src') : '';
-            var qrAlt = trigger ? trigger.getAttribute('data-qr-alt') : '';
-            if (trigger && qrLightboxImg) {
-                qrLightboxImg.src = qrSrc || 'https://res.cloudinary.com/dtpw5htqs/image/upload/v1782284227/qr_zalo_huh7bk.webp';
-                qrLightboxImg.alt = qrAlt || 'Ma QR phong to';
+            var finalQrSrc = qrSrc || 'images/qr_fb.png';
+            var finalQrAlt = qrAlt || 'Mã QR phóng to';
+            if (qrLightboxImg) {
+                qrLightboxImg.src = finalQrSrc;
+                qrLightboxImg.alt = finalQrAlt;
             }
             if (!skipHistory) {
                 qrHistoryActive = pushUiState({
                     qrLightbox: true,
-                    qrSrc: qrSrc || 'https://res.cloudinary.com/dtpw5htqs/image/upload/v1782284227/qr_zalo_huh7bk.webp',
-                    qrAlt: qrAlt || 'Ma QR phong to'
+                    qrSrc: finalQrSrc,
+                    qrAlt: finalQrAlt,
+                    title: title || ''
                 });
             }
             document.body.classList.add('is-modal-open');
             lightbox.classList.add('is-open');
             lightbox.setAttribute('aria-hidden', 'false');
+            if (qrLightboxClose && typeof qrLightboxClose.focus === 'function') {
+                qrLightboxClose.focus();
+            }
         }
     }
 
@@ -199,29 +241,106 @@
         }
     }
 
-    document.querySelectorAll('[data-qr-src]').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-            openLightbox(btn);
+    // Intercept clicks on links with data-qr-src
+    document.querySelectorAll('.link-btn[data-qr-src]').forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            var href = btn.getAttribute('href') || btn.getAttribute('data-href') || '';
+            var qrSrc = btn.getAttribute('data-qr-src') || '';
+            var qrAlt = btn.getAttribute('data-qr-alt') || '';
+            var title = btn.getAttribute('data-title') || (btn.querySelector('span') ? btn.querySelector('span').textContent.trim() : '');
+
+            openChoiceModal({
+                url: href,
+                qrSrc: qrSrc,
+                qrAlt: qrAlt,
+                title: title,
+                triggerBtn: btn
+            });
         });
     });
 
-    if (lightbox) {
-        lightbox.querySelector('.lightbox__backdrop').addEventListener('click', function () {
-            closeLightbox();
-        });
-        document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape') closeLightbox();
+    // Choice Modal Actions: Có (Yes) -> Open QR Lightbox
+    if (choiceBtnYes) {
+        choiceBtnYes.addEventListener('click', function () {
+            if (!currentChoice) return;
+            var target = currentChoice;
+            if (choiceModal) {
+                choiceModal.classList.remove('is-open');
+                choiceModal.setAttribute('aria-hidden', 'true');
+            }
+            choiceHistoryActive = false;
+            openLightbox(target.qrSrc, target.qrAlt, target.title);
         });
     }
 
+    // Choice Modal Actions: Không (No) -> Open regular link
+    if (choiceBtnNo) {
+        choiceBtnNo.addEventListener('click', function () {
+            if (!currentChoice) return;
+            var url = currentChoice.url;
+            closeChoiceModal();
+            if (url && url !== '#') {
+                window.open(url, '_blank', 'noopener,noreferrer');
+            }
+        });
+    }
+
+    if (choiceCloseBtn) {
+        choiceCloseBtn.addEventListener('click', function () {
+            closeChoiceModal();
+        });
+    }
+
+    if (choiceModal) {
+        var choiceBackdrop = choiceModal.querySelector('.qr-choice-modal__backdrop');
+        if (choiceBackdrop) {
+            choiceBackdrop.addEventListener('click', function () {
+                closeChoiceModal();
+            });
+        }
+    }
+
+    if (qrLightboxClose) {
+        qrLightboxClose.addEventListener('click', function () {
+            closeLightbox();
+        });
+    }
+
+    if (lightbox) {
+        var lbBackdrop = lightbox.querySelector('.lightbox__backdrop');
+        if (lbBackdrop) {
+            lbBackdrop.addEventListener('click', function () {
+                closeLightbox();
+            });
+        }
+    }
+
     window.addEventListener('popstate', function (e) {
+        if (e.state && e.state.qrChoiceModal) {
+            if (lightbox && lightbox.classList.contains('is-open')) {
+                closeLightbox(true);
+            }
+            choiceHistoryActive = true;
+            openChoiceModal(e.state.targetData, true);
+            return;
+        }
+
+        if (choiceHistoryActive) {
+            closeChoiceModal(true);
+            return;
+        }
+
         if (e.state && e.state.qrLightbox) {
+            if (choiceModal && choiceModal.classList.contains('is-open')) {
+                closeChoiceModal(true);
+            }
             if (qrLightboxImg) {
-                qrLightboxImg.src = e.state.qrSrc || 'https://res.cloudinary.com/dtpw5htqs/image/upload/v1782284227/qr_zalo_huh7bk.webp';
-                qrLightboxImg.alt = e.state.qrAlt || 'Ma QR phong to';
+                qrLightboxImg.src = e.state.qrSrc || 'images/qr_fb.png';
+                qrLightboxImg.alt = e.state.qrAlt || 'Mã QR phóng to';
             }
             qrHistoryActive = true;
-            openLightbox(null, true);
+            openLightbox(e.state.qrSrc, e.state.qrAlt, e.state.title, true);
             return;
         }
 
@@ -242,12 +361,21 @@
     });
 
     document.addEventListener('keydown', function (e) {
-        if (lightbox && lightbox.classList.contains('is-open')) return;
-        if (e.key !== 'Escape' || !hasOpenLinkPanel()) return;
-        if (panelHistoryActive) {
-            window.history.back();
-        } else {
-            closeLinkPanels();
+        if (e.key !== 'Escape') return;
+        if (lightbox && lightbox.classList.contains('is-open')) {
+            closeLightbox();
+            return;
+        }
+        if (choiceModal && choiceModal.classList.contains('is-open')) {
+            closeChoiceModal();
+            return;
+        }
+        if (hasOpenLinkPanel()) {
+            if (panelHistoryActive) {
+                window.history.back();
+            } else {
+                closeLinkPanels();
+            }
         }
     });
 
