@@ -571,6 +571,8 @@ button:focus-visible,
 .link-btn--zalo i        { color: #0068ff; }
 .link-btn--locket i      { color: #f59e0b; }
 .link-btn--email i       { color: #ea4335; }
+.link-btn--whatsapp i    { color: #25d366; }
+.link-btn--tiktok i      { color: #111827; }
 
 /* Primary CTA Accent Button (Vibrant Royal Blue Gradient) */
 .link-btn--primary,

@@ -172,6 +172,13 @@
     var choiceHistoryActive = false;
     var currentChoice = null;
 
+    function releaseModalFocus(modal) {
+        if (!modal || !document.activeElement || !modal.contains(document.activeElement)) return;
+        if (typeof document.activeElement.blur === 'function') {
+            document.activeElement.blur();
+        }
+    }
+
     function openChoiceModal(targetData, skipHistory) {
         if (!choiceModal) return;
         currentChoice = targetData;
@@ -198,6 +205,7 @@
         if (!lightbox || !lightbox.classList.contains('is-open')) {
             document.body.classList.remove('is-modal-open');
         }
+        releaseModalFocus(choiceModal);
         choiceModal.classList.remove('is-open');
         choiceModal.setAttribute('aria-hidden', 'true');
         choiceHistoryActive = false;
@@ -234,6 +242,7 @@
                 window.history.back();
                 return;
             }
+            releaseModalFocus(lightbox);
             document.body.classList.remove('is-modal-open');
             lightbox.classList.remove('is-open');
             lightbox.setAttribute('aria-hidden', 'true');
@@ -260,12 +269,20 @@
         });
     });
 
+    // Các sản phẩm đang tạm đóng chỉ hiển thị thông báo, không mở QR hay liên kết.
+    document.querySelectorAll('.link-btn[data-closed-product]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            showToast('Sản phẩm tạm đóng');
+        });
+    });
+
     // Choice Modal Actions: Có (Yes) -> Open QR Lightbox
     if (choiceBtnYes) {
         choiceBtnYes.addEventListener('click', function () {
             if (!currentChoice) return;
             var target = currentChoice;
             if (choiceModal) {
+                releaseModalFocus(choiceModal);
                 choiceModal.classList.remove('is-open');
                 choiceModal.setAttribute('aria-hidden', 'true');
             }
